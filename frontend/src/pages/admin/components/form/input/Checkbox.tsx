@@ -2,11 +2,12 @@ import type React from "react";
 
 interface CheckboxProps {
   label?: string;
-  checked: boolean;
+  checked?: boolean;
   className?: string;
   id?: string;
-  onChange: (checked: boolean) => void;
+  onChange?: (checked: boolean) => void;
   disabled?: boolean;
+  register?: object; // Register props for react-hook-form
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({
@@ -16,6 +17,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
   onChange,
   className = "",
   disabled = false,
+  register = {}, // Register is optional, can be used with react-hook-form
 }) => {
   return (
     <label
@@ -32,6 +34,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
           checked={checked}
           onChange={(e) => onChange(e.target.checked)}
           disabled={disabled}
+          {...register} // Spread register props if provided
         />
         {checked && (
           <svg

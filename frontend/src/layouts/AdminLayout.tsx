@@ -1,8 +1,10 @@
+import toast, { Toaster } from 'react-hot-toast';
 import { SidebarProvider, useSidebar } from "../context/SidebarContext";
-import { Outlet } from "react-router";
+import { Navigate, Outlet } from "react-router";
 import AppHeader from "./AppHeader";
 import Backdrop from "./Backdrop";
 import AppSidebar from "./AppSidebar";
+import { getToken } from '../helper/localSorageHelper';
 
 const LayoutContent: React.FC = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
@@ -22,12 +24,17 @@ const LayoutContent: React.FC = () => {
         <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
           <Outlet />
         </div>
+        <Toaster />
       </div>
     </div>
   );
 };
 
 const AppLayout: React.FC = () => {
+  if (!getToken()) {
+    toast.success("User already logged out! Redirecting to signin page...");
+    return <Navigate to="/signin" replace />;
+  }
   return (
     <SidebarProvider>
       <LayoutContent />

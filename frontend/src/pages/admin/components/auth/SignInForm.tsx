@@ -1,14 +1,43 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../../../../icons";
 import Label from "../form/Label";
 import Input from "../form/input/InputField";
 import Checkbox from "../form/input/Checkbox";
 import Button from "../ui/button/Button";
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { setToken } from '../../../../helper/localSorageHelper';
+
+interface IFormInput {
+  email: string,
+  password: string,
+  remember_me?: boolean;
+}
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
+  const { register, handleSubmit } = useForm<IFormInput>()
+  const navigate = useNavigate();
+
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    try {
+    const res = await axios.post('http://localhost:3000/api/auth/login', data);
+    console.log(res);
+    if (res.status === 200) {
+      toast.success("Login successful!");
+      setToken(res.data.access_token);
+      navigate("/admin");
+    } else {
+      toast.error("Login failed. Please try again.");
+    }
+  } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Login failed. Please check your credentials.");
+    }
+  }
+
   return (
     <div className="flex flex-col flex-1">
       <div className="w-full max-w-md pt-10 mx-auto">
@@ -17,7 +46,7 @@ export default function SignInForm() {
           className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
         >
           <ChevronLeftIcon className="size-5" />
-          Back to dashboard
+          Back to Home
         </Link>
       </div>
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
@@ -83,13 +112,16 @@ export default function SignInForm() {
                 </span>
               </div>
             </div>
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="space-y-6">
                 <div>
                   <Label>
                     Email <span className="text-error-500">*</span>{" "}
                   </Label>
-                  <Input placeholder="info@gmail.com" />
+                  <Input
+                  placeholder="info@gmail.com"
+                  register={register('email', { required: true }) }
+                  />
                 </div>
                 <div>
                   <Label>
@@ -99,6 +131,7 @@ export default function SignInForm() {
                     <Input
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
+                      register={register('password', { required: true }) }
                     />
                     <span
                       onClick={() => setShowPassword(!showPassword)}
@@ -114,7 +147,7 @@ export default function SignInForm() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <Checkbox checked={isChecked} onChange={setIsChecked} />
+                    <Checkbox register={register('remember_me')} />
                     <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
                       Keep me logged in
                     </span>

@@ -38,8 +38,10 @@ import Blank from "./pages/admin/Blank";
 import AdminHome from "./pages/admin/Dashboard/Home";
 
 
+// Importing ProtectedRoute to protect admin routes
+import ProtectedRoute from './pages/components/ProtectedRoute';
+
 function App() {
-  console.log('App')
   return (
     <Router>
       <ScrollToTop /> 
@@ -59,31 +61,32 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
 
         {/* Dashboard Layout */}
-        <Route element={<AdminLayout />}>
-            <Route index path="/admin" element={<AdminHome />} />
 
-            {/* Others Page */}
-            <Route path="admin/profile" element={<UserProfiles />} />
-            <Route path="admin/calendar" element={<Calendar />} />
-            <Route path="admin/blank" element={<Blank />} />
+        <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+          <Route index path="/admin" element={<AdminHome />} />
 
-            {/* Forms */}
-            <Route path="admin/form-elements" element={<FormElements />} />
+          {/* Others Page */}
+          <Route path="admin/profile" element={<UserProfiles />} />
+          <Route path="admin/calendar" element={<Calendar />} />
+          <Route path="admin/blank" element={<Blank />} />
 
-            {/* Tables */}
-            <Route path="admin/basic-tables" element={<BasicTables />} />
+          {/* Forms */}
+          <Route path="admin/form-elements" element={<FormElements />} />
 
-            {/* Ui Elements */}
-            <Route path="admin/alerts" element={<Alerts />} />
-            <Route path="admin/avatars" element={<Avatars />} />
-            <Route path="admin/badge" element={<Badges />} />
-            <Route path="admin/buttons" element={<Buttons />} />
-            <Route path="admin/images" element={<Images />} />
-            <Route path="admin/videos" element={<Videos />} />
+          {/* Tables */}
+          <Route path="admin/basic-tables" element={<BasicTables />} />
 
-            {/* Charts */}
-            <Route path="admin/line-chart" element={<LineChart />} />
-            <Route path="admin/bar-chart" element={<BarChart />} />
+          {/* Ui Elements */}
+          <Route path="admin/alerts" element={<Alerts />} />
+          <Route path="admin/avatars" element={<Avatars />} />
+          <Route path="admin/badge" element={<Badges />} />
+          <Route path="admin/buttons" element={<Buttons />} />
+          <Route path="admin/images" element={<Images />} />
+          <Route path="admin/videos" element={<Videos />} />
+
+          {/* Charts */}
+          <Route path="admin/line-chart" element={<LineChart />} />
+          <Route path="admin/bar-chart" element={<BarChart />} />
         </Route>
 
         {/* Fallback Route */}

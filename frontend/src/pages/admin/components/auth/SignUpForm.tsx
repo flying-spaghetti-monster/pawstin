@@ -1,13 +1,44 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../../../../icons";
 import Label from "../form/Label";
 import Input from "../form/input/InputField";
 import Checkbox from "../form/input/Checkbox";
+import { cp } from '../../../../hooks/utils';
+import { useForm, SubmitHandler } from "react-hook-form";
+import axios from 'axios';
+import toast from 'react-hot-toast';
+
+interface IFormInput {
+  first_name: string,
+  last_name: string,
+  email: string,
+  password: string,
+}
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const { register, handleSubmit } = useForm<IFormInput>()
+  const navigate = useNavigate();
+
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    try {
+      const res = await axios.post('http://localhost:3000/api/auth/registration', data);
+      console.log(res);
+      
+      if (res.status === 200) {
+        toast.success("Registration successful!");
+        navigate("/signin");
+      } else {
+        toast.error("Registration failed. Please check your credentials.");
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      toast.error("Registration failed. Please check your credentials.");
+    }
+  }
+
   return (
     <div className="flex flex-col flex-1 w-full overflow-y-auto lg:w-1/2 no-scrollbar">
       <div className="w-full max-w-md mx-auto mb-5 sm:pt-10">
@@ -16,7 +47,7 @@ export default function SignUpForm() {
           className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
         >
           <ChevronLeftIcon className="size-5" />
-          Back to dashboard
+          Back to Home
         </Link>
       </div>
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
@@ -82,7 +113,7 @@ export default function SignUpForm() {
                 </span>
               </div>
             </div>
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="space-y-5">
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                   {/* <!-- First Name --> */}
@@ -92,9 +123,10 @@ export default function SignUpForm() {
                     </Label>
                     <Input
                       type="text"
-                      id="fname"
-                      name="fname"
+                      id="first_name"
+                      name="first_name"
                       placeholder="Enter your first name"
+                      register={register('first_name', { required: true }) }
                     />
                   </div>
                   {/* <!-- Last Name --> */}
@@ -104,9 +136,10 @@ export default function SignUpForm() {
                     </Label>
                     <Input
                       type="text"
-                      id="lname"
-                      name="lname"
+                      id="last_name"
+                      name="last_name"
                       placeholder="Enter your last name"
+                      register={register('last_name', { required: true }) }
                     />
                   </div>
                 </div>
@@ -120,6 +153,7 @@ export default function SignUpForm() {
                     id="email"
                     name="email"
                     placeholder="Enter your email"
+                    register={register('email', { required: true }) }
                   />
                 </div>
                 {/* <!-- Password --> */}
@@ -131,6 +165,7 @@ export default function SignUpForm() {
                     <Input
                       placeholder="Enter your password"
                       type={showPassword ? "text" : "password"}
+                      register={register('password', { required: true }) }
                     />
                     <span
                       onClick={() => setShowPassword(!showPassword)}
@@ -164,7 +199,15 @@ export default function SignUpForm() {
                 </div>
                 {/* <!-- Button --> */}
                 <div>
-                  <button className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
+                  <button 
+                    className={cp("flex items-center justify-center w-full px-4 py-3 text-sm font-medium",
+                      {
+                        "text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600": isChecked,
+                        "text-gray-700 transition-colors bg-gray-100 rounded-lg px-7  dark:bg-white/5 dark:text-white/90": !isChecked,
+                      }
+                    )}
+                    disabled={!isChecked}
+                  >
                     Sign Up
                   </button>
                 </div>
