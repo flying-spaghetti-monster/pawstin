@@ -3,7 +3,7 @@
 
 ## Stack:
   - JavaScript / TypeScript
-  - NodeJS / NestJS / ExpresJS / REST API
+  - NodeJS / NestJS / REST API
   - React/Zustand/Context API
   - Tailwindcss/Material UI/SCSS/Css/html 
   - PostgreSQL/Prisma ORM
