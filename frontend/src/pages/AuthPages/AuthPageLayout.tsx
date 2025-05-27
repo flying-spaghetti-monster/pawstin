@@ -42,7 +42,11 @@ export default function AuthLayout({
           <ThemeTogglerTwo />
         </div>
       </div>
-      <Toaster position="top-center" />
+      <Toaster toastOptions={{
+          style: {
+            zIndex: 9999, // higher than modal (adjust as needed)
+          },
+        }} position="top-center" />
     </div>
   );
 }

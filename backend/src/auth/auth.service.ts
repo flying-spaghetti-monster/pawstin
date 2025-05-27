@@ -1,9 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { genSalt, hash, compare } from 'bcrypt';
+import { Roles } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +21,7 @@ export class AuthService {
         password: await hash(dto.password, salt),
         first_name: dto.first_name,
         last_name: dto.last_name,
-        role: dto.role || 'USER',
+        role: dto.role || Roles.USER,
       },
     });
 
@@ -45,11 +45,6 @@ export class AuthService {
 
     const isCorrectPassword = await compare(password, user.password);
 
-    console.log(password === user.password);
-    console.log(typeof password);
-    console.log(typeof user.password);
-    console.log(isCorrectPassword);
-
     if (!isCorrectPassword) {
       throw new UnauthorizedException('Wrong Password');
     }
@@ -67,6 +62,32 @@ export class AuthService {
 
     return {
       access_token: await this.jwtService.signAsync(payload),
+    };
+  }
+
+  async getUsers(page: number = 1) {
+    const users = await this.prisma.customers.findMany({
+      select: {
+        email: true,
+        first_name: true,
+        last_name: true,
+        role: true,
+        address: true,
+        city: true,
+        region: true,
+        postal_code: true,
+        country: true,
+        phone: true,
+        isActive: true,
+      },
+      skip: (page - 1) * 6,
+      take: 6,
+    });
+    const totalUsers = await this.prisma.customers.count();
+    return {
+      users,
+      totalUsers,
+      totalPages: Math.ceil(totalUsers / 6),
     };
   }
 }

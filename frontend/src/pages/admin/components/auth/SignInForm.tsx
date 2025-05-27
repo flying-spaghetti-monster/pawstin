@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { setToken } from '../../../../helper/localSorageHelper';
+import { LoginResponse } from '../../../../lib/types';
 
 interface IFormInput {
   email: string,
@@ -23,8 +24,8 @@ export default function SignInForm() {
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
-    const res = await axios.post('http://localhost:3000/api/auth/login', data);
-    console.log(res);
+    const res = await axios.post<LoginResponse>('http://localhost:3000/api/auth/login', data);
+
     if (res.status === 200) {
       toast.success("Login successful!");
       setToken(res.data.access_token);

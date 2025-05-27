@@ -1,10 +1,13 @@
 import toast, { Toaster } from 'react-hot-toast';
 import { SidebarProvider, useSidebar } from "../context/SidebarContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Navigate, Outlet } from "react-router";
 import AppHeader from "./AppHeader";
 import Backdrop from "./Backdrop";
 import AppSidebar from "./AppSidebar";
 import { getToken } from '../helper/localSorageHelper';
+import { CustomersPageProvider } from '../context/CustomersPageContext';
+import { CategoriesPageProvider } from '../context/CategoriesPageContext';
 
 const LayoutContent: React.FC = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
@@ -24,11 +27,17 @@ const LayoutContent: React.FC = () => {
         <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
           <Outlet />
         </div>
-        <Toaster />
+        <Toaster toastOptions={{
+          style: {
+            zIndex: 9999, // higher than modal (adjust as needed)
+          },
+        }} />
       </div>
     </div>
   );
 };
+
+const queryClient = new QueryClient();
 
 const AppLayout: React.FC = () => {
   if (!getToken()) {
@@ -36,9 +45,15 @@ const AppLayout: React.FC = () => {
     return <Navigate to="/signin" replace />;
   }
   return (
-    <SidebarProvider>
-      <LayoutContent />
-    </SidebarProvider>
+    <QueryClientProvider client={queryClient}>
+      <CustomersPageProvider>
+        <CategoriesPageProvider>
+            <SidebarProvider>
+              <LayoutContent />
+            </SidebarProvider>
+        </CategoriesPageProvider>
+      </CustomersPageProvider>
+    </QueryClientProvider>
   );
 };
 

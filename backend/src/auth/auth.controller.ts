@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, HttpException } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, HttpException, Get, Query } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { signInDto } from './dto/sing-in-auth.dto';
@@ -11,7 +11,6 @@ export class AuthController {
   @Post('login')
   async login(@Body() dto: signInDto) {
     //TODO: dto.remember_me
-    console.log(dto);
     const user = await this.authService.validateUser(dto.email, dto.password);
     if (!user) {
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
@@ -30,6 +29,12 @@ export class AuthController {
     return await this.authService.createUser(dto);
   }
 
+  @Get('getUsers')
+  async getUsers(@Query('page') page: number) {
+    return this.authService.getUsers(page);
+  }
+
+  //TODO: Implement these methods
   // logout
   //resetPassword
 }

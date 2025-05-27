@@ -1,6 +1,6 @@
 import { IsString, IsOptional, IsEnum } from 'class-validator';
-// import { Users } from '../../../prisma/client';
 import { Roles } from '@prisma/client';
+
 
 export class CreateAuthDto {
   @IsString()

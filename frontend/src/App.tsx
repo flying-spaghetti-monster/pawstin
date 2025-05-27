@@ -25,17 +25,19 @@ import NotFound from "./pages/admin/OtherPage/NotFound";
 import UserProfiles from "./pages/admin/UserProfiles";
 import Videos from "./pages/admin/UiElements/Videos";
 import Images from "./pages/admin/UiElements/Images";
-import Alerts from "./pages/admin/UiElements/Alerts";
-import Badges from "./pages/admin/UiElements/Badges";
-import Avatars from "./pages/admin/UiElements/Avatars";
 import Buttons from "./pages/admin/UiElements/Buttons";
 import LineChart from "./pages/admin/Charts/LineChart";
 import BarChart from "./pages/admin/Charts/BarChart";
-import Calendar from "./pages/admin/Calendar";
 import BasicTables from "./pages/admin/Tables/BasicTables";
 import FormElements from "./pages/admin/Forms/FormElements";
 import Blank from "./pages/admin/Blank";
+
+// pages
 import AdminHome from "./pages/admin/Dashboard/Home";
+import AdminProducts from "./pages/admin/Products/Products";
+import AdminCategories from "./pages/admin/Categories/Categories";
+import AdminOrders from "./pages/admin/Orders/Orders";
+import AdminCustomers from "./pages/admin/Customers/Customers";
 
 
 // Importing ProtectedRoute to protect admin routes
@@ -65,9 +67,19 @@ function App() {
         <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
           <Route index path="/admin" element={<AdminHome />} />
 
+          {/* Products Page */}
+          <Route path="admin/products" element={<AdminProducts />} />
+          {/* Products Page */}
+          <Route path="admin/categories" element={<AdminCategories />} />
+
+          {/* Orders Page */}
+          <Route path="admin/orders" element={<AdminOrders />} />
+
+          {/* Customers Page */}
+          <Route path="admin/customers" element={<AdminCustomers />} />
+          
           {/* Others Page */}
           <Route path="admin/profile" element={<UserProfiles />} />
-          <Route path="admin/calendar" element={<Calendar />} />
           <Route path="admin/blank" element={<Blank />} />
 
           {/* Forms */}
@@ -76,17 +88,6 @@ function App() {
           {/* Tables */}
           <Route path="admin/basic-tables" element={<BasicTables />} />
 
-          {/* Ui Elements */}
-          <Route path="admin/alerts" element={<Alerts />} />
-          <Route path="admin/avatars" element={<Avatars />} />
-          <Route path="admin/badge" element={<Badges />} />
-          <Route path="admin/buttons" element={<Buttons />} />
-          <Route path="admin/images" element={<Images />} />
-          <Route path="admin/videos" element={<Videos />} />
-
-          {/* Charts */}
-          <Route path="admin/line-chart" element={<LineChart />} />
-          <Route path="admin/bar-chart" element={<BarChart />} />
         </Route>
 
         {/* Fallback Route */}

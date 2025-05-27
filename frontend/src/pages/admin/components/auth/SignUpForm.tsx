@@ -16,6 +16,11 @@ interface IFormInput {
   password: string,
 }
 
+type Response = {
+  status: number,
+  data: { } 
+}
+
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -24,8 +29,7 @@ export default function SignUpForm() {
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
-      const res = await axios.post('http://localhost:3000/api/auth/registration', data);
-      console.log(res);
+      const res = await axios.post<Response>('http://localhost:3000/api/auth/registration', data);
       
       if (res.status === 200) {
         toast.success("Registration successful!");

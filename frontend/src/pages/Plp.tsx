@@ -15,7 +15,6 @@ function Plp() {
     const controller = new AbortController();
     axios("http://localhost:6000/product", { signal: controller.signal })
       .then((data) => {
-        // console.log(data);
         setProducts(data.data);
       })
       .catch((err) => {

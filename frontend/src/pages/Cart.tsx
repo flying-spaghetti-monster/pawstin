@@ -1,12 +1,10 @@
-import { useEffect, useState, useContext, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 
 import { useCartStore } from "../stores/cartStore";
 import axios from "axios";
 
 import "./Cart.scss";
-
-// import { FaRegTrashAlt, FaLongArrowAltLeft } from "react-icons/fa";
 
 function getTotal(plis, data) {
   if (!plis.length || !data.length) {
@@ -17,7 +15,6 @@ function getTotal(plis, data) {
       return item.price * plis.find((i) => i.isbn === item.isbn)?.qty;
     })
     .reduce((res, val) => (res += val), 0);
-  console.log("res", res);
   return res;
 }
 
@@ -25,12 +22,8 @@ function Cart() {
   const plis = useCartStore((state) => state.plis);
   const addProduct = useCartStore((state) => state.addToCart);
   const removeProduct = useCartStore((state) => state.removeFromCart);
-
-  // const { cart, updateProduct, deleteProduct } = useContext(CartContext);
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
-
-  console.log(total);
 
   const getProductQty = (id) => {
     return products.find((item) => {
@@ -69,7 +62,7 @@ function Cart() {
 
   const changeQty = (prop) => {
     let qty = getQuantity(prop.isbn, 0);
-    // console.log("134", qty);
+
     switch (prop.operand) {
       case "+":
         qty = getQuantity(prop.isbn, qty + 1);

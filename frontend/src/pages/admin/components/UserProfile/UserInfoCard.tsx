@@ -160,11 +160,6 @@ export default function UserInfoCard() {
                     <Label>Phone</Label>
                     <Input type="text" value="+09 363 398 46" />
                   </div>
-
-                  <div className="col-span-2">
-                    <Label>Bio</Label>
-                    <Input type="text" value="Team Manager" />
-                  </div>
                 </div>
               </div>
             </div>

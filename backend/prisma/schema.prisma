@@ -1,12 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "./generated/prisma"
+  // output   = "./generated/prisma"
 }
 
 datasource db {
@@ -23,8 +17,8 @@ model Categories {
   id            Int        @id @default(autoincrement())
   category_name String
   description   String
-  picture       Bytes
   slug          String     @unique
+  picture       String?
   isActive      Boolean    @default(true)
   products      Products[]
 
@@ -32,17 +26,16 @@ model Categories {
 }
 
 model Products {
-  id            Int     @id @default(autoincrement())
+  id            Int            @id @default(autoincrement())
   product_name  String
-  slug          String  @unique
+  slug          String         @unique
   price         Int
   discont_price Int
   in_stock      Int?
-  isActive      Boolean @default(true)
-
-  category_id  Int
-  category     Categories     @relation(fields: [category_id], references: [id])
-  orderDetails OrderDetails[]
+  isActive      Boolean        @default(true)
+  category_id   Int
+  orderDetails  OrderDetails[]
+  category      Categories     @relation(fields: [category_id], references: [id])
 
   @@map("products")
 }
@@ -67,7 +60,7 @@ model Customers {
 }
 
 model Orders {
-  id               Int     @id @default(autoincrement())
+  id               Int            @id @default(autoincrement())
   ship_first_name  String?
   ship_last_name   String?
   ship_address     String?
@@ -76,14 +69,11 @@ model Orders {
   ship_postal_code String?
   ship_country     String?
   phone            String?
-
-  customer_id Int
-  customer    Customers @relation(fields: [customer_id], references: [id])
-
-  shipper_id Int
-  shipper    Shippers @relation(fields: [shipper_id], references: [id])
-
-  orderDetails OrderDetails[]
+  customer_id      Int
+  shipper_id       Int
+  orderDetails     OrderDetails[]
+  customer         Customers      @relation(fields: [customer_id], references: [id])
+  shipper          Shippers       @relation(fields: [shipper_id], references: [id])
 
   @@map("orders")
 }
@@ -104,9 +94,8 @@ model OrderDetails {
   unit_price Int
   quantity   Int
   discount   Int
-
-  order   Orders   @relation(fields: [order_id], references: [id])
-  product Products @relation(fields: [product_id], references: [id])
+  order      Orders   @relation(fields: [order_id], references: [id])
+  product    Products @relation(fields: [product_id], references: [id])
 
   @@id([order_id, product_id])
   @@map("order_details")

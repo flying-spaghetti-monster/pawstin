@@ -22,7 +22,6 @@ function Pdp() {
   const { id } = useParams();
 
   const handleQuantity = (e) => {
-    console.log(Number(e.target.value));
     setQuantity((oldQty) => Number(e.target.value));
   };
 

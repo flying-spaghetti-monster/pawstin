@@ -4,9 +4,10 @@ import { Link, useLocation } from "react-router";
 // Assume these icons are imported from an icon library
 import {
   BoxCubeIcon,
-  CalenderIcon,
+  BoxIconLine,
   ChevronDownIcon,
   GridIcon,
+  GroupIcon,
   HorizontaLDots,
   ListIcon,
   PageIcon,
@@ -17,78 +18,52 @@ import {
 } from "../icons/";
 
 import { useSidebar } from "../context/SidebarContext";
-import SidebarWidget from "./SidebarWidget";
+// import SidebarWidget from "./SidebarWidget";
 
 type NavItem = {
   name: string;
   icon: React.ReactNode;
   path?: string;
-  subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
+  subItems?: { name: string; path: string; icon?: React.ReactNode;}[];
 };
 
 const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [{ name: "Ecommerce", path: "/admin/", pro: false }],
-  },
-  {
-    icon: <CalenderIcon />,
-    name: "Calendar",
-    path: "/admin/calendar",
+    subItems: [
+      { name: "Ecommerce", path: "/admin/", icon: <PieChartIcon />},
+      { name: "Categories", path: "/admin/categories",  },
+      { name: "Products", path: "/admin/products",  },
+      { name: "Customers", path: "/admin/customers", icon: <GroupIcon /> },
+      { name: "Orders", path: "/admin/orders", icon: <BoxIconLine /> },
+    ],
   },
   {
     icon: <UserCircleIcon />,
     name: "User Profile",
     path: "/admin/profile",
-  },
+  }
+];
+
+//TODO: Remove after 
+const othersItems: NavItem[] = [
   {
     name: "Forms",
     icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/admin/form-elements", pro: false }],
+    subItems: [{ name: "Form Elements", path: "/admin/form-elements"}],
   },
   {
     name: "Tables",
     icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/admin/basic-tables", pro: false }],
+    subItems: [{ name: "Basic Tables", path: "/admin/basic-tables"}],
   },
   {
     name: "Pages",
     icon: <PageIcon />,
     subItems: [
-      { name: "Blank Page", path: "/admin/blank", pro: false },
-      { name: "404 Error", path: "/admin/error-404", pro: false },
-    ],
-  },
-];
-
-const othersItems: NavItem[] = [
-  {
-    icon: <PieChartIcon />,
-    name: "Charts",
-    subItems: [
-      { name: "Line Chart", path: "/admin/line-chart", pro: false },
-      { name: "Bar Chart", path: "/admin/bar-chart", pro: false },
-    ],
-  },
-  {
-    icon: <BoxCubeIcon />,
-    name: "UI Elements",
-    subItems: [
-      { name: "Alerts", path: "/admin/alerts", pro: false },
-      { name: "Avatar", path: "/admin/avatars", pro: false },
-      { name: "Badge", path: "/admin/badge", pro: false },
-      { name: "Buttons", path: "/admin/buttons", pro: false },
-      { name: "Images", path: "/admin/images", pro: false },
-      { name: "Videos", path: "/admin/videos", pro: false },
-    ],
-  },
-  {
-    icon: <PlugInIcon />,
-    name: "Authentication",
-    subItems: [
-      { name: "Sign In", path: "/signin", pro: false },
-      { name: "Sign Up", path: "/signup", pro: false },
+      { name: "Blank Page", path: "/admin/blank"},
+      { name: "404 Error", path: "/admin/error-404"},
     ],
   },
 ];
@@ -248,31 +223,7 @@ const AppSidebar: React.FC = () => {
                           : "menu-dropdown-item-inactive"
                       }`}
                     >
-                      {subItem.name}
-                      <span className="flex items-center gap-1 ml-auto">
-                        {subItem.new && (
-                          <span
-                            className={`ml-auto ${
-                              isActive(subItem.path)
-                                ? "menu-dropdown-badge-active"
-                                : "menu-dropdown-badge-inactive"
-                            } menu-dropdown-badge`}
-                          >
-                            new
-                          </span>
-                        )}
-                        {subItem.pro && (
-                          <span
-                            className={`ml-auto ${
-                              isActive(subItem.path)
-                                ? "menu-dropdown-badge-active"
-                                : "menu-dropdown-badge-inactive"
-                            } menu-dropdown-badge`}
-                          >
-                            pro
-                          </span>
-                        )}
-                      </span>
+                      {subItem.icon} {subItem.name}
                     </Link>
                   </li>
                 ))}
@@ -309,7 +260,7 @@ const AppSidebar: React.FC = () => {
             <>
               <img
                 className="dark:hidden"
-                src="/images/logo/logo.svg"
+                src="/logo.png"
                 alt="Logo"
                 width={150}
                 height={40}
@@ -369,7 +320,6 @@ const AppSidebar: React.FC = () => {
             </div>
           </div>
         </nav>
-        {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null}
       </div>
     </aside>
   );
