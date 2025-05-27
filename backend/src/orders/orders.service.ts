@@ -7,7 +7,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class OrdersService {
   constructor(private readonly prisma: PrismaService) { }
 
-  create(data: CreateOrderDto) {
+  create(data) {
     console.log('Creating:', data);
     return this.prisma.orders.create({
       data,

@@ -7,7 +7,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class ProductsService {
   constructor(private readonly prisma: PrismaService) { }
 
-  create(data: CreateProductDto) {
+  create(data) {
     console.log('Creating:', data);
     return this.prisma.products.create({
       data,

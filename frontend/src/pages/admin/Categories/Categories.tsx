@@ -11,6 +11,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CategoryModal from './CategoryModal';
 import { useState } from 'react';
+import Badge from '../components/ui/badge/Badge';
 
 export default function Categories() {
   const [ activeCategory, setActiveCategory ] = useState<CategoryResponse | undefined>();
