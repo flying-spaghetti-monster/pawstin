@@ -26,10 +26,11 @@ export default function AuthLayout({
             <div className="flex flex-col items-center max-w-xs">
               <Link to="/" className="block mb-4">
                 <img
+                  src="/logo.png"
+                  alt="Pawstin Logo"
                   width={231}
                   height={48}
-                  src="/images/logo/auth-logo.svg"
-                  alt="Logo"
+                  className="site-logo"
                 />
               </Link>
               <p className="text-center text-gray-400 dark:text-white/60">

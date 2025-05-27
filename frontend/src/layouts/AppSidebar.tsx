@@ -2,70 +2,59 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
 
 // Assume these icons are imported from an icon library
-import {
-  BoxCubeIcon,
-  BoxIconLine,
-  ChevronDownIcon,
-  GridIcon,
-  GroupIcon,
-  HorizontaLDots,
-  ListIcon,
-  PageIcon,
-  PieChartIcon,
-  PlugInIcon,
-  TableIcon,
-  UserCircleIcon,
-} from "../icons/";
+// import {
+//   BoxCubeIcon,
+//   BoxIconLine,
+//   ChevronDownIcon,
+//   GridIcon,
+//   GroupIcon,
+//   HorizontaLDots,
+//   ListIcon,
+//   PageIcon,
+//   PieChartIcon,
+//   PlugInIcon,
+//   TableIcon,
+//   UserCircleIcon,
+// } from "../icons/";
 
 import { useSidebar } from "../context/SidebarContext";
 // import SidebarWidget from "./SidebarWidget";
 
 type NavItem = {
   name: string;
-  icon: React.ReactNode;
-  path?: string;
-  subItems?: { name: string; path: string; icon?: React.ReactNode;}[];
+  icon?: React.ReactNode;
+  path: string;
 };
 
 const navItems: NavItem[] = [
-  {
-    icon: <GridIcon />,
-    name: "Dashboard",
-    subItems: [
-      { name: "Ecommerce", path: "/admin/", icon: <PieChartIcon />},
-      { name: "Categories", path: "/admin/categories",  },
-      { name: "Products", path: "/admin/products",  },
-      { name: "Customers", path: "/admin/customers", icon: <GroupIcon /> },
-      { name: "Orders", path: "/admin/orders", icon: <BoxIconLine /> },
-    ],
+  { 
+    // icon: <GridIcon />,
+    name: "Dashboard", 
+    path: "/admin/"
+  },
+  { 
+    name: "Categories", 
+    path: "/admin/categories",
+  },
+  { 
+    name: "Products",
+     path: "/admin/products",
+  },
+  { 
+    // icon: <GroupIcon />,
+    name: "Customers", 
+    path: "/admin/customers",
+  },
+  { 
+  // icon: <BoxIconLine />,
+    name: "Orders",
+    path: "/admin/orders",
   },
   {
-    icon: <UserCircleIcon />,
+    // icon: <UserCircleIcon />,
     name: "User Profile",
     path: "/admin/profile",
   }
-];
-
-//TODO: Remove after 
-const othersItems: NavItem[] = [
-  {
-    name: "Forms",
-    icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/admin/form-elements"}],
-  },
-  {
-    name: "Tables",
-    icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/admin/basic-tables"}],
-  },
-  {
-    name: "Pages",
-    icon: <PageIcon />,
-    subItems: [
-      { name: "Blank Page", path: "/admin/blank"},
-      { name: "404 Error", path: "/admin/error-404"},
-    ],
-  },
 ];
 
 const AppSidebar: React.FC = () => {
@@ -89,22 +78,6 @@ const AppSidebar: React.FC = () => {
 
   useEffect(() => {
     let submenuMatched = false;
-    ["main", "others"].forEach((menuType) => {
-      const items = menuType === "main" ? navItems : othersItems;
-      items.forEach((nav, index) => {
-        if (nav.subItems) {
-          nav.subItems.forEach((subItem) => {
-            if (isActive(subItem.path)) {
-              setOpenSubmenu({
-                type: menuType as "main" | "others",
-                index,
-              });
-              submenuMatched = true;
-            }
-          });
-        }
-      });
-    });
 
     if (!submenuMatched) {
       setOpenSubmenu(null);
@@ -140,44 +113,7 @@ const AppSidebar: React.FC = () => {
     <ul className="flex flex-col gap-4">
       {items.map((nav, index) => (
         <li key={nav.name}>
-          {nav.subItems ? (
-            <button
-              onClick={() => handleSubmenuToggle(index, menuType)}
-              className={`menu-item group ${
-                openSubmenu?.type === menuType && openSubmenu?.index === index
-                  ? "menu-item-active"
-                  : "menu-item-inactive"
-              } cursor-pointer ${
-                !isExpanded && !isHovered
-                  ? "lg:justify-center"
-                  : "lg:justify-start"
-              }`}
-            >
-              <span
-                className={`menu-item-icon-size  ${
-                  openSubmenu?.type === menuType && openSubmenu?.index === index
-                    ? "menu-item-icon-active"
-                    : "menu-item-icon-inactive"
-                }`}
-              >
-                {nav.icon}
-              </span>
-              {(isExpanded || isHovered || isMobileOpen) && (
-                <span className="menu-item-text">{nav.name}</span>
-              )}
-              {(isExpanded || isHovered || isMobileOpen) && (
-                <ChevronDownIcon
-                  className={`ml-auto w-5 h-5 transition-transform duration-200 ${
-                    openSubmenu?.type === menuType &&
-                    openSubmenu?.index === index
-                      ? "rotate-180 text-brand-500"
-                      : ""
-                  }`}
-                />
-              )}
-            </button>
-          ) : (
-            nav.path && (
+          {nav.path && (
               <Link
                 to={nav.path}
                 className={`menu-item group ${
@@ -197,39 +133,7 @@ const AppSidebar: React.FC = () => {
                   <span className="menu-item-text">{nav.name}</span>
                 )}
               </Link>
-            )
-          )}
-          {nav.subItems && (isExpanded || isHovered || isMobileOpen) && (
-            <div
-              ref={(el) => {
-                subMenuRefs.current[`${menuType}-${index}`] = el;
-              }}
-              className="overflow-hidden transition-all duration-300"
-              style={{
-                height:
-                  openSubmenu?.type === menuType && openSubmenu?.index === index
-                    ? `${subMenuHeight[`${menuType}-${index}`]}px`
-                    : "0px",
-              }}
-            >
-              <ul className="mt-2 space-y-1 ml-9">
-                {nav.subItems.map((subItem) => (
-                  <li key={subItem.name}>
-                    <Link
-                      to={subItem.path}
-                      className={`menu-dropdown-item ${
-                        isActive(subItem.path)
-                          ? "menu-dropdown-item-active"
-                          : "menu-dropdown-item-inactive"
-                      }`}
-                    >
-                      {subItem.icon} {subItem.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+            )}
         </li>
       ))}
     </ul>
@@ -259,23 +163,16 @@ const AppSidebar: React.FC = () => {
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <img
-                className="dark:hidden"
                 src="/logo.png"
-                alt="Logo"
+                alt="Pawstin Logo"
                 width={150}
                 height={40}
-              />
-              <img
-                className="hidden dark:block"
-                src="/images/logo/logo-dark.svg"
-                alt="Logo"
-                width={150}
-                height={40}
+                className="site-logo"
               />
             </>
           ) : (
             <img
-              src="/images/logo/logo-icon.svg"
+              src="logo.png"
               alt="Logo"
               width={32}
               height={32}
@@ -301,22 +198,6 @@ const AppSidebar: React.FC = () => {
                 )}
               </h2>
               {renderMenuItems(navItems, "main")}
-            </div>
-            <div className="">
-              <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
-                  !isExpanded && !isHovered
-                    ? "lg:justify-center"
-                    : "justify-start"
-                }`}
-              >
-                {isExpanded || isHovered || isMobileOpen ? (
-                  "Others"
-                ) : (
-                  <HorizontaLDots />
-                )}
-              </h2>
-              {renderMenuItems(othersItems, "others")}
             </div>
           </div>
         </nav>

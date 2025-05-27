@@ -18,18 +18,18 @@ export class CategoriesController {
     return this.categoriesService.findAll(page);
   }
 
-  @Get(':slug')
-  findOne(@Param('slug') slug: string) {
-    return this.categoriesService.findOne(slug);
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.categoriesService.findOne(id);
   }
 
-  @Patch(':slug')
-  update(@Param('slug') slug: string, @Body() dto: UpdateCategoryDto) {
-    return this.categoriesService.update(slug, dto);
+  @Patch(':id')
+  update(@Param('id') id: number, @Body() dto: UpdateCategoryDto) {
+    return this.categoriesService.update(id, dto);
   }
 
-  @Delete('delete/:slug')
-  remove(@Param('slug') slug: string) {
-    return this.categoriesService.remove(slug);
+  @Delete('delete/:id')
+  remove(@Param('id') id: number) {
+    return this.categoriesService.remove(id);
   }
 }

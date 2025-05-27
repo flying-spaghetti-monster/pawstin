@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-// import { Categories } from '@prisma/client';
 
 @Injectable()
 export class CategoriesService {
@@ -37,25 +36,22 @@ export class CategoriesService {
     };
   }
 
-  findOne(slug: string) {
+  findOne(id: number) {
     return this.prisma.categories.findUnique({
-      where: { slug },
+      where: { id },
     });
   }
 
-  update(slug: string, data: UpdateCategoryDto) {
-    // return this.prisma.categories.update({
-    //   where: { slug },
-    //   data: {
-    //     ...data
-
-    //   },
-    // });
+  update(id: number, data: UpdateCategoryDto) {
+    return this.prisma.categories.update({
+      where: { id },
+      data: data,
+    });
   }
 
-  remove(slug: string) {
+  remove(id: number) {
     return this.prisma.categories.delete({
-      where: { slug },
+      where: { id },
     });
   }
 }
