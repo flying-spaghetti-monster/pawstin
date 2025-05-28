@@ -1,16 +1,14 @@
+import "../site.css";
+
 import { Outlet } from "react-router";
-
 import { CartContextProvider } from "../context/CartContext";
-
-import Footer from "../pages/Footer";
-import Header from "../pages/Header";
-import Navigation from "../pages/Navigation.tsx";
+import Footer from "../pages/components/Footer.tsx";
+import Navigation from "../pages/components/Navigation.tsx";
 
 function SiteLayout() {
   return (
     <CartContextProvider>
       <Navigation />
-      <Header />
       <main>
         <Outlet />
       </main>

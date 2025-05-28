@@ -1,3 +1,6 @@
+import '../addmin.css';
+import 'swiper/swiper-bundle.css';
+import 'flatpickr/dist/flatpickr.css';
 import toast, { Toaster } from 'react-hot-toast';
 import { SidebarProvider, useSidebar } from "../context/SidebarContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -8,6 +11,10 @@ import AppSidebar from "./AppSidebar";
 import { getToken } from '../helper/localSorageHelper';
 import { CustomersPageProvider } from '../context/CustomersPageContext';
 import { CategoriesPageProvider } from '../context/CategoriesPageContext';
+import { ProductsPageProvider } from '../context/ProductsPageContext';
+import { ShippersPageProvider } from '../context/ShippersPageContext';
+import { OrdersPageProvider } from '../context/OrdersPageContext';
+
 
 const LayoutContent: React.FC = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
@@ -47,11 +54,17 @@ const AppLayout: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <CustomersPageProvider>
-        <CategoriesPageProvider>
-            <SidebarProvider>
-              <LayoutContent />
-            </SidebarProvider>
-        </CategoriesPageProvider>
+      <CategoriesPageProvider>
+      <ProductsPageProvider>
+      <OrdersPageProvider>
+      <ShippersPageProvider>
+      <SidebarProvider>
+        <LayoutContent />
+      </SidebarProvider>
+      </ShippersPageProvider>
+      </OrdersPageProvider>
+      </ProductsPageProvider>
+      </CategoriesPageProvider>
       </CustomersPageProvider>
     </QueryClientProvider>
   );

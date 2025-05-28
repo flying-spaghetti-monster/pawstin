@@ -56,6 +56,7 @@ model Categories {
 model Products {
   id            Int            @id @default(autoincrement())
   product_name  String
+  description   String
   slug          String         @unique
   price         Int
   discont_price Int

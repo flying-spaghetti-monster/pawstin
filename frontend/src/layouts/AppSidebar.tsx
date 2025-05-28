@@ -37,6 +37,10 @@ const navItems: NavItem[] = [
     path: "/admin/categories",
   },
   { 
+    name: "Shippers", 
+    path: "/admin/shippers",
+  },
+  { 
     name: "Products",
      path: "/admin/products",
   },
@@ -52,7 +56,7 @@ const navItems: NavItem[] = [
   },
   {
     // icon: <UserCircleIcon />,
-    name: "User Profile",
+    name: "Profile",
     path: "/admin/profile",
   }
 ];

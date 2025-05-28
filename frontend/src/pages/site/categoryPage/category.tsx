@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 
-import "./Plp.scss";
+import './category.scss';
 
 import axios from "axios";
 
-import AddToCartBtn from "./components/AddToCartBtn";
+import AddToCartBtn from "../../components/AddToCartBtn";
 
 function Plp() {
   const [products, setProducts] = useState([]);

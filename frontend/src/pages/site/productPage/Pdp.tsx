@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router";
 
 import axios from "axios";
 
-import AddToCartBtn from "./components/AddToCartBtn";
+import AddToCartBtn from "../../components/AddToCartBtn";
 
 interface Product {
   isbn: string;

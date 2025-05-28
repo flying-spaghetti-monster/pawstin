@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 
-import MiniCartBtn from "./components/MiniCartBtn";
-import Logo from "./components/Logo";
+import MiniCartBtn from "./MiniCartBtn";
+import Logo from "./Logo";
 // import SearchAppBar from "./Search";
 import NavMenuLink from "./NavMenuLink";
 

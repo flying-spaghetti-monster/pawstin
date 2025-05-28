@@ -1,7 +1,7 @@
 "use client";
 
 import { Link } from "react-router";
-import { cp } from '../hooks/utils';
+import { cp } from '../../hooks/utils';
 
 export default function NavMenuLink({
   route,

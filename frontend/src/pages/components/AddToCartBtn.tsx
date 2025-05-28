@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 // import { useCartContext } from "../../hooks/useCartContext";
-import { useCartStore } from "../../stores/cartStore";
+import { useCartStore } from "../site/stores/cartStore";
 import {shallow} from "zustand/shallow";
 
 // const handleAdd: () => void = (e) => {

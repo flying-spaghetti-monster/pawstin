@@ -16,9 +16,6 @@ export class ProductsService {
 
   async findAll(page: number = 1) {
     const products = await this.prisma.products.findMany({
-      select: {
-        id: true,
-      },
       skip: (page - 1) * 6,
       take: 6,
     });

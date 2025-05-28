@@ -52,6 +52,7 @@ async function createRandomCategories(): Promise<void> {
 
 type Product = {
   product_name: string;
+  description: string;
   slug: string;
   price: number;
   discont_price: number;
@@ -66,6 +67,7 @@ async function createRandomProducts(): Promise<void> {
 
   const data = Array.from({ length: 20 }, () => ({
     product_name: faker.commerce.productName(),
+    description: faker.commerce.productDescription(),
     slug: faker.helpers.slugify(faker.commerce.productName().toLowerCase() + '-' + faker.string.alpha(4)),
     price: Number(faker.commerce.price({ min: 10, max: 1000, dec: 0 })),
     discont_price: Number(faker.commerce.price({ min: 5, max: 900, dec: 0 })),

@@ -16,14 +16,6 @@ export class CategoriesService {
 
   async findAll(page: number = 1) {
     const categories = await this.prisma.categories.findMany({
-      select: {
-        id: true,
-        category_name: true,
-        description: true,
-        isActive: true,
-        picture: true,
-        slug: true,
-      },
       skip: (page - 1) * 6,
       take: 6,
     });

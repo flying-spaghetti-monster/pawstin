@@ -1,9 +1,9 @@
 import React from "react";
-import GridShape from "../admin/components/common/GridShape";
+import GridShape from "../pages/admin/components/common/GridShape";
 import { Link, Navigate } from "react-router";
-import ThemeTogglerTwo from "../admin/components/common/ThemeTogglerTwo";
+import ThemeTogglerTwo from "../pages/admin/components/common/ThemeTogglerTwo";
 import toast, { Toaster } from 'react-hot-toast';
-import { getToken } from '../../helper/localSorageHelper';
+import { getToken } from '../helper/localSorageHelper';
 
 export default function AuthLayout({
   children,

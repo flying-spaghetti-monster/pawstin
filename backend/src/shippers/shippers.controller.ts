@@ -1,20 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ShippersService } from './shippers.service';
 import { CreateShipperDto } from './dto/create-shipper.dto';
 import { UpdateShipperDto } from './dto/update-shipper.dto';
 
 @Controller('shippers')
 export class ShippersController {
-  constructor(private readonly shippersService: ShippersService) {}
+  constructor(private readonly shippersService: ShippersService) { }
 
   @Post()
   create(@Body() createShipperDto: CreateShipperDto) {
     return this.shippersService.create(createShipperDto);
   }
 
-  @Get()
-  findAll() {
-    return this.shippersService.findAll();
+  @Get('findAll')
+  findAll(@Query('page') page: number) {
+    return this.shippersService.findAll(page);
   }
 
   @Get(':id')

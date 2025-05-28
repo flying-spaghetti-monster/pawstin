@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { useCartStore } from "../../stores/cartStore";
+import { useCartStore } from "../site/stores/cartStore";
 // import { IoCart } from "react-icons/io5";
 
 function MiniCartBtn() {

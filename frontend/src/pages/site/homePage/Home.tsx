@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router";
 import axios from "axios";
 
 import AddToCartBtn from "./components/AddToCartBtn";
+import Header from '../../components/Header';
 
 function Home() {
   // const [recomends, setRelateds] = useState([]);
@@ -29,7 +30,8 @@ function Home() {
   //     });
   // }, []);
 
-  return (<>1234</>
+  return (
+    <Header />
     // recomends && (
     //   <div className="row">
     //     <div className="col">

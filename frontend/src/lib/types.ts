@@ -38,3 +38,79 @@ export type CategoryResponse = {
 
 export type Actions = "CREATE" | "EDIT" | "DELETE";
 
+export type ShipperResponse = {
+  id: number;
+  company_name: string;
+  phone: string;
+  isActive: boolean;
+}
+
+export type ProductResponse = {
+  id: number;
+  product_name: string;
+  description: string;
+  slug: string;
+  price: number;
+  discont_price: number;
+  in_stock: number;
+  isActive: boolean;
+  category_id: number;
+}
+
+// CREATED	Замовлення створене, але ще не оброблено
+// PENDING	Очікує підтвердження або оплати
+// CONFIRMED	Підтверджено (клієнтом або системою)
+// PROCESSING	У процесі обробки
+// INPROGRESS	Виконується
+// SHIPPED	Відправлено
+// DELIVERED	Доставлено
+// CANCELLED	Скасовано користувачем або системою
+// RETURNED	Товар повернуто
+// FAILED	Помилка виконання (наприклад, оплати)
+// REFUNDED	Гроші повернено
+// ONHOLD	Призупинено з певної причини
+
+enum Status {
+  CREATED,
+  PENDING,
+  CONFIRMED,
+  PROCESSING,
+  INPROGRESS,
+  SHIPPED,
+  DELIVERED,
+  CANCELLED,
+  RETURNED,
+  FAILED,
+  REFUNDED,
+  ONHOLD,
+}
+
+export type OrderResponse = {
+  id: number;
+  ship_first_name: string;
+  ship_last_name: string;
+  ship_address: string;
+  ship_city: string;
+  ship_region: string;
+  ship_postal_code: string;
+  ship_country: string;
+  phone: string;
+  customer_id: number;
+  shipper_id: number;
+  status: Status;
+}
+
+// Define the CartItem type if not already defined or import it from the correct module
+type CartItem = {
+  id: string;
+  qty: number;
+  // add other properties as needed
+};
+
+interface CartStore {
+  plis: CartItem[];
+  qty: number;
+  addToCart: (item: CartItem) => void;
+  removeFromCart: (id: string) => void;
+  clearCart: () => void;
+}
