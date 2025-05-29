@@ -2,29 +2,31 @@ import { Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { GetCategoriesDto } from './dto/get-category.dto';
 
 @Injectable()
 export class CategoriesService {
   constructor(private readonly prisma: PrismaService) { }
 
   create(data: CreateCategoryDto) {
-    console.log('Creating:', data);
     return this.prisma.categories.create({
       data,
     });
   }
 
-  async findAll(page: number = 1) {
-    const categories = await this.prisma.categories.findMany({
-      skip: (page - 1) * 6,
-      take: 6,
-    });
+  async findAll(dto: GetCategoriesDto) {
+    const args: any = {};
+    if (dto.take) {
+      args.skip = dto.page ? (dto.page - 1) * dto.take : 0;
+      args.take = dto.take;
+    }
 
+    const categories = await this.prisma.categories.findMany(args);
     const totalCategories = await this.prisma.categories.count();
     return {
       categories,
       totalCategories,
-      totalPages: Math.ceil(totalCategories / 6),
+      totalPages: dto.take ? Math.ceil(totalCategories / dto.take) : null,
     };
   }
 

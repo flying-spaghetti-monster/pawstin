@@ -60,8 +60,6 @@ export const OrdersPageProvider: React.FC<{ children: React.ReactNode }> = ({
   })
 
   const createOrder = async (newData: OrdersPageContextType) => {
-    // Function to create a new order
-    console.log(newData)
     const response = await toast.promise(
       axios.post<OrderResponse>('/orders/create', newData),
       {

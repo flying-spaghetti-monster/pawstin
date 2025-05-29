@@ -60,8 +60,6 @@ export const CategoriesPageProvider: React.FC<{ children: React.ReactNode }> = (
   })
 
   const createCategory = async (newData: CategoriesPageContextType) => {
-    // Function to create a new category
-    console.log(newData)
     const response = await toast.promise(
       axios.post<CategoryResponse>('/categories/create', newData),
       {

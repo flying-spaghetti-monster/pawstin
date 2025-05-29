@@ -1,7 +1,8 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, HttpException, Get, Query, ParseIntPipe } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, HttpException, Get, Query, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { signInDto } from './dto/sing-in-auth.dto';
+import { JwtAuthGuard } from './guards/jwt.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -29,6 +30,7 @@ export class AuthController {
     return await this.authService.createUser(dto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('getUsers')
   async getUsers(@Query('page', ParseIntPipe) page: number) {
     return this.authService.getUsers(page);
@@ -36,5 +38,5 @@ export class AuthController {
 
   //TODO: Implement these methods
   // logout
-  //resetPassword
+  //resetPassword / gmail sevice
 }

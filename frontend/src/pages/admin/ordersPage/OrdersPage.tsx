@@ -32,8 +32,6 @@ export default function Orders() {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<OrderResponse> = (formData) => {
-    console.log(activeOrder);
-    console.log(formData);
     if (action === 'EDIT') {
       editOrder(formData);
     } else if (action === 'DELETE') {

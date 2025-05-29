@@ -3,20 +3,21 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { GetProductsDto } from './dto/get-products.dto';
 
-@UseGuards(JwtAuthGuard)
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() tdo: CreateProductDto) {
-    return this.productsService.create(tdo);
+  create(@Body() dto: CreateProductDto) {
+    return this.productsService.create(dto);
   }
 
   @Get('findAll')
-  findAll(@Query('page', ParseIntPipe) tdo) {
-    return this.productsService.findAll();
+  findAll(@Query() dto: GetProductsDto) {
+    return this.productsService.findAll(dto);
   }
 
   @Get(':id')
@@ -24,11 +25,13 @@ export class ProductsController {
     return this.productsService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() tdo: UpdateProductDto) {
-    return this.productsService.update(id, tdo);
+  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateProductDto) {
+    return this.productsService.update(id, dto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.remove(id);

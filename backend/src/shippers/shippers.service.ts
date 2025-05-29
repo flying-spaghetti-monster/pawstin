@@ -2,29 +2,31 @@ import { Injectable } from '@nestjs/common';
 import { CreateShipperDto } from './dto/create-shipper.dto';
 import { UpdateShipperDto } from './dto/update-shipper.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { GetShippersDto } from './dto/get-shippes.dto';
 
 @Injectable()
 export class ShippersService {
   constructor(private readonly prisma: PrismaService) { }
 
   create(data) {
-    console.log('Creating:', data);
     return this.prisma.shippers.create({
       data,
     });
   }
 
-  async findAll(page: number = 1) {
-    const shippers = await this.prisma.shippers.findMany({
-      skip: (page - 1) * 6,
-      take: 6,
-    });
+  async findAll(dto: GetShippersDto) {
+    const args: any = {};
+    if (dto.take) {
+      args.skip = dto.page ? (dto.page - 1) * dto.take : 0;
+      args.take = dto.take;
+    }
 
-    const totalShippers = await this.prisma.shippers.count();
+    const shippers = await this.prisma.categories.findMany(args);
+    const totalShippers = await this.prisma.categories.count();
     return {
       shippers,
       totalShippers,
-      totalPages: Math.ceil(totalShippers / 6),
+      totalPages: dto.take ? Math.ceil(totalShippers / dto.take) : null,
     };
   }
 

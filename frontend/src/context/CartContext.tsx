@@ -31,7 +31,6 @@ export const CartContextProvider = ({ children }) => {
   const updateProduct = (id, qty) => {
     setCart((prevCart) => {
       const existingProduct = prevCart.plis.find((item) => item.isbn === id);
-      // console.log("existingProduct", existingProduct);
       if (existingProduct) {
         return {
           plis: prevCart.plis.map((item) =>
@@ -47,7 +46,6 @@ export const CartContextProvider = ({ children }) => {
   const deleteProduct = (id) => {
     setCart((prevCart) => {
       const existingProduct = prevCart.plis.find((item) => item.isbn === id);
-      // console.log("existingProduct", existingProduct);
       if (existingProduct) {
         return {
           plis: prevCart.plis.filter((item) => item.isbn !== id),
@@ -75,12 +73,10 @@ export const CartContextProvider = ({ children }) => {
   useEffect(() => {
     const initialCart = cartStorage.getCart();
     setCart(initialCart);
-    // console.log("з localStorage", cart);
   }, []);
 
   useEffect(() => {
     cartStorage.saveCart(cart);
-    // console.log("в localStorage", cart);
   }, [cart]);
 
   return (

@@ -32,8 +32,6 @@ export default function Categories() {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<CategoryResponse> = (formData) => {
-    console.log(activeCategory);
-    console.log(formData);
     if (action === 'EDIT') {
       editCategory(formData);
     } else if (action === 'DELETE') {

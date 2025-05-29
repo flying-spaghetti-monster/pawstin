@@ -11,54 +11,53 @@ function AddToCartBtn({
   quantity = 1,
 }: {
   product: ProductResponse,
-  quantity: number,
-  className: string,
+  quantity?: number,
+  className?: string,
   children: React.ReactNode,
 })  {
-  const { plis, addProduct } = useCartStore((state) => {
-    return {
-      plis: state.plis,
-      addProduct: state.addToCart,
-    };
-  }, shallow);
+  // const { plis, addProduct } = useCartStore((state) => {
+  //   return {
+  //     plis: state.plis,
+  //     addProduct: state.addToCart,
+  //   };
+  // }, shallow);
 
-  const [isDisabled, setDisabled] = useState(false);
+  // const [isDisabled, setDisabled] = useState(false);
 
-  const handleAdd = (e) => {
-    e.preventDefault();
+  // const handleAdd = (e) => {
+  //   e.preventDefault();
 
-    const existingCartProduct = plis.find((item) => item.id === product.isbn);
+  //   const existingCartProduct = plis.find((item) => item.id === product.isbn);
 
-    if (existingCartProduct) {
-      if (existingCartProduct.qty + quantity > product.quantity) {
-        setDisabled(true);
-        return;
-      }
-    }
+  //   if (existingCartProduct) {
+  //     if (existingCartProduct.qty + quantity > product.quantity) {
+  //       setDisabled(true);
+  //       return;
+  //     }
+  //   }
 
-    console.log(product.isbn, quantity);
-    addProduct({ id: product.isbn, qty: quantity });
-  };
+  //   addProduct({ id: product.isbn, qty: quantity });
+  // };
 
-  useEffect(() => {
-    const existingCartProduct = plis.find((item) => item.id === product.isbn);
+  // useEffect(() => {
+  //   const existingCartProduct = plis.find((item) => item.id === product.isbn);
 
-    if (existingCartProduct) {
-      if (existingCartProduct.qty + quantity > product.quantity) {
-        setDisabled(true);
-      } else {
-        setDisabled(false);
-      }
-    }
-  }, [plis]);
+  //   if (existingCartProduct) {
+  //     if (existingCartProduct.qty + quantity > product.quantity) {
+  //       setDisabled(true);
+  //     } else {
+  //       setDisabled(false);
+  //     }
+  //   }
+  // }, [plis]);
 
   return (
     <button
-      disabled={isDisabled}
-      className={className}
-      onClick={handleAdd}
+      // disabled={isDisabled}
+      // className={className}
+      // onClick={handleAdd}
       type="button"
-      style={isDisabled ? { backgroundColor: "gray" } : {}}
+      // style={isDisabled ? { backgroundColor: "gray" } : {}}
     >
       {children}
     </button>

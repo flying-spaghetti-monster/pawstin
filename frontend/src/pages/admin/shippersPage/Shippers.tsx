@@ -32,8 +32,6 @@ export default function Shippers() {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<ShipperResponse> = (formData) => {
-    console.log(activeShipper);
-    console.log(formData);
     if (action === 'EDIT') {
       editShipper(formData);
     } else if (action === 'DELETE') {

@@ -6,29 +6,23 @@ export default function ProductIListItem({ product } : { product : ProductRespon
   return (
     <div
       key={product.id}
-      className="col-3 justify-content-center py-5"
+      className="py-5 h-100"
     >
-      <div className="card h-100">
-        <Link to={`/product/${encodeURI(product.slug)}`}>
-          <img
-            className="card-img-top"
-            src="/cube.jpg"
-            alt={product.product_name}
-          />
-          <div className="card-body p-4">
-            <div className="text-center">
-              <h5 className="fw-bolder">{product.product_name}</h5>
-              $ {product.price}
-            </div>
-          </div>
-        </Link>
-        <div className="card-footer p-4 pt-0 border-top-0 bg-transparent">
-          <div className="text-center">
-            {/* <AddToCartBtn className="btn btn-outline-dark mt-auto" product={product}>
-              Add to cart
-            </AddToCartBtn> */}
-          </div>
+      <Link to={`/${product.category_slug}/product/${encodeURI(product.slug)}`}>
+        <img
+          className="w-[450px]"
+          src="/cube.jpg"
+          alt={product.product_name}
+        />
+        <div className="">
+          <h5 className="fw-bolder">{product.product_name}</h5>
+          $ {product.price}
         </div>
+      </Link>
+      <div className="">
+        <AddToCartBtn className="" product={product}>
+          Add to cart
+        </AddToCartBtn>
       </div>
     </div>
   );

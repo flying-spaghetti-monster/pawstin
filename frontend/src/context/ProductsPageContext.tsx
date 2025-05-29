@@ -60,8 +60,6 @@ export const ProductsPageProvider: React.FC<{ children: React.ReactNode }> = ({
   })
 
   const createProduct = async (newData: ProductsPageContextType) => {
-    // Function to create a new product
-    console.log(newData)
     const response = await toast.promise(
       axios.post<ProductResponse>('/products/create', newData),
       {

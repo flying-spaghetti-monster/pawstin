@@ -6,19 +6,15 @@ function Home() {
   return (
     <>
       <Header/>
-      <div className="row">
-        <div className="col">
-          <section className="py-5 bg-light justify-content-center">
-            <h1 className="fw-bolder mb-4 text-center text-4xl">Recommended products</h1>
-            <div className="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-              <Recomendations />
-            </div>
-            <div className="text-center">
-              <Link to={"/products"} className="btn btn-outline-dark mt-auto text-2xl border-2 p-1 px-4 rounded-xl hover:bg-gray-500"> See All </Link>
-            </div>
-          </section>
+      <section className="container flex flex-col mx-auto justify-center items-center py-20 bg-light text-center px-4">
+        <h1 className="fw-bolder mb-4 text-4xl">Recommended products</h1>
+        <div className="flex flex-row justify-between gap-4" >
+          <Recomendations />
         </div>
-      </div>
+        <div className="">
+          <Link to={"/products"} className="btn btn-outline-dark mt-auto text-2xl border-2 p-1 px-4 rounded-xl hover:bg-gray-500"> See All </Link>
+        </div>
+      </section>
     </>
   );
 }

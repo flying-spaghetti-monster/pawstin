@@ -32,8 +32,6 @@ export default function products() {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<ProductResponse> = (formData) => {
-    console.log(activeProduct);
-    console.log(formData);
     if (action === 'EDIT') {
       editProduct(formData);
     } else if (action === 'DELETE') {

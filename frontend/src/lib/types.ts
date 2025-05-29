@@ -54,7 +54,7 @@ export type ProductResponse = {
   discont_price: number;
   in_stock: number;
   isActive: boolean;
-  category_id: number;
+  category_slug: string;
 }
 
 // CREATED	Замовлення створене, але ще не оброблено

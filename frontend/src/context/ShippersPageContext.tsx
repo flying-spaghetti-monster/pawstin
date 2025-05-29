@@ -60,8 +60,6 @@ export const ShippersPageProvider: React.FC<{ children: React.ReactNode }> = ({
   })
 
   const createShipper = async (newData: ShippersPageContextType) => {
-    // Function to create a new Shipper
-    console.log(newData)
     const response = await toast.promise(
       axios.post<ShipperResponse>('/shippers/create', newData),
       {

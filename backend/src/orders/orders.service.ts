@@ -2,29 +2,32 @@ import { Injectable } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { GetOrdersDto } from './dto/get-orders.dto';
 
 @Injectable()
 export class OrdersService {
   constructor(private readonly prisma: PrismaService) { }
 
-  create(data) {
-    console.log('Creating:', data);
-    return this.prisma.orders.create({
-      data,
-    });
+  create(dto: CreateOrderDto) {
+    //TODO: implement logic
+    // return this.prisma.orders.create({
+    //   data
+    // });
   }
 
-  async findAll(page: number = 1) {
-    const orders = await this.prisma.orders.findMany({
-      skip: (page - 1) * 6,
-      take: 6,
-    });
+  async findAll(dto: GetOrdersDto) {
+    const args: any = {};
+    if (dto.take) {
+      args.skip = dto.page ? (dto.page - 1) * dto.take : 0;
+      args.take = dto.take;
+    }
 
-    const totalorders = await this.prisma.orders.count();
+    const orders = await this.prisma.products.findMany(args);
+    const totalorders = await this.prisma.products.count();
     return {
       orders,
       totalorders,
-      totalPages: Math.ceil(totalorders / 6),
+      totalPages: dto.take ? Math.ceil(totalorders / dto.take) : null,
     };
   }
 
@@ -35,10 +38,11 @@ export class OrdersService {
   }
 
   update(id: number, data: UpdateOrderDto) {
-    return this.prisma.orders.update({
-      where: { id },
-      data: data,
-    });
+    //TODO: implement logic
+    // return this.prisma.orders.update({
+    //   where: { id },
+    //   data: data,
+    // });
   }
 
   remove(id: number) {
