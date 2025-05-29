@@ -37,9 +37,24 @@ export class CategoriesService {
     };
   }
 
-  findOne(id: number) {
+  findOne(slug: string) {
     return this.prisma.categories.findUnique({
-      where: { id },
+      where: { slug },
+      include: {
+        products: {
+          where: {
+            isActive: true, //TODO: fix for admin panel
+          },
+          select: {
+            id: true,
+            product_name: true,
+            slug: true,
+            price: true,
+            discont_price: true,
+            in_stock: true,
+          },
+        },
+      },
     });
   }
 

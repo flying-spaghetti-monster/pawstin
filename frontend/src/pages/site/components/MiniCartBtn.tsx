@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { useCartStore } from "../stores/cartStore";
 
 
+//TODO: Implement MiniCartBtn
 function MiniCartBtn() {
   const quantity = useCartStore((state) => state.qty);
 

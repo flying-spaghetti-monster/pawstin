@@ -21,9 +21,9 @@ export class CategoriesController {
     return this.categoriesService.findAll(dto);
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.categoriesService.findOne(id);
+  @Get(':slug')
+  findOne(@Param('slug') slug: string) {
+    return this.categoriesService.findOne(slug);
   }
 
   @UseGuards(JwtAuthGuard)

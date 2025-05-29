@@ -8,7 +8,7 @@ import ToggleSwitch from "../form/form-elements/ToggleSwitch";
 import SelectInputs from "../form/form-elements/SelectInputs";
 import TextAreaInput from "../form/form-elements/TextAreaInput";
 import InputStates from "../form/form-elements/InputStates";
-import PageMeta from "../common/PageMeta";
+import PageMeta from "../../../components/PageMeta";
 import FileInputExample from '../form/form-elements/FileInputExample';
 
 export default function FormElements() {

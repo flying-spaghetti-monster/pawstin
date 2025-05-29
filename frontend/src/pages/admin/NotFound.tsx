@@ -1,6 +1,6 @@
 import GridShape from "../admin/components/common/GridShape";
 import { Link } from "react-router";
-import PageMeta from "../admin/components/common/PageMeta";
+import PageMeta from "../components/PageMeta";
 
 export default function NotFound() {
   return (

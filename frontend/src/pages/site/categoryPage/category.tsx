@@ -1,68 +1,49 @@
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
+import { CategoryResponse, ProductResponse } from '../../../lib/types';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import ProductIListItem from '../components/ProductIListItem';
+import PageMeta from '../../components/PageMeta';
 
-import AddToCartBtn from "../components/AddToCartBtn";
+ type TCategoryResponse = CategoryResponse & {
+  products: ProductResponse[]
+ }
 
-//TODO: implement Category page
+  //TODO: loading logic {isLoading && <Loading />}
+  //TODO: Sort
+  //TODO: Breadcrumbs
+  //TODO: moove to context provider
+
 function Category() {
-  // const [products, setProducts] = useState([]);
-  // const controller = new AbortController();
+  const activePathName:string = useLocation().pathname;
+  const { data } = useQuery<TCategoryResponse[]>({
+    queryKey: [activePathName.substring(2)],
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    keepPreviousData: true,
+    queryFn: async (): Promise<TCategoryResponse[]> =>  {
+      const response = await axios.get('http://localhost:3000/api/categories/music');
+      return response.data;
+    }
+  })
+  if(!data) return;
 
-  // useEffect(() => {
-  //   const controller = new AbortController();
-  //   axios("http://localhost:6000/product", { signal: controller.signal })
-  //     .then((data) => {
-  //       setProducts(data.data);
-  //     })
-  //     .catch((err) => {
-  //       if (err.name === "AbortError") {
-  //         // Не помилка, просто запит скасовано
-  //         return;
-  //       }
-  //       console.log(err);
-  //     });
-  // }, []);
-
+  const products: ProductResponse[] = data.products;
   return (
-    <></>
-    // <div className="col">
-    //   <div className="row">
-    //     {products.map((item) => {
-    //       return (
-    //         <div
-    //           key={item.isbn}
-    //           className="col-3  mb-5 justify-content-center py-5"
-    //         >
-    //           <div className="card h-100">
-    //             <Link to={`/product/${encodeURI(item.isbn)}`}>
-    //               <img
-    //                 className="card-img-top"
-    //                 src={item.imageUrl}
-    //                 alt={item.productName}
-    //               />
-    //               <div className="card-body p-4">
-    //                 <div className="text-center">
-    //                   <h5 className="fw-bolder">{item.productName}</h5>$
-    //                   {item.price}
-    //                 </div>
-    //               </div>
-    //             </Link>
-
-    //             <div className="card-footer p-4 pt-0 border-top-0 bg-transparent">
-    //               <div className="text-center">
-    //                 <AddToCartBtn
-    //                   className="btn btn-outline-dark mt-auto"
-    //                   product={item}
-    //                 >
-    //                   Add to cart
-    //                 </AddToCartBtn>
-    //               </div>
-    //             </div>
-    //           </div>
-    //         </div>
-    //       );
-    //     })}
-    //   </div>
-    // </div>
+    <>
+      <PageMeta
+        title={data.category_name}
+        description={data.description}
+      />
+      
+      <main className="container flex flex-col mx-auto justify-center items-center py-20 bg-light text-center px-4">
+        <h1 className="fw-bolder mb-4 text-4xl">{data.category_name}</h1>
+        <div className="grid grid-cols-4 justify-between gap-4" >
+          {products.map((product: ProductResponse) => (
+            <ProductIListItem key={product.id} product={{ ...product, category_slug: data.slug }} />
+          ))}
+        </div>
+      </main>
+    </>
   );
 }
 

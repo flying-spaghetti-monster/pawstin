@@ -23,7 +23,7 @@ export const useMainMenu = create<CategoryStore>()(
           const routes = [
             { category_name: "Home", slug: "/" },
             ...response.data.categories,
-            { category_name: "About", slug: "/about" }
+            { category_name: "About", slug: "about" }
           ];
           set({ items: routes });
         } catch (error) {

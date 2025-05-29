@@ -2,7 +2,7 @@ import { Table, TableBody, TableCell, TableHeader, TableRow } from '../component
 import PaginationControls from '../components/common/PaginationControls';
 import { useCustomersPage } from '../../../context/CustomersPageContext';
 import PageBreadcrumb from '../components/common/PageBreadCrumb';
-import PageMeta from "../components/common/PageMeta";
+import PageMeta from "../../components/PageMeta";
 import Badge from '../components/ui/badge/Badge';
 
 export default function Customers() {

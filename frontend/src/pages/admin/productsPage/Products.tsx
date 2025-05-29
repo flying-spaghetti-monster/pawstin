@@ -1,6 +1,6 @@
 import { useModal } from '../../../hooks/useModal';
 import PageBreadcrumb from '../components/common/PageBreadCrumb';
-import PageMeta from "../components/common/PageMeta";
+import PageMeta from "../../components/PageMeta";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '../components/ui/table';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Actions, ProductResponse } from '../../../lib/types';

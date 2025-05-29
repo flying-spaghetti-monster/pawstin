@@ -1,4 +1,4 @@
-import PageMeta from "../admin/components/common/PageMeta";
+import PageMeta from "../components/PageMeta";
 import AuthLayout from "../../layouts/AuthPageLayout";
 import SignUpForm from "../admin/components/auth/SignUpForm";
 

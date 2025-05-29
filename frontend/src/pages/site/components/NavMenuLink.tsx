@@ -13,8 +13,8 @@ export default function NavMenuLink({
       <Link
         to={route.slug}
         className={cp("text-3xl hover:text-[#4a4a4b] transition", {
-          "text-[#141415]": activePathName === route.slug,
-          "text-[#707071]": activePathName !== route.slug,
+          "text-[#141415]": activePathName === '/' +route.slug,
+          "text-[#707071]": activePathName !== '/' +route.slug,
         })}
       >
         {route.category_name}
