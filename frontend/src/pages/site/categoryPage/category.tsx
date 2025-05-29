@@ -5,7 +5,7 @@ import axios from 'axios';
 import ProductIListItem from '../components/ProductIListItem';
 import PageMeta from '../../components/PageMeta';
 
- type TCategoryResponse = CategoryResponse & {
+ type _CategoryResponse = CategoryResponse & {
   products: ProductResponse[]
  }
 
@@ -16,30 +16,30 @@ import PageMeta from '../../components/PageMeta';
 
 function Category() {
   const activePathName:string = useLocation().pathname;
-  const { data } = useQuery<TCategoryResponse[]>({
+  const { data: category } = useQuery<_CategoryResponse[]>({
     queryKey: [activePathName.substring(2)],
     staleTime: 1000 * 60 * 5, // 5 minutes
     keepPreviousData: true,
-    queryFn: async (): Promise<TCategoryResponse[]> =>  {
+    queryFn: async (): Promise<_CategoryResponse[]> =>  {
       const response = await axios.get('http://localhost:3000/api/categories/music');
       return response.data;
     }
   })
-  if(!data) return;
+  if(!category) return <></>;
 
-  const products: ProductResponse[] = data.products;
+  const products: ProductResponse[] = category.products;
   return (
     <>
       <PageMeta
-        title={data.category_name}
-        description={data.description}
+        title={category.category_name}
+        description={category.description}
       />
       
       <main className="container flex flex-col mx-auto justify-center items-center py-20 bg-light text-center px-4">
-        <h1 className="fw-bolder mb-4 text-4xl">{data.category_name}</h1>
+        <h1 className="fw-bolder mb-4 text-4xl">{category.category_name}</h1>
         <div className="grid grid-cols-4 justify-between gap-4" >
           {products.map((product: ProductResponse) => (
-            <ProductIListItem key={product.id} product={{ ...product, category_slug: data.slug }} />
+            <ProductIListItem key={product.id} product={{ ...product, category_slug: category.slug }} />
           ))}
         </div>
       </main>

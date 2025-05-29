@@ -4,13 +4,16 @@ import { useQuery } from '@tanstack/react-query';
 import Loading from './Loading';
 import axios from 'axios';
 
-export default function Recomendations() {
+export default function Recomendations({ category }: {category : string}) {
+  const url:string = 'http://localhost:3000/api/products/findAll?take=4' + (category ? `&`+ category : '')
+  const queryKey = 'recomentations' + category ? '-'+ category : '';
+console.log(queryKey);
   const { data , isLoading } = useQuery<ProductResponse[]>({
-    queryKey: ['recomentations'],
+    queryKey: [queryKey],
     staleTime: 1000 * 60 * 5, // 5 minutes
     keepPreviousData: true,
     queryFn: async (): Promise<ProductResponse[]> =>  {
-      const response = await axios.get('http://localhost:3000/api/products/findAll?take=4');
+      const response = await axios.get(url);
       return response.data?.products ?? [];
     }
   })

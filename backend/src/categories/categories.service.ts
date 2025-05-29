@@ -38,6 +38,7 @@ export class CategoriesService {
   }
 
   findOne(slug: string) {
+    //exclude dublicates from response
     return this.prisma.categories.findUnique({
       where: { slug },
       include: {

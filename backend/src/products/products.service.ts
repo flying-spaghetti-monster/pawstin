@@ -41,7 +41,6 @@ export class ProductsService {
     }
 
     const rawProducts = await this.prisma.products.findMany(args);
-
     const totalproducts = await this.prisma.products.count();
     const products: ProductsResponse[] = rawProducts.map((p: any) => ({
       ...p,
@@ -57,9 +56,18 @@ export class ProductsService {
     };
   }
 
-  findOne(id: number) {
+
+  findOne(slug: string) {
     return this.prisma.products.findUnique({
-      where: { id },
+      where: { slug },
+      include: {
+        category: {
+          select: {
+            category_name: true,
+            slug: true
+          }
+        }
+      }
     });
   }
 

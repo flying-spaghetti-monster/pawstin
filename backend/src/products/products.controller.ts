@@ -12,6 +12,7 @@ export class ProductsController {
   @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() dto: CreateProductDto) {
+    //TODO: multi image download ?
     return this.productsService.create(dto);
   }
 
@@ -20,9 +21,9 @@ export class ProductsController {
     return this.productsService.findAll(dto);
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.productsService.findOne(id);
+  @Get(':slug')
+  findOne(@Param('slug') slug: string) {
+    return this.productsService.findOne(slug);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -34,6 +35,7 @@ export class ProductsController {
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
+    //TODO: multi image remove from db and page ?
     return this.productsService.remove(id);
   }
 }

@@ -1,156 +1,63 @@
-import { Link, useParams } from "react-router";
+import { useLocation } from "react-router";
+import { ProductResponse } from '../../../lib/types';
+import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
+import AddToCartBtn from '../components/AddToCartBtn';
+import Recomendations from '../components/Recomendations';
 
-import AddToCartBtn from "../components/AddToCartBtn";
-
-interface Product {
-  isbn: string;
-  name: string;
-  productName: string;
-  productDescription: string;
-  imageUrl: string;
-  price: number;
-  quantity: number;
+type _ProductResponse = ProductResponse & {
+  category_name: string,
+  slug: string
 }
 
-//TODO: implement Product page
+//TODO: implement loading
+//TODO: implement breads..
+//TODO: implement slick slider
+//TODO: search by category and exclude page active product
 function Product() {
-  // const [product, setProduct] = useState(null);
-  // const [relateds, setRelateds] = useState([]);
-  // const [quantity, setQuantity] = useState(1);
-  // const { id } = useParams();
+  const activePathName:string  = useLocation().pathname.split('/').at(-1) || '';
 
-  // const handleQuantity = (e) => {
-  //   setQuantity((oldQty) => Number(e.target.value));
-  // };
+  const { data: product } = useQuery<_ProductResponse>({
+    queryKey: [activePathName.substring(2)],
+    staleTime: 1000 * 60 * 5,
+    keepPreviousData: true,
+    queryFn: async (): Promise<_ProductResponse> =>  {
+      const response = await axios.get(`http://localhost:3000/api/products/${activePathName}`);
+      return response.data;
+    }
+  })
 
-  // useEffect(() => {
-  //   const controller = new AbortController();
-
-  //   axios(`http://localhost:6000/product/${id}`, {
-  //     signal: controller.signal,
-  //     params: {
-  //       related: true,
-  //       count: 4,
-  //     },
-  //   })
-  //     .then((data) => {
-  //       const rels = data.data.relateds;
-  //       delete data.data.relateds;
-  //       const product: Product = data.data;
-
-  //       setRelateds(rels);
-  //       setProduct(product);
-  //     })
-  //     .catch((err) => {
-  //       if (err.name === "AbortError") {
-  //         // Не помилка, просто запит скасовано
-  //         return;
-  //       }
-  //       console.log(err);
-  //     });
-  // }, [id]);
-
-  // if (!product) {
-  //   return <></>;
-  // }
+  if(!product) return <></>;
 
   return (
-    <></>
-    // <div className="container px-4 px-lg-5 my-5">
-    //   <div className="row">
-    //     <div className="col">
-    //       <section className="py-5">
-    //         <div className="row gx-4 gx-lg-5 align-items-center">
-    //           <div className="col-md-6">
-    //             <img
-    //               className="card-img-top mb-5 mb-md-0"
-    //               src={product.imageUrl}
-    //               alt="..."
-    //             />
-    //           </div>
-    //           <div className="col-md-6">
-    //             <div className="small mb-1">SKU: {product.isbn}</div>
-    //             <h1 className="display-5 fw-bolder">{product.productName}</h1>
-    //             <div className="fs-5 mb-5">
-    //               <span
-    //                 className="text-decoration-line-through"
-    //                 style={{ color: "red" }}
-    //               >
-    //                 ${(product.price + product.price * 0.1).toFixed()}
-    //               </span>{" "}
-    //               <span>${product.price}</span>
-    //             </div>
-    //             <p className="lead">{product.productDescription}</p>
-    //             <div className="d-flex">
-    //               <input
-    //                 className="form-control text-center me-3"
-    //                 id="inputQuantity"
-    //                 type="num"
-    //                 value={quantity}
-    //                 style={{ maxWidth: "3rem" }}
-    //                 onChange={handleQuantity}
-    //               />
-    //               <AddToCartBtn
-    //                 className="btn btn-outline-dark flex-shrink-0"
-    //                 product={product}
-    //                 quantity={quantity}
-    //               >
-    //                 <i className="bi-cart-fill me-1"></i>
-    //                 Add to cart
-    //               </AddToCartBtn>
-    //             </div>
-    //           </div>
-    //         </div>
-    //       </section>
-    //     </div>
-    //   </div>
-    //   {relateds && (
-    //     <div className="row">
-    //       <div className="col">
-    //         <section className="py-5 bg-light justify-content-center">
-    //           <h2 className="fw-bolder mb-4 text-center">Related products</h2>
-    //           <div className="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-    //             {relateds.map((item) => {
-    //               return (
-    //                 <div
-    //                   key={item.isbn}
-    //                   className="col-3  mb-5 justify-content-center py-5"
-    //                 >
-    //                   <div className="card h-100">
-    //                     <Link to={`/product/${encodeURI(item.isbn)}`}>
-    //                       <img
-    //                         className="card-img-top"
-    //                         src={item.imageUrl}
-    //                         alt={item.productName}
-    //                       />
-    //                       <div className="card-body p-4">
-    //                         <div className="text-center">
-    //                           <h5 className="fw-bolder">{item.productName}</h5>$
-    //                           {item.price}
-    //                         </div>
-    //                       </div>
-    //                     </Link>
-
-    //                     <div className="card-footer p-4 pt-0 border-top-0 bg-transparent">
-    //                       <div className="text-center">
-    //                         <AddToCartBtn
-    //                           className="btn btn-outline-dark mt-auto"
-    //                           product={product}
-    //                         >
-    //                           Add to cart
-    //                         </AddToCartBtn>
-    //                       </div>
-    //                     </div>
-    //                   </div>
-    //                 </div>
-    //               );
-    //             })}
-    //           </div>
-    //         </section>
-    //       </div>
-    //     </div>
-    //   )}
-    // </div>
+    <main className="container grid mx-auto justify-center">
+      <div className="grid grid-cols-12 gap-4 md:gap-6 px-4 py-8">
+        <div className='col-span-12 xl:col-span-5'>
+          <img
+              className="w-[600px]"
+              src="/cube.jpg"
+              alt={product.product_name}
+            />
+        </div>
+        <div className='col-span-12 xl:col-span-7'>
+          <h1 className='text-3xl font-bold'>{product.product_name}</h1>
+          <div>
+            {product.description}
+          </div>
+          <div className="">
+            $ {product.price}
+          </div>
+          <div className="">
+            <AddToCartBtn className="" product={product}>
+              Add to cart
+            </AddToCartBtn>
+          </div>
+        </div>
+      </div>
+      <div>
+        <Recomendations category={product.category.slug} />
+      </div>
+    </main>
   );
 }
 
