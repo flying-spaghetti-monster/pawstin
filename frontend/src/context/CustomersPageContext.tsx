@@ -34,9 +34,6 @@ export const CustomersPageProvider: React.FC<{ children: React.ReactNode }> = ({
   const [currentPage, setCurrentPage] = useState(1);
   const { data } = useQuery<customersResponse>({
     queryKey: ['admin-customers', currentPage],
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
     staleTime: 1000 * 60 * 5, // 5 minutes
     keepPreviousData: true,
     queryFn: async () => {

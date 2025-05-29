@@ -41,9 +41,6 @@ export const ProductsPageProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const { data } = useQuery<productsResponse>({
     queryKey: ['admin-products', currentPage, action],
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
     staleTime: 1000 * 60 * 5, // 5 minutes
     keepPreviousData: true,
     queryFn: async () => {

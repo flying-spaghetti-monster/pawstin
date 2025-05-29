@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist, devtools } from "zustand/middleware";
 
+//TODO: implemet zustand cartStore
 export const useCartStore = create(
   devtools(
     persist<CartStore>(

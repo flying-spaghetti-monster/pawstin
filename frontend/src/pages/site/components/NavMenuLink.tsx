@@ -1,22 +1,23 @@
 import { Link, useLocation } from "react-router";
 import { cp } from '../../../hooks/utils';
+import { CategoryResponse } from '../../../lib/types';
 
 export default function NavMenuLink({
   route,
 }: {
-  route: { name: string; path: string };
+  route: CategoryResponse;
 }) {
   const activePathName:string = useLocation().pathname;
   return (
     <>
       <Link
-        to={route.path}
+        to={route.slug}
         className={cp("text-3xl hover:text-[#4a4a4b] transition", {
-          "text-[#141415]": activePathName === route.path,
-          "text-[#707071]": activePathName !== route.path,
+          "text-[#141415]": activePathName === route.slug,
+          "text-[#707071]": activePathName !== route.slug,
         })}
       >
-        {route.name}
+        {route.category_name}
       </Link>
     </>
   );

@@ -5,12 +5,8 @@ import Loading from './Loading';
 import axios from 'axios';
 
 export default function Recomendations() {
-  
   const { data , isLoading } = useQuery<ProductResponse[]>({
     queryKey: ['recomentations'],
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
     staleTime: 1000 * 60 * 5, // 5 minutes
     keepPreviousData: true,
     queryFn: async (): Promise<ProductResponse[]> =>  {
@@ -20,11 +16,14 @@ export default function Recomendations() {
   })
 
   return (
-    <>
-      {isLoading && <Loading />}
-      {(data ?? []).map((product: ProductResponse) => (
-        <ProductIListItem key={product.id} product={product} />
-      ))}
-    </>
+    <section className="container flex flex-col mx-auto justify-center items-center py-20 bg-light text-center px-4">
+      <h1 className="fw-bolder mb-4 text-4xl">Recommended products</h1>
+      <div className="flex flex-row justify-between gap-4" >
+        {isLoading && <Loading />}
+        {(data ?? []).map((product: ProductResponse) => (
+          <ProductIListItem key={product.id} product={product} />
+        ))}
+      </div>
+    </section>
   );
 }

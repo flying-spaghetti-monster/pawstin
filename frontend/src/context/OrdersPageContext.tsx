@@ -41,9 +41,6 @@ export const OrdersPageProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const { data } = useQuery<ordersResponse>({
     queryKey: ['admin-orders', currentPage, action],
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
     staleTime: 1000 * 60 * 5, // 5 minutes
     keepPreviousData: true,
     queryFn: async () => {

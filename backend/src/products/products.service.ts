@@ -34,6 +34,12 @@ export class ProductsService {
       args.take = dto.take;
     }
 
+    if (dto.isActive) {
+      args.where = {
+        isActice: dto.isActive
+      }
+    }
+
     const rawProducts = await this.prisma.products.findMany(args);
 
     const totalproducts = await this.prisma.products.count();

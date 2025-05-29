@@ -15,6 +15,7 @@ function AddToCartBtn({
   className?: string,
   children: React.ReactNode,
 })  {
+  //TODO: implemet cartStore
   // const { plis, addProduct } = useCartStore((state) => {
   //   return {
   //     plis: state.plis,

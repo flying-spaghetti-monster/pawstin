@@ -10,8 +10,8 @@ import { ScrollToTop } from './pages/admin/components/common/ScrollToTop';
 
 //site
 import Home from "./pages/site/homePage/Home";
-import Plp from "./pages/site/categoryPage/category";
-import Pdp from "./pages/site/productPage/Pdp";
+import Category from "./pages/site/categoryPage/Category";
+import Product from "./pages/site/productPage/Product";
 import About from "./pages/site/aboutPage/About";
 import Cart from "./pages/site/cartPage/Cart";
 import Checkout from "./pages/site/checkoutPage/Checkout";
@@ -44,8 +44,8 @@ function App() {
         {/* Site */}
         <Route element={<SiteLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="products" element={<Plp />} />
-          <Route path="product/:id" element={<Pdp />} />
+          <Route path=":category" element={<Category />} />
+          <Route path=":category/:id" element={<Product />} />
           <Route path="about" element={<About />} />
           <Route path="cart" element={<Cart />} />
           <Route path="checkout" element={<Checkout />} />

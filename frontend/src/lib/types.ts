@@ -28,12 +28,12 @@ export type LoginResponse = {
 export type PageDirection = "next" | "previous";
 
 export type CategoryResponse = {
-  id: number;
+  id?: number;
   category_name: string;
   slug: string;
-  description: string;
+  description?: string;
   picture?: string;
-  isActive: boolean;
+  isActive?: boolean;
 };
 
 export type Actions = "CREATE" | "EDIT" | "DELETE";

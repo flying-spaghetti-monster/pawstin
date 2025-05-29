@@ -8,7 +8,7 @@ export default function ProductIListItem({ product } : { product : ProductRespon
       key={product.id}
       className="py-5 h-100"
     >
-      <Link to={`/${product.category_slug}/product/${encodeURI(product.slug)}`}>
+      <Link to={`/${product.category_slug}/${encodeURI(product.slug)}`}>
         <img
           className="w-[450px]"
           src="/cube.jpg"

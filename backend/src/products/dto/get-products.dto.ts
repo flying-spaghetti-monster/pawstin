@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional } from 'class-validator'
+import { IsBoolean, IsNumber, IsOptional } from 'class-validator'
 
 export class GetProductsDto {
   @IsOptional()
@@ -11,4 +11,9 @@ export class GetProductsDto {
   @Type(() => Number)
   @IsNumber()
   take?: number;
+
+  @IsOptional()
+  @Type(() => Boolean)
+  @IsBoolean()
+  isActive?: Boolean
 }

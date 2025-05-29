@@ -21,8 +21,15 @@ export class CategoriesService {
       args.take = dto.take;
     }
 
+    if (dto.isActive) {
+      args.where = {
+        isActive: dto.isActive
+      }
+    }
+
     const categories = await this.prisma.categories.findMany(args);
     const totalCategories = await this.prisma.categories.count();
+
     return {
       categories,
       totalCategories,
