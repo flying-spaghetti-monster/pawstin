@@ -2,11 +2,15 @@ import "../site.css";
 
 import { Outlet } from "react-router";
 import { CartContextProvider } from "../context/CartContext";
-import Footer from "../pages/components/Footer.tsx";
-import Navigation from "../pages/components/Navigation.tsx";
+import Footer from "../pages/site/Footer.tsx";
+import Navigation from "../pages/site/components/Navigation.tsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 function SiteLayout() {
   return (
+    <QueryClientProvider client={queryClient}>
     <CartContextProvider>
       <Navigation />
       <main>
@@ -14,6 +18,7 @@ function SiteLayout() {
       </main>
       <Footer />
     </CartContextProvider>
+    </QueryClientProvider>
   );
 }
 

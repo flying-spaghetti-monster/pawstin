@@ -53,19 +53,19 @@ const AppLayout: React.FC = () => {
   }
   return (
     <QueryClientProvider client={queryClient}>
-      <CustomersPageProvider>
-      <CategoriesPageProvider>
-      <ProductsPageProvider>
-      <OrdersPageProvider>
-      <ShippersPageProvider>
-      <SidebarProvider>
-        <LayoutContent />
-      </SidebarProvider>
-      </ShippersPageProvider>
-      </OrdersPageProvider>
-      </ProductsPageProvider>
-      </CategoriesPageProvider>
-      </CustomersPageProvider>
+    <CustomersPageProvider>
+    <CategoriesPageProvider>
+    <ProductsPageProvider>
+    <OrdersPageProvider>
+    <ShippersPageProvider>
+    <SidebarProvider>
+      <LayoutContent />
+    </SidebarProvider>
+    </ShippersPageProvider>
+    </OrdersPageProvider>
+    </ProductsPageProvider>
+    </CategoriesPageProvider>
+    </CustomersPageProvider>
     </QueryClientProvider>
   );
 };

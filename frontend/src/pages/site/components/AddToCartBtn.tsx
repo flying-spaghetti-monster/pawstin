@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
-// import { useCartContext } from "../../hooks/useCartContext";
-import { useCartStore } from "../site/stores/cartStore";
-import {shallow} from "zustand/shallow";
+import { shallow } from "zustand/shallow";
+import { useCartStore } from "../stores/cartStore";
+import { ProductResponse } from '../../../lib/types';
 
-// const handleAdd: () => void = (e) => {
-//   e.preventDefault();
-// };
 
 function AddToCartBtn({
   product,
+  className,
+  children,
   quantity = 1,
-  ...rest
 }: {
-  product: { isbn: string; quantity: number };
-  quantity?: number;
-  [key: string]: any;
+  product: ProductResponse,
+  quantity: number,
+  className: string,
+  children: React.ReactNode,
 })  {
   const { plis, addProduct } = useCartStore((state) => {
     return {
@@ -56,12 +55,12 @@ function AddToCartBtn({
   return (
     <button
       disabled={isDisabled}
-      className={rest.className}
+      className={className}
       onClick={handleAdd}
       type="button"
       style={isDisabled ? { backgroundColor: "gray" } : {}}
     >
-      {rest.children}
+      {children}
     </button>
   );
 }

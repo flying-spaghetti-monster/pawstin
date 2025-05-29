@@ -1,15 +1,12 @@
-"use client";
-
-import { Link } from "react-router";
-import { cp } from '../../hooks/utils';
+import { Link, useLocation } from "react-router";
+import { cp } from '../../../hooks/utils';
 
 export default function NavMenuLink({
   route,
 }: {
   route: { name: string; path: string };
 }) {
-  // const activePathName = usePathname();
-  const activePathName: string = 'home';
+  const activePathName:string = useLocation().pathname;
   return (
     <>
       <Link

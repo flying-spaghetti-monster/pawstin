@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, HttpException, Get, Query } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, HttpException, Get, Query, ParseIntPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { signInDto } from './dto/sing-in-auth.dto';
@@ -30,7 +30,7 @@ export class AuthController {
   }
 
   @Get('getUsers')
-  async getUsers(@Query('page') page: number) {
+  async getUsers(@Query('page', ParseIntPipe) page: number) {
     return this.authService.getUsers(page);
   }
 

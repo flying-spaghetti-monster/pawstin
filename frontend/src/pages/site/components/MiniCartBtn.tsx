@@ -1,6 +1,6 @@
 import { Link } from "react-router";
-import { useCartStore } from "../site/stores/cartStore";
-// import { IoCart } from "react-icons/io5";
+import { useCartStore } from "../stores/cartStore";
+
 
 function MiniCartBtn() {
   const quantity = useCartStore((state) => state.qty);

@@ -5,7 +5,7 @@ import './category.scss';
 
 import axios from "axios";
 
-import AddToCartBtn from "../../components/AddToCartBtn";
+import AddToCartBtn from "../components/AddToCartBtn";
 
 function Plp() {
   const [products, setProducts] = useState([]);

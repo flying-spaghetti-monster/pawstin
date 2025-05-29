@@ -34,7 +34,7 @@ import AdminShippers from "./pages/admin/shippersPage/Shippers";
 
 
 // Importing ProtectedRoute to protect admin routes
-import ProtectedRoute from './pages/components/ProtectedRoute';
+import ProtectedRoute from './layouts/ProtectedRoute';
 
 function App() {
   return (

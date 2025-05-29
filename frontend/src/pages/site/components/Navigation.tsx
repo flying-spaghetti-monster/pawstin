@@ -13,7 +13,7 @@ const routes = [
 
 function Navigation() {
   return (
-  <nav className="container mx-auto flex items-center justify-between py-4">
+  <nav className="container mx-auto flex items-center justify-between p-4">
       <Logo />
       <ul className="flex flex-row gap-4 text-3xl text-[#707071] ">
         {routes.map((route) => (
