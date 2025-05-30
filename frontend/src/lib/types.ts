@@ -1,3 +1,5 @@
+import cartStorage from '../helper/cartHelper';
+
 export type Role = "USER" | "ADMIN";
 
 export type UserLogin = {
@@ -40,7 +42,7 @@ export type Actions = "CREATE" | "EDIT" | "DELETE";
 
 export type ShipperResponse = {
   id: number;
-  company_name: string;
+  category_name: string;
   phone: string;
   isActive: boolean;
 }
@@ -98,4 +100,15 @@ export type OrderResponse = {
   customer_id: number;
   shipper_id: number;
   status: Status;
+}
+
+
+export interface TCartStorage {
+  items: ProductResponse[];
+  totalQuantity: number;
+  totalPrice: number;
+  addToCart: (product: ProductResponse, quantity?: number) => void;
+  removeFromCart: (id: number) => void;
+  getProductFromCart: (id: number) => void;
+  clearCart: () => void;
 }

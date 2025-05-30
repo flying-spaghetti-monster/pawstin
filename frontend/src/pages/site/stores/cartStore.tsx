@@ -1,53 +1,56 @@
 import { create } from "zustand";
 import { persist, devtools } from "zustand/middleware";
+import { TCartStorage } from '../../../lib/types';
 
-//TODO: implemet zustand cartStore
-export const useCartStore = create(
+
+
+function calculateCart(items: TCartStorage[]) {
+  const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = items.reduce((sum, item) => sum + item.quantity * item.price, 0);
+  return { totalQuantity, totalPrice };
+}
+
+//TODO implement validation logic
+//update busket product
+//chack quantity in busket and product stock
+//promo ?
+export const useCartStore = create<TCartStorage>()(
   devtools(
-    persist<CartStore>(
-      (set) => ({
-        plis: [],
-        qty: 0,
-        addToCart: (item: CartItem) => {
-          set((state) => {
-            const existingItem = state.plis.find((i) => i.id === item.id);
-            if (existingItem) {
-              return {
-                plis: state.plis.map((i) =>
-                  i.id === item.id ? { ...i, qty: i.qty + item.qty } : i
-                ),
-                qty: state.qty + item.qty,
-              };
-            } else {
-              return {
-                plis: [...state.plis, item],
-                qty: state.qty + item.qty,
-              };
-            }
-          });
+    persist(
+      (set, get) => ({
+        items: [],
+        totalQuantity: 0,
+        totalPrice: 0,
+        addToCart: (product, quantity = 1) => {
+          const existing = get().items.find(item => item.id === product.id);
+
+          let updatedItems;
+          if (existing) {
+            updatedItems = get().items.map(item =>
+              item.id === product.id
+                ? { ...item, quantity: item.in_stock + quantity }
+                : item
+            );
+          } else {
+            updatedItems = [...get().items, { ...product, quantity }];
+          }
+
+          const totals = calculateCart(updatedItems);
+          set({ items: updatedItems, ...totals });
         },
-        removeFromCart: (id: string) => {
-          set((state) => {
-            const itemToRemove = state.plis.find((item) => item.id === id);
-            if (itemToRemove) {
-              return {
-                plis: state.plis.filter((item) => item.id !== id),
-                qty: state.qty - itemToRemove.qty,
-              };
-            }
-            return state;
-          });
+        removeFromCart: (id) => {
+          const updatedItems = get().items.filter(item => item.id !== id);
+          const totals = calculateCart(updatedItems);
+          set({ items: updatedItems, ...totals });
+        },
+        getProductFromCart: (id) => {
+         return get().items.find(item => item.id === id);
         },
         clearCart: () => {
-          set(() => ({
-            plis: [],
-            qty: 0,
-          }));
+          set({ items: [], totalQuantity: 0, totalPrice: 0 });
         },
       }),
-      {
-        name: "cart-storage", // unique name for storage key
-      }
+      { name: "cart-storage" }
     )
   )
 );

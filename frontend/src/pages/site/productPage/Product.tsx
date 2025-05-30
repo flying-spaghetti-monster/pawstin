@@ -10,6 +10,7 @@ type _ProductResponse = ProductResponse & {
   slug: string
 }
 
+//implement quantity logic
 //TODO: implement loading
 //TODO: implement breads..
 //TODO: implement slick slider
@@ -44,6 +45,7 @@ function Product() {
           <div>
             {product.description}
           </div>
+          {/* <input type="number" value="1" className=""/> */}
           <div className="">
             $ {product.price}
           </div>

@@ -3,62 +3,33 @@ import { shallow } from "zustand/shallow";
 import { useCartStore } from "../stores/cartStore";
 import { ProductResponse } from '../../../lib/types';
 
-
+//TODO: implemet quantity logic
+//TODO: implemet disable button
 function AddToCartBtn({
   product,
-  className,
   children,
   quantity = 1,
 }: {
   product: ProductResponse,
-  quantity?: number,
-  className?: string,
   children: React.ReactNode,
+  quantity?: number,
 })  {
-  //TODO: implemet cartStore
-  // const { plis, addProduct } = useCartStore((state) => {
-  //   return {
-  //     plis: state.plis,
-  //     addProduct: state.addToCart,
-  //   };
-  // }, shallow);
+  const [isDisabled, setDisabled] = useState(false);
+  const addToCart = useCartStore(state => state.addToCart);
+  const getProductFromCart = useCartStore(state => state.getProductFromCart);
 
-  // const [isDisabled, setDisabled] = useState(false);
-
-  // const handleAdd = (e) => {
-  //   e.preventDefault();
-
-  //   const existingCartProduct = plis.find((item) => item.id === product.isbn);
-
-  //   if (existingCartProduct) {
-  //     if (existingCartProduct.qty + quantity > product.quantity) {
-  //       setDisabled(true);
-  //       return;
-  //     }
-  //   }
-
-  //   addProduct({ id: product.isbn, qty: quantity });
-  // };
-
-  // useEffect(() => {
-  //   const existingCartProduct = plis.find((item) => item.id === product.isbn);
-
-  //   if (existingCartProduct) {
-  //     if (existingCartProduct.qty + quantity > product.quantity) {
-  //       setDisabled(true);
-  //     } else {
-  //       setDisabled(false);
-  //     }
-  //   }
-  // }, [plis]);
+  const handleAdd = (e) => {
+    e.preventDefault();
+    addToCart(product, quantity);
+  };
 
   return (
     <button
-      // disabled={isDisabled}
+      disabled={isDisabled}
       // className={className}
-      // onClick={handleAdd}
+      onClick={handleAdd}
       type="button"
-      // style={isDisabled ? { backgroundColor: "gray" } : {}}
+      style={isDisabled ? { backgroundColor: "gray" } : {}}
     >
       {children}
     </button>

@@ -123,12 +123,12 @@ export default function Shippers() {
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 overflow-hidden rounded-full">
                         <div className="w-10 h-10 overflow-hidden rounded-full text-center flex items-center justify-center bg-gray-200 dark:bg-white/10 text-gray-500 dark:text-white/90">
-                          {(shipper.company_name.charAt(0)).toUpperCase()}
+                          {(shipper.category_name.charAt(0)).toUpperCase()}
                         </div>
                         </div>
                         <div>
                           <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                            {shipper.company_name}
+                            {shipper.category_name}
                           </span>
                         </div>
                       </div>

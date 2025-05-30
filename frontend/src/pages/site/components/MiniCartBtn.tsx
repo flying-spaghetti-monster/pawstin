@@ -1,18 +1,20 @@
 import { Link } from "react-router";
 import { useCartStore } from "../stores/cartStore";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 
 //TODO: Implement MiniCartBtn
 function MiniCartBtn() {
-  const quantity = useCartStore((state) => state.qty);
+  const totalQuantity = useCartStore((state) => state.totalQuantity);
+  console.log(totalQuantity )
 
   return (
     <div className="d-flex">
-      <Link to="/cart" className="btn btn-outline-dark" type="submit">
-        {/* <IoCart /> */}
+      <Link to="/cart" className="" type="submit">
+        <ShoppingCartIcon />
         Cart
-        <span className="badge bg-dark text-white ms-1 rounded-pill">
-          {quantity}
+        <span className="px-2">
+          ({totalQuantity})
         </span>
       </Link>
     </div>
