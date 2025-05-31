@@ -1,5 +1,6 @@
 import { PageDirection } from '../../../../lib/types';
-import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons"
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 export default function PaginationControls({ 
     totalNumberOfPages,
@@ -54,14 +55,14 @@ function PaginationButton({
     >
       {direction === "previous" && (
         <>
-          <ArrowLeftIcon />
+          <KeyboardBackspaceIcon />
           Page {currentPage - 1}
         </>
       )}
       {direction === "next" && (
         <>
           Page {currentPage + 1}
-          <ArrowRightIcon />
+          <ArrowRightAltIcon />
         </>
       )}
     </button>

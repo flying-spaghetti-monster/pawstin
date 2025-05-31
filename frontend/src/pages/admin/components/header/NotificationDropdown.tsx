@@ -2,10 +2,13 @@ import { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { Link } from "react-router";
+import SocketApi from '../../../../api/socket';
+import { useConnectSocket } from '../../../../hooks/useSocket';
 
 export default function NotificationDropdown() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [notifying, setNotifying] = useState(true);
+  const [ isOpen, setIsOpen ] = useState(false);
+  const [ notifying, setNotifying ] = useState(true);
+  const { notifications }  = useConnectSocket();
 
   function toggleDropdown() {
     setIsOpen(!isOpen);
@@ -19,6 +22,13 @@ export default function NotificationDropdown() {
     toggleDropdown();
     setNotifying(false);
   };
+
+  SocketApi.socket?.emit('server-message', "test call")//remove after test
+  
+  if (notifications) {
+    console.log(notifications);
+  }
+  
   return (
     <div className="relative">
       <button

@@ -10,6 +10,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { OrdersModule } from './orders/orders.module';
 import { ProductsModule } from './products/products.module';
 import { ShippersModule } from './shippers/shippers.module';
+import { NotificationsGateway } from './notifications/notifications.gateway';
 
 @Module({
   imports: [
@@ -42,6 +43,9 @@ import { ShippersModule } from './shippers/shippers.module';
     ShippersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    NotificationsGateway
+  ],
 })
 export class AppModule { }

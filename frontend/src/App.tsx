@@ -22,7 +22,6 @@ import SignUp from "./pages/AuthPages/SignUp";
 
 //admin
 import NotFound from "./pages/admin/NotFound";
-import UserProfiles from "./pages/admin/UserProfiles";
 import Blank from "./pages/admin/Blank";
 
 import AdminHome from "./pages/admin/dashboardPage/Home";
@@ -66,7 +65,6 @@ function App() {
           <Route path="admin/customers" element={<AdminCustomers />} />
           
           {/* Others Page */}
-          <Route path="admin/profile" element={<UserProfiles />} />
           <Route path="admin/blank" element={<Blank />} />
 
         </Route>

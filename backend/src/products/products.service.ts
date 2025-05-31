@@ -48,7 +48,7 @@ export class ProductsService {
       category: undefined,
       category_id: undefined
     }));
-    console.log(products)
+    // console.log(products)
     return {
       products,
       totalproducts,

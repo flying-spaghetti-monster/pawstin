@@ -14,10 +14,13 @@ import { CategoriesPageProvider } from '../context/CategoriesPageContext';
 import { ProductsPageProvider } from '../context/ProductsPageContext';
 import { ShippersPageProvider } from '../context/ShippersPageContext';
 import { OrdersPageProvider } from '../context/OrdersPageContext';
+import { useConnectSocket } from '../hooks/useSocket';
 
 
 const LayoutContent: React.FC = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
+  
+  useConnectSocket();
 
   return (
     <div className="min-h-screen xl:flex">

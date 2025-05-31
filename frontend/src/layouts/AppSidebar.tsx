@@ -1,24 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
-
-// Assume these icons are imported from an icon library
-// import {
-//   BoxCubeIcon,
-//   BoxIconLine,
-//   ChevronDownIcon,
-//   GridIcon,
-//   GroupIcon,
-//   HorizontaLDots,
-//   ListIcon,
-//   PageIcon,
-//   PieChartIcon,
-//   PlugInIcon,
-//   TableIcon,
-//   UserCircleIcon,
-// } from "../icons/";
-
 import { useSidebar } from "../context/SidebarContext";
-// import SidebarWidget from "./SidebarWidget";
+
+import GroupsIcon from '@mui/icons-material/Groups';
+import CategoryIcon from '@mui/icons-material/Category';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
+import ViewInArIcon from '@mui/icons-material/ViewInAr';
 
 type NavItem = {
   name: string;
@@ -28,36 +17,34 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { 
-    // icon: <GridIcon />,
+    icon: <DashboardIcon />,
     name: "Dashboard", 
     path: "/admin/"
   },
   { 
+    icon: <CategoryIcon />,
     name: "Categories", 
     path: "/admin/categories",
   },
   { 
+    icon: <LocalShippingIcon />,
     name: "Shippers", 
     path: "/admin/shippers",
   },
   { 
+    icon: <ViewInArIcon />,
     name: "Products",
      path: "/admin/products",
   },
   { 
-    // icon: <GroupIcon />,
+    icon: <GroupsIcon />,
     name: "Customers", 
     path: "/admin/customers",
   },
   { 
-  // icon: <BoxIconLine />,
+    icon: <ShoppingCartCheckoutIcon />,
     name: "Orders",
     path: "/admin/orders",
-  },
-  {
-    // icon: <UserCircleIcon />,
-    name: "Profile",
-    path: "/admin/profile",
   }
 ];
 
@@ -198,7 +185,8 @@ const AppSidebar: React.FC = () => {
                 {isExpanded || isHovered || isMobileOpen ? (
                   "Menu"
                 ) : (
-                  <HorizontaLDots className="size-6" />
+                  <></>
+                  // <HorizontaLDots className="size-6" />
                 )}
               </h2>
               {renderMenuItems(navItems, "main")}
