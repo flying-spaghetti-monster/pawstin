@@ -2,11 +2,11 @@ import { ProductResponse } from '../../../lib/types';
 import AddToCartBtn from './AddToCartBtn';
 import { Link } from 'react-router';
 
-export default function ProductIListItem({ product } : { product : ProductResponse }) {
+export default function ProductIListItem({ product }: { product: ProductResponse }) {
   return (
     <div
       key={product.id}
-      className="py-5 h-100"
+      className="py-5 min-h-80"
     >
       <Link to={`/${product.category_slug}/${encodeURI(product.slug)}`}>
         <img

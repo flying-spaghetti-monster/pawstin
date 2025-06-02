@@ -12,7 +12,7 @@ function Home() {
         title="Home"
         description="Pawstin Store"
       />
-      <Header/>
+      <Header />
       <Recomendations />
     </>
   );

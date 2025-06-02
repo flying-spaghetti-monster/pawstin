@@ -11,13 +11,13 @@ const queryClient = new QueryClient();
 function SiteLayout() {
   return (
     <QueryClientProvider client={queryClient}>
-    <CartContextProvider>
-      <Navigation />
-      <main>
-        <Outlet />
-      </main>
-      <Footer />
-    </CartContextProvider>
+      <CartContextProvider>
+        {/* <Navigation /> */}
+        <main>
+          <Outlet />
+        </main>
+        <Footer />
+      </CartContextProvider>
     </QueryClientProvider>
   );
 }
