@@ -1,20 +1,22 @@
+import { Type } from 'class-transformer';
 import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class CreateCategoryDto {
   @IsString()
-  category_name;
+  category_name: string
 
   @IsString()
-  description;
+  description: string
 
   @IsString()
-  slug;
+  slug: string
 
   @IsString()
   @IsOptional()
-  picture?;
+  picture?: string
 
+  @IsOptional()
+  @Type(() => Boolean)
   @IsBoolean()
-  @IsOptional()
-  isActive?;
+  isActive?: boolean
 }

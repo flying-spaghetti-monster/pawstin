@@ -4,18 +4,18 @@ import { Roles } from '@prisma/client';
 
 export class CreateAuthDto {
   @IsString()
-  email;
+  email: string
 
   @IsString()
-  password;
+  password: string
 
   @IsString()
-  first_name;
+  first_name: string
 
   @IsString()
-  last_name;
+  last_name: string
 
-  @IsEnum(Roles, { message: 'role must be a valid enum value (USER, ADMIN) : if empty user by default' })
   @IsOptional()
+  @IsEnum(Roles, { message: 'role must be a valid enum value (USER, ADMIN) : if empty user by default' })
   role?: Roles;
 }

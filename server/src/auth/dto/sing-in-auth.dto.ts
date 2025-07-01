@@ -1,12 +1,15 @@
-import { IsBoolean, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class signInDto {
   @IsString()
-  email;
+  email: string
 
   @IsString()
-  password;
+  password: string
 
+  @IsOptional()
+  @Type(() => Boolean)
   @IsBoolean()
-  remember_me?;
+  remember_me?: boolean
 }
