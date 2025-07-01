@@ -3,20 +3,20 @@ import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class CreateCategoryDto {
   @IsString()
-  category_name: string
+  category_name: string;
 
   @IsString()
-  description: string
+  description: string;
 
   @IsString()
-  slug: string
+  slug: string;
 
-  @IsString()
   @IsOptional()
-  picture?: string
+  @IsString()
+  picture?: string;
 
   @IsOptional()
   @Type(() => Boolean)
   @IsBoolean()
-  isActive?: boolean
+  isActive?: boolean;
 }

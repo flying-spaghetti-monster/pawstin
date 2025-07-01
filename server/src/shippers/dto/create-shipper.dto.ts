@@ -3,7 +3,7 @@ import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class CreateShipperDto {
   @IsString()
-  shipper_name: string;
+  company_name: string;
 
   @IsString()
   phone: string;

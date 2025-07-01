@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsBoolean, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateProductDto {
   @IsString()
@@ -10,6 +10,19 @@ export class CreateProductDto {
 
   @IsString()
   slug: string;
+
+  @IsNumber()
+  @Type(() => Number)
+  price: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  discont_price?: number;
+
+  @IsNumber()
+  @Type(() => Number)
+  category_id: number;
 
   @IsOptional()
   @IsString()

@@ -3,18 +3,19 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GetCategoriesDto } from './dto/get-category.dto';
+import { Categories } from '@prisma/client';
 
 @Injectable()
 export class CategoriesService {
   constructor(private readonly prisma: PrismaService) { }
 
-  create(data: CreateCategoryDto) {
+  create(data: CreateCategoryDto): Promise<Categories> {
     return this.prisma.categories.create({
       data,
     });
   }
 
-  async findAll(dto: GetCategoriesDto) {
+  async findAll(dto: GetCategoriesDto): Promise<{ categories: Partial<Categories>[], totalCategories: number, totalPages: number }> {
     const args: any = {};
     if (dto.take) {
       args.skip = dto.page ? (dto.page - 1) * dto.take : 0;
@@ -33,11 +34,11 @@ export class CategoriesService {
     return {
       categories,
       totalCategories,
-      totalPages: dto.take ? Math.ceil(totalCategories / dto.take) : null,
+      totalPages: dto.take ? Math.ceil(totalCategories / dto.take) : 0,
     };
   }
 
-  findOne(slug: string) {
+  findOne(slug: string): Promise<Categories | null> {
     //exclude dublicates from response
     return this.prisma.categories.findUnique({
       where: { slug },
@@ -59,14 +60,14 @@ export class CategoriesService {
     });
   }
 
-  update(id: number, data: UpdateCategoryDto) {
+  update(id: number, data: UpdateCategoryDto): Promise<Categories> {
     return this.prisma.categories.update({
       where: { id },
       data: data,
     });
   }
 
-  remove(id: number) {
+  remove(id: number): Promise<Categories> {
     return this.prisma.categories.delete({
       where: { id },
     });

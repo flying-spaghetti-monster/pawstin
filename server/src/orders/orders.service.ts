@@ -3,6 +3,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GetOrdersDto } from './dto/get-orders.dto';
+import { Orders } from '@prisma/client';
 
 @Injectable()
 export class OrdersService {
@@ -15,7 +16,7 @@ export class OrdersService {
     // });
   }
 
-  async findAll(dto: GetOrdersDto) {
+  async findAll(dto: GetOrdersDto): Promise<{ orders: Partial<Orders>[], totalorders: number, totalPages: number }> {
     const args: any = {};
     if (dto.take) {
       args.skip = dto.page ? (dto.page - 1) * dto.take : 0;
@@ -27,11 +28,11 @@ export class OrdersService {
     return {
       orders,
       totalorders,
-      totalPages: dto.take ? Math.ceil(totalorders / dto.take) : null,
+      totalPages: dto.take ? Math.ceil(totalorders / dto.take) : 0,
     };
   }
 
-  findOne(id: number) {
+  findOne(id: number): Promise<Orders | null> {
     return this.prisma.orders.findUnique({
       where: { id },
     });
@@ -45,7 +46,7 @@ export class OrdersService {
     // });
   }
 
-  remove(id: number) {
+  remove(id: number): Promise<Orders> {
     return this.prisma.orders.delete({
       where: { id },
     });

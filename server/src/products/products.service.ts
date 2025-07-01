@@ -13,13 +13,22 @@ type ProductsResponse = Omit<ProductWithCategory, 'category_id' | 'category'>
 export class ProductsService {
   constructor(private readonly prisma: PrismaService) { }
 
-  create(data) {
+  create(data: CreateProductDto): Promise<Products> {
+    // Map CreateProductDto to ProductsCreateInput
+    // Exclude category_id from data, as it's handled by the relation
+    const { category_id, ...rest } = data;
+    const productData: any = {
+      ...rest,
+      category_id: {
+        connect: { id: category_id }
+      }
+    };
     return this.prisma.products.create({
-      data,
+      data: productData
     });
   }
 
-  async findAll(dto: GetProductsDto) {
+  async findAll(dto: GetProductsDto): Promise<{ products: Partial<Products>[], totalproducts: number, totalPages: number }> {
     const args: any = {
       include: {
         category: {
@@ -48,16 +57,16 @@ export class ProductsService {
       category: undefined,
       category_id: undefined
     }));
-    // console.log(products)
+
     return {
       products,
       totalproducts,
-      totalPages: dto.take ? Math.ceil(totalproducts / dto.take) : null,
+      totalPages: dto.take ? Math.ceil(totalproducts / dto.take) : 0,
     };
   }
 
 
-  findOne(slug: string) {
+  findOne(slug: string): Promise<Products | null> {
     return this.prisma.products.findUnique({
       where: { slug },
       include: {
@@ -71,14 +80,14 @@ export class ProductsService {
     });
   }
 
-  update(id: number, data: UpdateProductDto) {
+  update(id: number, data: UpdateProductDto): Promise<Products> {
     return this.prisma.products.update({
       where: { id },
       data: data,
     });
   }
 
-  remove(id: number) {
+  remove(id: number): Promise<Products> {
     return this.prisma.products.delete({
       where: { id },
     });

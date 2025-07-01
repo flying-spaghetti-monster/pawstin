@@ -3,7 +3,11 @@ import { CreateAuthDto } from './dto/create-auth.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { genSalt, hash, compare } from 'bcrypt';
-import { Roles } from '@prisma/client';
+import { Customers, Roles } from '@prisma/client';
+
+export interface JwtPayload {
+  access_token: string;
+}
 
 @Injectable()
 export class AuthService {
@@ -12,7 +16,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
   ) { }
 
-  async createUser(dto: CreateAuthDto) {
+  async createUser(dto: CreateAuthDto): Promise<Customers> {
     const salt = await genSalt(10);
 
     const newUser = await this.prisma.customers.create({
@@ -28,7 +32,7 @@ export class AuthService {
     return newUser;
   }
 
-  async findUser(email: string) {
+  async findUser(email: string): Promise<Customers | null> {
     return this.prisma.customers.findUnique({
       where: {
         email: email,
@@ -36,7 +40,7 @@ export class AuthService {
     });
   }
 
-  async validateUser(email: string, password: string) {
+  async validateUser(email: string, password: string): Promise<Customers> {
     const user = await this.findUser(email);
 
     if (!user) {
@@ -52,7 +56,7 @@ export class AuthService {
     return user;
   }
 
-  async login(email: string) {
+  async login(email: string): Promise<JwtPayload> {
     const user = await this.findUser(email);
 
     if (!user) {
@@ -65,7 +69,7 @@ export class AuthService {
     };
   }
 
-  async getUsers(page: number = 1) {
+  async getUsers(page: number = 1): Promise<{ users: Partial<Customers>[], totalUsers: number, totalPages: number }> {
     const users = await this.prisma.customers.findMany({
       select: {
         email: true,
