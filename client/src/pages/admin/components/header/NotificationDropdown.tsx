@@ -6,9 +6,9 @@ import SocketApi from '../../../../api/socket';
 import { useConnectSocket } from '../../../../hooks/useSocket';
 
 export default function NotificationDropdown() {
-  const [ isOpen, setIsOpen ] = useState(false);
-  const [ notifying, setNotifying ] = useState(true);
-  const { notifications }  = useConnectSocket();
+  const [isOpen, setIsOpen] = useState(false);
+  const [notifying, setNotifying] = useState(true);
+  const { notifications } = useConnectSocket();
 
   function toggleDropdown() {
     setIsOpen(!isOpen);
@@ -23,12 +23,12 @@ export default function NotificationDropdown() {
     setNotifying(false);
   };
 
-  SocketApi.socket?.emit('server-message', "test call")//remove after test
-  
+  // SocketApi.socket?.emit('server-message', "test call")//remove after test
+
   if (notifications) {
     console.log(notifications);
   }
-  
+
   return (
     <div className="relative">
       <button
@@ -36,9 +36,8 @@ export default function NotificationDropdown() {
         onClick={handleClick}
       >
         <span
-          className={`absolute right-0 top-0.5 z-10 h-2 w-2 rounded-full bg-orange-400 ${
-            !notifying ? "hidden" : "flex"
-          }`}
+          className={`absolute right-0 top-0.5 z-10 h-2 w-2 rounded-full bg-orange-400 ${!notifying ? "hidden" : "flex"
+            }`}
         >
           <span className="absolute inline-flex w-full h-full bg-orange-400 rounded-full opacity-75 animate-ping"></span>
         </span>

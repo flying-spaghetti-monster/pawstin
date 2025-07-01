@@ -4,7 +4,7 @@ import NavMenuLink from "./NavMenuLink";
 import { useMainMenu } from "../stores/NavigationStore";
 import { useEffect } from 'react';
 
- //TODO: implement SearchAppBar
+//TODO: implement SearchAppBar
 function Navigation() {
   const { items, fetchCategories } = useMainMenu();
 
@@ -13,7 +13,7 @@ function Navigation() {
   }, [fetchCategories]);
 
   return (
-  <nav className="container mx-auto flex items-center justify-between p-4">
+    <nav className="container mx-auto flex items-center justify-between p-4">
       <Logo />
       <ul className="flex flex-row gap-4 text-3xl text-[#707071] ">
         {items && items.map((route) => (
@@ -25,7 +25,7 @@ function Navigation() {
       {/* <SearchAppBar /> */}
       <MiniCartBtn />
     </nav>
-    );
+  );
 }
 
 export default Navigation;

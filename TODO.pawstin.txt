@@ -1,0 +1,53 @@
+TODO:
+----
+shearch product
+debounce serch hook
+react-query search cahse ? (only clien side)
+use "react hot toast" when order placed  (or something on serverside)
+
+
+
+
+
+
+Site
+----
+breadcrumb
+use Prisma ORM MongoDB
+
+
+
+WishList ?
+-----
+
+
+Nav
+----
+active page
+
+
+PLP
+--
+sort
+pagination
+
+
+
+PDP
+--
+
+Cart
+---
+
+Checkout
+--------
+
+
+Auth
+------
+
+
+Dashboard
+---------
+
+About

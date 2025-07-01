@@ -12,7 +12,7 @@ function SiteLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <CartContextProvider>
-        {/* <Navigation /> */}
+        <Navigation />
         <main>
           <Outlet />
         </main>

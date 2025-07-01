@@ -20,10 +20,10 @@ export default function Recomendations({ category }: { category?: string }) {
 
   return (
     <section className="container flex flex-col mx-auto justify-center items-center py-5 md:py-10 2xl:py-15 bg-light text-center px-4">
-      <h1 className="fw-bolder mb-4 text-xl md:text-2xl xl:text-4xl">Recommended products</h1>
-      <div className="grid md:grid-cols-2 md:gap-2 xl:grid-cols-4 xl:gap-4" >
+      <h1 className="fw-bolder mb-8 text-xl md:text-2xl xl:text-4xl">Recommended products</h1>
+      <div className="grid md:grid-cols-2 md:gap-2 xl:grid-cols-4 xl:gap-16" >
         {isLoading && <Loading />}
-        {(data ?? []).map((product: ProductResponse) => (
+        {data && data.map((product: ProductResponse) => (
           <ProductIListItem key={product.id} product={product} />
         ))}
       </div>

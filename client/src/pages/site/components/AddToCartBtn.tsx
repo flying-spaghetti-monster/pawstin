@@ -7,13 +7,15 @@ import { ProductResponse } from '../../../lib/types';
 //TODO: implemet disable button
 function AddToCartBtn({
   product,
+  className,
   children,
   quantity = 1,
 }: {
   product: ProductResponse,
+  className: string,
   children: React.ReactNode,
   quantity?: number,
-})  {
+}) {
   const [isDisabled, setDisabled] = useState(false);
   const addToCart = useCartStore(state => state.addToCart);
   const getProductFromCart = useCartStore(state => state.getProductFromCart);
@@ -26,7 +28,7 @@ function AddToCartBtn({
   return (
     <button
       disabled={isDisabled}
-      // className={className}
+      className={className}
       onClick={handleAdd}
       type="button"
       style={isDisabled ? { backgroundColor: "gray" } : {}}
