@@ -30,13 +30,13 @@ services:
     restart: unless-stopped
 
   db:
-    image: postgres:17
+    image: postgres:17-alpine
     env_file:
       - ./server/.env
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_HOST}
+      POSTGRES_DB: ${DB_NAME}
     volumes:
       - pgdata:/var/lib/postgresql/data
     restart: unless-stopped
