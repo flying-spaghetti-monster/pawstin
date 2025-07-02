@@ -1,7 +1,23 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres
+    env_file:
+      - ./server/.env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - dbnet
+
   server:
+    container_name: server
     build:
       context: ./server
     env_file:
@@ -14,13 +30,18 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
+    networks:
+      - dbnet
+    links:
+      - "postgres:db"
+    restart: unless-stopped
     depends_on:
-      - db
+      - postgres
     volumes:
       - ./server:/app
-    restart: unless-stopped
 
   client:
+    container_name: client
     build:
       context: ./client
     ports:
@@ -28,18 +49,12 @@ services:
     volumes:
       - ./client:/app
     restart: unless-stopped
+    depends_on:
+      - server
 
-  db:
-    image: postgres:17-alpine
-    env_file:
-      - ./server/.env
-    environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    restart: unless-stopped
+networks:
+  dbnet:
+    driver: bridge
 
 volumes:
   pgdata:
