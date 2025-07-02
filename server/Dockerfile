@@ -6,9 +6,10 @@ WORKDIR /app
 COPY package*.json ./
 
 RUN yarn install
-RUN yarn prisma generate
 
 COPY . .
+# RUN yarn prisma generate
+# RUN yarn prisma db seed
 RUN yarn build
 
 EXPOSE 3000
