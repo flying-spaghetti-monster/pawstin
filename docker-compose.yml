@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: ./server
+    env_file:
+      - ./server/.env 
+    ports:
+      - '3000:3000'
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    depends_on:
+      - db
+    volumes:
+      - ./server:/app
+    restart: unless-stopped
+
+  client:
+    build:
+      context: ./client
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./client:/app
+    restart: unless-stopped
+
+  db:
+    image: postgres:17
+    env_file:
+      - ./server/.env 
+    environment:
+      POSTGRES_USER: ${DB_HOST}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  pgdata:

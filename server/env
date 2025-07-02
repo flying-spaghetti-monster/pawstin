@@ -1,2 +1,0 @@
-DEFAULT_LANGUAGE=en
-DATABASE_URL="postgresql://postgres:test@localhost:5432/test?schema=public"

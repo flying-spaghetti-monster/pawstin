@@ -1,12 +1,18 @@
-import { IsString, IsOptional, IsEnum } from 'class-validator';
+import { IsString, IsOptional, IsEnum, Matches, IsEmail } from 'class-validator';
 import { Roles } from '@prisma/client';
 
 
 export class CreateAuthDto {
-  @IsString()
+  @Matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, {
+    message: 'email must be a valid email address'
+  })
+  @IsEmail()
   email: string
 
   @IsString()
+  @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, {
+    message: 'password must be at least 8 characters long and contain at least one letter and one number'
+  })
   password: string
 
   @IsString()
