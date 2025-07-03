@@ -1,55 +1,68 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import cartStorage from "../helper/cartHelper";
+import { pli, prevCart } from '../lib/types';
 
-export const CartContext = createContext(null);
+type CartPageContextType = {
+  cart: prevCart;
+  cartquantity: number;
+  addProduct: (id: number, quantity: number) => void;
+  updateProduct: (id: number, quantity: number) => void;
+  deleteProduct: (id: number) => void;
+  clearCart: () => void;
+};
 
-export const CartContextProvider = ({ children }) => {
-  const [cart, setCart] = useState({
+
+export const CartContext = createContext<CartPageContextType | undefined>(undefined);
+
+export const CartContextProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [cart, setCart] = useState<prevCart>({
     plis: [],
-    qty: 0,
+    quantity: 0,
   });
 
-  const addProduct = (id, qty) => {
-    setCart((prevCart) => {
-      const existingProduct = prevCart.plis.find((item) => item.isbn === id);
+  const addProduct = (id: number, quantity: number) => {
+    setCart((prevCart: prevCart) => {
+      const existingProduct = prevCart.plis.find((item: pli) => item.id === id);
 
       if (existingProduct) {
         return {
-          plis: prevCart.plis.map((item) =>
-            item.isbn === id ? { ...item, qty: item.qty + qty } : item
+          plis: prevCart.plis.map((item: pli) =>
+            item.id === id ? { ...item, quantity: item.quantity + quantity } : item
           ),
-          qty: prevCart.qty + qty,
+          quantity: prevCart.quantity + quantity,
         };
       } else {
         return {
-          plis: [...prevCart.plis, { isbn: id, qty }],
-          qty: prevCart.qty + qty,
+          plis: [...prevCart.plis, { id: id, quantity }],
+          quantity: prevCart.quantity + quantity,
         };
       }
     });
   };
-  const updateProduct = (id, qty) => {
-    setCart((prevCart) => {
-      const existingProduct = prevCart.plis.find((item) => item.isbn === id);
+  const updateProduct = (id: number, quantity: number) => {
+    setCart((prevCart: prevCart) => {
+      const existingProduct: pli | undefined = prevCart.plis.find((item: pli) => item.id === id);
       if (existingProduct) {
         return {
-          plis: prevCart.plis.map((item) =>
-            item.isbn === id ? { ...item, qty } : item
+          plis: prevCart.plis.map((item: pli) =>
+            item.id === id ? { ...item, quantity } : item
           ),
-          qty: prevCart.qty - existingProduct.qty + qty,
+          quantity: prevCart.quantity - existingProduct.quantity + quantity,
         };
       }
       return prevCart;
     });
   };
 
-  const deleteProduct = (id) => {
-    setCart((prevCart) => {
-      const existingProduct = prevCart.plis.find((item) => item.isbn === id);
+  const deleteProduct = (id: number) => {
+    setCart((prevCart: prevCart) => {
+      const existingProduct = prevCart.plis.find((item: pli) => item.id === id);
       if (existingProduct) {
         return {
-          plis: prevCart.plis.filter((item) => item.isbn !== id),
-          qty: prevCart.qty - existingProduct.qty,
+          plis: prevCart.plis.filter((item: pli) => item.id !== id),
+          quantity: prevCart.quantity - existingProduct.quantity,
         };
       }
       return prevCart;
@@ -59,13 +72,13 @@ export const CartContextProvider = ({ children }) => {
   const clearCart = () => {
     setCart({
       plis: [],
-      qty: 0,
+      quantity: 0,
     });
   };
-  const cartQty =
+  const cartquantity =
     (cart.plis.length &&
       Object.values(cart.plis).reduce(
-        (accumulator, currentValue) => accumulator + currentValue.qty,
+        (accumulator, currentValue) => accumulator + currentValue.quantity,
         0
       )) ||
     0;
@@ -79,16 +92,30 @@ export const CartContextProvider = ({ children }) => {
     cartStorage.saveCart(cart);
   }, [cart]);
 
+
+  const contextValue = useMemo(
+    () => ({
+      cart,
+      addProduct,
+      updateProduct,
+      deleteProduct,
+      clearCart,
+      cartquantity,
+    }),
+    [
+      cart,
+      addProduct,
+      updateProduct,
+      deleteProduct,
+      clearCart,
+      cartquantity,
+    ]
+  );
+
+
   return (
     <CartContext.Provider
-      value={{
-        cart,
-        addProduct,
-        updateProduct,
-        deleteProduct,
-        clearCart,
-        cartQty,
-      }}
+      value={contextValue}
     >
       {children}
     </CartContext.Provider>

@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useCallback, useMemo } from "react
 import { PageDirection, ShipperResponse, Actions } from '../lib/types';
 import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import {instance as axios} from '../api/axios';
+import { instance as axios } from '../api/axios';
 
 type ShippersPageContextType = {
   currentPage: number;
@@ -11,10 +11,10 @@ type ShippersPageContextType = {
   totalPages: number;
   action: Actions,
   handleChangePage: (direction: PageDirection) => void;
-  createShipper: () => void;
-  deleteShipper: () => void;
-  editShipper: () => void;
-  setAction: () => void
+  createShipper: (newData: ShippersPageContextType) => Promise<ShipperResponse>;
+  deleteShipper: (id: number) => Promise<ShipperResponse>;
+  editShipper: (newData: ShipperResponse) => Promise<ShipperResponse>;
+  setAction: React.Dispatch<React.SetStateAction<Actions>>;
 };
 
 const ShippersPageContext = createContext<ShippersPageContextType | undefined>(undefined);
@@ -36,16 +36,16 @@ type shippersResponse = {
 export const ShippersPageProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [ currentPage, setCurrentPage ] = useState(1);
-  const [ action, setAction ] = useState<Actions>('CREATE');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [action, setAction] = useState<Actions>('CREATE');
 
-  const { data } = useQuery<shippersResponse>({
+  const { data } = useQuery<shippersResponse, Error, shippersResponse, [string, number, Actions]>({
     queryKey: ['admin-shippers', currentPage, action],
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
     staleTime: 1000 * 60 * 5, // 5 minutes
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
     queryFn: async () => {
       const response = await toast.promise(
         axios.get('/shippers/findAll?page=' + currentPage),

@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { shallow } from "zustand/shallow";
+import { useState } from "react";
 import { useCartStore } from "../stores/cartStore";
-import { ProductResponse } from '../../../lib/types';
+import { pli, ProductResponse } from '../../../lib/types';
 
 //TODO: implemet quantity logic
 //TODO: implemet disable button
@@ -20,9 +19,15 @@ function AddToCartBtn({
   const addToCart = useCartStore(state => state.addToCart);
   const getProductFromCart = useCartStore(state => state.getProductFromCart);
 
-  const handleAdd = (e) => {
+  const handleAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     addToCart(product, quantity);
+
+    // Ensure getProductFromCart returns the product or update logic accordingly
+    const existingProduct = getProductFromCart(product.id);
+    if (existingProduct && existingProduct.qty >= quantity) {
+      setDisabled(true)
+    }
   };
 
   return (

@@ -15,25 +15,25 @@ enum CategoryAction {
 }
 
 export default function CategoryModal({
-    action,
-    isOpen,
-    closeModal,
-    onSubmit,
-    handleSubmit,
-    control,
-    register,
-    activeCategory
+  action,
+  isOpen,
+  // control,
+  // register,
+  activeCategory,
+  closeModal,
+  onSubmit,
+  handleSubmit,
 }: {
   action: CategoryAction,
   isOpen: boolean,
   activeCategory: CategoryResponse,
   closeModal: () => void;
-  onSubmit: () => void;
-  handleSubmit: () => void;
-  control: () => void;
-  register: () => void;
+  onSubmit: (data: any) => void;
+  handleSubmit: (callback: (data: any) => void) => (e?: React.BaseSyntheticEvent) => void;
+  // control: () => void;
+  // register: () => void;
 }) {
-    const isEdit = action && activeCategory && action == CategoryAction.EDIT.toLocaleUpperCase();
+  const isEdit = action && activeCategory && action == CategoryAction.EDIT.toLocaleUpperCase();
   return (
     <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
       <div className="relative w-full p-4 overflow-y-auto bg-white no-scrollbar rounded-3xl dark:bg-gray-900 lg:p-11">
@@ -43,16 +43,16 @@ export default function CategoryModal({
           </h4>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-        { action === "DELETE" ? (
-          <div className="px-2 mb-4">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Are you sure you want to delete this category? This action cannot be undone.
-            </p>
-          </div>
-        ) : (
-          <>
-          <div className="px-2 overflow-y-auto custom-scrollbar">
-            {/* <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+          {action === "DELETE" ? (
+            <div className="px-2 mb-4">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Are you sure you want to delete this category? This action cannot be undone.
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="px-2 overflow-y-auto custom-scrollbar">
+                {/* <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
               <div>
                 <Label>Name</Label>
                 <Input type="text" value={isEdit && activeCategory.category_name}  placeholder="Enter category name" name='category_name' register={register('category_name', { required: true })} />
@@ -63,9 +63,9 @@ export default function CategoryModal({
                 <Input type="text" value={isEdit && activeCategory.slug} placeholder="Enter category slug" name='slug' register={register('slug', { required: true })} />
               </div>
             </div> */}
-            <div className="grid mt-8">
-            <Label>Description</Label>
-            {/* <Controller
+                <div className="grid mt-8">
+                  <Label>Description</Label>
+                  {/* <Controller
               control={control}
               name="description"
               rules={{ required: 'Description is required' }}
@@ -79,16 +79,16 @@ export default function CategoryModal({
               />
             )}
             /> */}
-            </div>
-            <div className="grid mt-8">
-              <Checkbox label="Is Active" register={register('isActive')}/>
-            </div>
-            <div className="grid mt-8">
-              <DropzoneComponent />
-            </div>
-          </div>
-          </>
-      )}
+                </div>
+                <div className="grid mt-8">
+                  <Checkbox label="Is Active" register={register('isActive')} />
+                </div>
+                <div className="grid mt-8">
+                  <DropzoneComponent />
+                </div>
+              </div>
+            </>
+          )}
           <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
             <Button size="sm" variant="outline" onClick={closeModal}>
               Close

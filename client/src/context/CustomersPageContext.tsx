@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useCallback, useMemo } from "react
 import { PageDirection, UserAddressResponse } from '../lib/types';
 import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import {instance as axios} from '../api/axios';
+import { instance as axios } from '../api/axios';
 
 type CustomersPageContextType = {
   currentPage: number;
@@ -32,10 +32,10 @@ export const CustomersPageProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const { data } = useQuery<customersResponse>({
+  const { data } = useQuery<customersResponse, Error, customersResponse, [string, number]>({
     queryKey: ['admin-customers', currentPage],
     staleTime: 1000 * 60 * 5, // 5 minutes
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
     queryFn: async () => {
       const response = await toast.promise(
         axios.get<customersResponse>('/auth/getUsers?page=' + currentPage),

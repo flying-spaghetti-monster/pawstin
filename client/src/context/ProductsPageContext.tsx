@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useCallback, useMemo } from "react
 import { PageDirection, ProductResponse, Actions } from '../lib/types';
 import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import {instance as axios} from '../api/axios';
+import { instance as axios } from '../api/axios';
 
 type ProductsPageContextType = {
   currentPage: number;
@@ -11,10 +11,10 @@ type ProductsPageContextType = {
   totalPages: number;
   action: Actions,
   handleChangePage: (direction: PageDirection) => void;
-  createProduct: () => void;
-  deleteProduct: () => void;
-  editProduct: () => void;
-  setAction: () => void
+  createProduct: (newData: ProductsPageContextType) => void;
+  deleteProduct: (slug: string) => void;
+  editProduct: (newData: ProductResponse) => void;
+  setAction: React.Dispatch<React.SetStateAction<Actions>>;
 };
 
 const ProductsPageContext = createContext<ProductsPageContextType | undefined>(undefined);
@@ -36,13 +36,13 @@ type productsResponse = {
 export const ProductsPageProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [ currentPage, setCurrentPage ] = useState(1);
-  const [ action, setAction ] = useState<Actions>('CREATE');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [action, setAction] = useState<Actions>('CREATE');
 
-  const { data } = useQuery<productsResponse>({
+  const { data } = useQuery<productsResponse, Error, productsResponse, [string, number, Actions]>({
     queryKey: ['admin-products', currentPage, action],
     staleTime: 1000 * 60 * 5, // 5 minutes
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
     queryFn: async () => {
       const response = await toast.promise(
         axios.get('/products/findAll?page=' + currentPage),

@@ -1,7 +1,7 @@
 import { Controller, Post, Body, HttpCode, HttpStatus, HttpException, Get, Query, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { signInDto } from './dto/sing-in-auth.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
 
 @Controller('auth')
@@ -10,7 +10,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  async login(@Body() dto: signInDto) {
+  async login(@Body() dto: LoginUserDto) {
     //TODO: dto.remember_me
     const user = await this.authService.validateUser(dto.email, dto.password);
     if (!user) {
@@ -21,7 +21,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('registration')
-  async create(@Body() dto: CreateAuthDto) {
+  async create(@Body() dto: CreateUserDto) {
     const oldUser = await this.authService.findUser(dto.email);
 
     if (oldUser) {

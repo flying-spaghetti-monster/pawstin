@@ -102,13 +102,12 @@ export type OrderResponse = {
   status: Status;
 }
 
+export type pli = {
+  id: number,
+  quantity: number
+}
 
-export interface TCartStorage {
-  items: ProductResponse[];
-  totalQuantity: number;
-  totalPrice: number;
-  addToCart: (product: ProductResponse, quantity?: number) => void;
-  removeFromCart: (id: number) => void;
-  getProductFromCart: (id: number) => void;
-  clearCart: () => void;
+export type prevCart = {
+  plis: pli[],
+  quantity: number
 }

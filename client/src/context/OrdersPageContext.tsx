@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useCallback, useMemo } from "react
 import { PageDirection, OrderResponse, Actions } from '../lib/types';
 import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import {instance as axios} from '../api/axios';
+import { instance as axios } from '../api/axios';
 
 type OrdersPageContextType = {
   currentPage: number;
@@ -11,10 +11,10 @@ type OrdersPageContextType = {
   totalPages: number;
   action: Actions,
   handleChangePage: (direction: PageDirection) => void;
-  createOrder: () => void;
-  deleteOrder: () => void;
-  editOrder: () => void;
-  setAction: () => void
+  createOrder: (newData: OrdersPageContextType) => void;
+  deleteOrder: (slug: string) => void;
+  editOrder: (newData: OrderResponse) => void;
+  setAction: React.Dispatch<React.SetStateAction<Actions>>;
 };
 
 const OrdersPageContext = createContext<OrdersPageContextType | undefined>(undefined);
@@ -36,13 +36,13 @@ type ordersResponse = {
 export const OrdersPageProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [ currentPage, setCurrentPage ] = useState(1);
-  const [ action, setAction ] = useState<Actions>('CREATE');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [action, setAction] = useState<Actions>('CREATE');
 
-  const { data } = useQuery<ordersResponse>({
+  const { data } = useQuery<ordersResponse, Error, ordersResponse, [string, number, Actions]>({
     queryKey: ['admin-orders', currentPage, action],
     staleTime: 1000 * 60 * 5, // 5 minutes
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
     queryFn: async () => {
       const response = await toast.promise(
         axios.get('/orders/findAll?page=' + currentPage),
@@ -78,7 +78,7 @@ export const OrdersPageProvider: React.FC<{ children: React.ReactNode }> = ({
     );
     return response.data;
   };
-  const editOrder = async (newData: OrderResponse) => {
+  const editOrder = async (newData: { slug: string } & OrderResponse) => {
     const response = await toast.promise(
       axios.patch<OrderResponse>('/orders/' + newData.slug, newData),
       {

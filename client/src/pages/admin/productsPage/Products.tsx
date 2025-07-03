@@ -6,7 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Actions, ProductResponse } from '../../../lib/types';
 import { useProductsPage } from '../../../context/ProductsPageContext';
 import PaginationControls from '../components/common/PaginationControls';
-import { Link, useNavigate  } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ProductModal from './ProductsModal';
@@ -14,9 +14,9 @@ import { useState } from 'react';
 import Badge from '../components/ui/badge/Badge';
 
 export default function products() {
-  const [ activeProduct, setActiveProduct ] = useState<ProductResponse | undefined>();
+  const [activeProduct, setActiveProduct] = useState<ProductResponse | undefined>();
   const { isOpen, openModal, closeModal } = useModal();
-  const { control,  register, handleSubmit } = useForm<ProductResponse>()
+  const { control, register, handleSubmit } = useForm<ProductResponse>()
   const {
     handleChangePage,
     createProduct,
@@ -42,7 +42,7 @@ export default function products() {
     closeModal();
     return navigate('/admin/products')
   }
-  const handleOpenModal = (modalAction: Actions, Product?:ProductResponse) => {
+  const handleOpenModal = (modalAction: Actions, Product?: ProductResponse) => {
     return () => {
       setAction(modalAction);
       setActiveProduct(Product);
@@ -57,9 +57,9 @@ export default function products() {
         description="Admin products Template"
       />
       <div className="grid">
-      <PageBreadcrumb pageTitle="Products" />
-      <div className="flex items-center justify-between mb-6">
-        <button
+        <PageBreadcrumb pageTitle="Products" />
+        <div className="flex items-center justify-between mb-6">
+          <button
             onClick={handleOpenModal('CREATE')}
             className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
           >
@@ -78,10 +78,10 @@ export default function products() {
                 fill=""
               />
             </svg>
-          Add Product
-        </button>
-        {isOpen && ( <ProductModal action={action} activeProduct={activeProduct} setActiveProduct={setActiveProduct} isOpen={isOpen}  closeModal={closeModal} onSubmit={onSubmit} handleSubmit={handleSubmit}  control={control} register={register}/> )}
-      </div>
+            Add Product
+          </button>
+          {isOpen && (<ProductModal action={action} activeProduct={activeProduct} setActiveProduct={setActiveProduct} isOpen={isOpen} closeModal={closeModal} onSubmit={onSubmit} handleSubmit={handleSubmit} control={control} register={register} />)}
+        </div>
         <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
           <div className="max-w-full overflow-x-auto">
             <Table>
@@ -128,9 +128,9 @@ export default function products() {
                     <TableCell className="px-5 py-4 sm:px-6 text-start">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 overflow-hidden rounded-full">
-                        <div className="w-10 h-10 overflow-hidden rounded-full text-center flex items-center justify-center bg-gray-200 dark:bg-white/10 text-gray-500 dark:text-white/90">
-                          {(Product.product_name.charAt(0)).toUpperCase()}
-                        </div>
+                          <div className="w-10 h-10 overflow-hidden rounded-full text-center flex items-center justify-center bg-gray-200 dark:bg-white/10 text-gray-500 dark:text-white/90">
+                            {(Product.product_name.charAt(0)).toUpperCase()}
+                          </div>
                         </div>
                         <div>
                           <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
@@ -143,15 +143,15 @@ export default function products() {
                       <Link to={`http://localhost:5173/${Product.slug}`} target='_black'>{Product.product_name}</Link>
                     </TableCell>
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {Product.isActive? (
-                          <Badge size="sm" color="success">
-                            Active
-                          </Badge>
-                        ) : (
-                          <Badge size="sm" color="error">
-                            Inactive
-                          </Badge>
-                        )}
+                      {Product.isActive ? (
+                        <Badge size="sm" color="success">
+                          Active
+                        </Badge>
+                      ) : (
+                        <Badge size="sm" color="error">
+                          Inactive
+                        </Badge>
+                      )}
                     </TableCell>
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                       <ul>
@@ -173,7 +173,7 @@ export default function products() {
                         onClick={handleOpenModal('DELETE', Product)}
                         className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
                       >
-                        <DeleteIcon/>
+                        <DeleteIcon />
                       </button>
                     </TableCell>
                   </TableRow>

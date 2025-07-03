@@ -1,12 +1,25 @@
 import { create } from "zustand";
 import { persist, devtools } from "zustand/middleware";
-import { TCartStorage } from '../../../lib/types';
+import { pli, ProductResponse } from '../../../lib/types';
 
 
+export interface TCartStorage {
+  items: ProductResponse[];
+  totalQuantity: number;
+  totalPrice: number;
+  addToCart: (product: ProductResponse, quantity?: number) => void;
+  removeFromCart: (id: number) => void;
+  getProductFromCart: (id: number) => pli | undefined;
+  clearCart: () => void;
+}
 
-function calculateCart(items: TCartStorage[]) {
-  const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = items.reduce((sum, item) => sum + item.quantity * item.price, 0);
+export interface ProductItems extends ProductResponse {
+  quantity?: number;
+}
+
+function calculateCart(items: ProductItems[]): { totalQuantity: number, totalPrice: number } {
+  const totalQuantity = items.reduce((sum, item) => sum + (item.quantity || 0), 0);
+  const totalPrice = items.reduce((sum, item) => sum + (item.quantity || 0) * item.price, 0);
   return { totalQuantity, totalPrice };
 }
 
@@ -43,8 +56,9 @@ export const useCartStore = create<TCartStorage>()(
           const totals = calculateCart(updatedItems);
           set({ items: updatedItems, ...totals });
         },
-        getProductFromCart: (id) => {
-         return get().items.find(item => item.id === id);
+        getProductFromCart: (id): pli | undefined => {
+          const product = get().items.find(item => item.id === id);
+          return product;
         },
         clearCart: () => {
           set({ items: [], totalQuantity: 0, totalPrice: 0 });

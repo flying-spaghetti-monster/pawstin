@@ -7,9 +7,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import { getJwtConfig } from 'configs/jwt.config';
 import { PrismaModule } from 'src/prisma/prisma.module';
+import { AuthResolver } from './auth.resolver';
 
 @Module({
-  controllers: [AuthController],
+  controllers: [AuthController, AuthResolver],
   providers: [AuthService, JwtStrategy],
   imports: [
     ConfigModule,

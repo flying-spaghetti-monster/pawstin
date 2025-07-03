@@ -4,15 +4,18 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const PORT: string | undefined = process.env.PORT;
 
-  app.setGlobalPrefix('api', { exclude: ['uploads'] });
+  //Only for REST API
+  app.setGlobalPrefix('api', { exclude: ['/qraph', '/uploads'] });
   app.useGlobalPipes(new ValidationPipe({
     transform: true, // This is crucial for type conversion
   }));
   app.enableCors();
 
-  await app.listen(process.env.PORT ?? 3000, () => {
-    console.log('Local: http://localhost:3000/api');
+  await app.listen(PORT || 3000, () => {
+    console.log(`REST API: http://localhost:${PORT}/api`);
+    console.log(`GraphQL: http://localhost:${PORT}/graphql`);
   });
 }
 bootstrap();
