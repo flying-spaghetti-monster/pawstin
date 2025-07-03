@@ -6,7 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Actions, CategoryResponse } from '../../../lib/types';
 import { useCategoriesPage } from '../../../context/CategoriesPageContext';
 import PaginationControls from '../components/common/PaginationControls';
-import { Link, useNavigate  } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CategoryModal from './CategoryModal';
@@ -14,9 +14,9 @@ import { useState } from 'react';
 import Badge from '../components/ui/badge/Badge';
 
 export default function Categories() {
-  const [ activeCategory, setActiveCategory ] = useState<CategoryResponse | undefined>();
+  const [activeCategory, setActiveCategory] = useState<CategoryResponse | undefined>();
   const { isOpen, openModal, closeModal } = useModal();
-  const { control,  register, handleSubmit } = useForm<CategoryResponse>()
+  const { control, register, handleSubmit } = useForm<CategoryResponse>()
   const {
     handleChangePage,
     createCategory,
@@ -35,14 +35,14 @@ export default function Categories() {
     if (action === 'EDIT') {
       editCategory(formData);
     } else if (action === 'DELETE') {
-      deleteCategory(activeCategory.slug);
+      deleteCategory(activeCategory ? activeCategory.slug : '');
     } else if (action === 'CREATE') {
       createCategory(formData);
     }
     closeModal();
     return navigate('/admin/categories')
   }
-  const handleOpenModal = (modalAction: Actions, category?:CategoryResponse) => {
+  const handleOpenModal = (modalAction: Actions, category?: CategoryResponse) => {
     return () => {
       setAction(modalAction);
       setActiveCategory(category);
@@ -57,9 +57,9 @@ export default function Categories() {
         description="Admin Categories Template"
       />
       <div className="grid">
-      <PageBreadcrumb pageTitle="Categories" />
-      <div className="flex items-center justify-between mb-6">
-        <button
+        <PageBreadcrumb pageTitle="Categories" />
+        <div className="flex items-center justify-between mb-6">
+          <button
             onClick={handleOpenModal('CREATE')}
             className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
           >
@@ -78,10 +78,10 @@ export default function Categories() {
                 fill=""
               />
             </svg>
-          Add Category
-        </button>
-        {isOpen && ( <CategoryModal action={action} activeCategory={activeCategory} setActiveCategory={setActiveCategory} isOpen={isOpen}  closeModal={closeModal} onSubmit={onSubmit} handleSubmit={handleSubmit}  control={control} register={register}/> )}
-      </div>
+            Add Category
+          </button>
+          {isOpen && (<CategoryModal action={action} activeCategory={activeCategory} setActiveCategory={setActiveCategory} isOpen={isOpen} closeModal={closeModal} onSubmit={onSubmit} handleSubmit={handleSubmit} control={control} register={register} />)}
+        </div>
         <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
           <div className="max-w-full overflow-x-auto">
             <Table>
@@ -122,9 +122,9 @@ export default function Categories() {
                     <TableCell className="px-5 py-4 sm:px-6 text-start">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 overflow-hidden rounded-full">
-                        <div className="w-10 h-10 overflow-hidden rounded-full text-center flex items-center justify-center bg-gray-200 dark:bg-white/10 text-gray-500 dark:text-white/90">
-                          {(category.category_name.charAt(0)).toUpperCase()}
-                        </div>
+                          <div className="w-10 h-10 overflow-hidden rounded-full text-center flex items-center justify-center bg-gray-200 dark:bg-white/10 text-gray-500 dark:text-white/90">
+                            {(category.category_name.charAt(0)).toUpperCase()}
+                          </div>
                         </div>
                         <div>
                           <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
@@ -137,15 +137,15 @@ export default function Categories() {
                       <Link to={`http://localhost:5173/${category.slug}`} target='_black'>{category.category_name}</Link>
                     </TableCell>
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {category.isActive? (
-                          <Badge size="sm" color="success">
-                            Active
-                          </Badge>
-                        ) : (
-                          <Badge size="sm" color="error">
-                            Inactive
-                          </Badge>
-                        )}
+                      {category.isActive ? (
+                        <Badge size="sm" color="success">
+                          Active
+                        </Badge>
+                      ) : (
+                        <Badge size="sm" color="error">
+                          Inactive
+                        </Badge>
+                      )}
                     </TableCell>
                     <TableCell className="flex w-full gap-2 px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                       {/* TODO: add */}
@@ -159,7 +159,7 @@ export default function Categories() {
                         onClick={handleOpenModal('DELETE', category)}
                         className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
                       >
-                        <DeleteIcon/>
+                        <DeleteIcon />
                       </button>
                     </TableCell>
                   </TableRow>

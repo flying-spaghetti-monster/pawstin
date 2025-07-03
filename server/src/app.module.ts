@@ -11,11 +11,23 @@ import { OrdersModule } from './orders/orders.module';
 import { ProductsModule } from './products/products.module';
 import { ShippersModule } from './shippers/shippers.module';
 import { NotificationsGateway } from './notifications/notifications.gateway';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { AppResolver } from './graphql/app.resolver';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    // GraphQL is available at /graphql
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      path: '/graphql',
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      sortSchema: true,
+      playground: true,
+      debug: true,
     }),
     I18nModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
@@ -45,7 +57,8 @@ import { NotificationsGateway } from './notifications/notifications.gateway';
   controllers: [AppController],
   providers: [
     AppService,
-    NotificationsGateway
+    NotificationsGateway,
+    AppResolver
   ],
 })
 export class AppModule { }

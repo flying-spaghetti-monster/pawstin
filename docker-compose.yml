@@ -10,9 +10,11 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-    restart: unless-stopped
+    restart: always
     networks:
       - dbnet
 
@@ -34,10 +36,11 @@ services:
       - dbnet
     links:
       - "postgres:db"
-    restart: unless-stopped
+    restart: always
     depends_on:
       - postgres
     volumes:
+      - ./server/node_modules
       - ./server:/app
 
   client:
@@ -47,8 +50,9 @@ services:
     ports:
       - '5173:5173'
     volumes:
+      - ./client/node_modules
       - ./client:/app
-    restart: unless-stopped
+    restart: always
     depends_on:
       - server
 
@@ -58,3 +62,6 @@ networks:
 
 volumes:
   pgdata:
+
+# TODO fix postgres connection like here
+# https://github.com/alexdevero/docker-nestjs-react-postgres/tree/master

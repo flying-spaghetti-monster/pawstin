@@ -6,7 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Actions, ShipperResponse } from '../../../lib/types';
 import { useShippersPage } from '../../../context/ShippersPageContext';
 import PaginationControls from '../components/common/PaginationControls';
-import { Link, useNavigate  } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ShipperModal from './ShippersModal';
@@ -14,9 +14,9 @@ import { useState } from 'react';
 import Badge from '../components/ui/badge/Badge';
 
 export default function Shippers() {
-  const [ activeShipper, setActiveShipper ] = useState<ShipperResponse | undefined>();
+  const [activeShipper, setActiveShipper] = useState<ShipperResponse | undefined>();
   const { isOpen, openModal, closeModal } = useModal();
-  const { control,  register, handleSubmit } = useForm<ShipperResponse>()
+  const { control, register, handleSubmit } = useForm<ShipperResponse>()
   const {
     handleChangePage,
     createShipper,
@@ -42,7 +42,7 @@ export default function Shippers() {
     closeModal();
     return navigate('/admin/shippers')
   }
-  const handleOpenModal = (modalAction: Actions, Shipper?:ShipperResponse) => {
+  const handleOpenModal = (modalAction: Actions, Shipper?: ShipperResponse) => {
     return () => {
       setAction(modalAction);
       setActiveShipper(Shipper);
@@ -57,9 +57,9 @@ export default function Shippers() {
         description="Admin Shippers Template"
       />
       <div className="grid">
-      <PageBreadcrumb pageTitle="Shippers" />
-      <div className="flex items-center justify-between mb-6">
-        <button
+        <PageBreadcrumb pageTitle="Shippers" />
+        <div className="flex items-center justify-between mb-6">
+          <button
             onClick={handleOpenModal('CREATE')}
             className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
           >
@@ -78,10 +78,10 @@ export default function Shippers() {
                 fill=""
               />
             </svg>
-          Add Shipper
-        </button>
-        {isOpen && ( <ShipperModal action={action} activeShipper={activeShipper} setActiveShipper={setActiveShipper} isOpen={isOpen}  closeModal={closeModal} onSubmit={onSubmit} handleSubmit={handleSubmit}  control={control} register={register}/> )}
-      </div>
+            Add Shipper
+          </button>
+          {isOpen && (<ShipperModal action={action} activeShipper={activeShipper} setActiveShipper={setActiveShipper} isOpen={isOpen} closeModal={closeModal} onSubmit={onSubmit} handleSubmit={handleSubmit} control={control} register={register} />)}
+        </div>
         <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
           <div className="max-w-full overflow-x-auto">
             <Table>
@@ -122,9 +122,9 @@ export default function Shippers() {
                     <TableCell className="px-5 py-4 sm:px-6 text-start">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 overflow-hidden rounded-full">
-                        <div className="w-10 h-10 overflow-hidden rounded-full text-center flex items-center justify-center bg-gray-200 dark:bg-white/10 text-gray-500 dark:text-white/90">
-                          {(shipper.category_name.charAt(0)).toUpperCase()}
-                        </div>
+                          <div className="w-10 h-10 overflow-hidden rounded-full text-center flex items-center justify-center bg-gray-200 dark:bg-white/10 text-gray-500 dark:text-white/90">
+                            {(shipper.category_name.charAt(0)).toUpperCase()}
+                          </div>
                         </div>
                         <div>
                           <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
@@ -137,15 +137,15 @@ export default function Shippers() {
                       {shipper.phone}
                     </TableCell>
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {shipper.isActive? (
-                          <Badge size="sm" color="success">
-                            Active
-                          </Badge>
-                        ) : (
-                          <Badge size="sm" color="error">
-                            Inactive
-                          </Badge>
-                        )}
+                      {shipper.isActive ? (
+                        <Badge size="sm" color="success">
+                          Active
+                        </Badge>
+                      ) : (
+                        <Badge size="sm" color="error">
+                          Inactive
+                        </Badge>
+                      )}
                     </TableCell>
                     <TableCell className="flex w-full gap-2 px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                       {/* TODO: add */}
@@ -159,7 +159,7 @@ export default function Shippers() {
                         onClick={handleOpenModal('DELETE', shipper)}
                         className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
                       >
-                        <DeleteIcon/>
+                        <DeleteIcon />
                       </button>
                     </TableCell>
                   </TableRow>

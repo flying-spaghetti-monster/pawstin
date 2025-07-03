@@ -8,10 +8,10 @@ export default function Recomendations({ category }: { category?: string }) {
   const url: string = 'http://localhost:3000/api/products/findAll?take=4' + (category ? `&` + category : '')
   const queryKey = 'recomentations' + category ? '-' + category : '';
 
-  const { data, isLoading } = useQuery<ProductResponse[]>({
+  const { data, isLoading } = useQuery<ProductResponse[], Error, ProductResponse[], [string]>({
     queryKey: [queryKey],
     staleTime: 1000 * 60 * 5, // 5 minutes
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
     queryFn: async (): Promise<ProductResponse[]> => {
       const response = await axios.get(url);
       return response.data?.products ?? [];

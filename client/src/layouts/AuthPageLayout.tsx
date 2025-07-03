@@ -44,10 +44,10 @@ export default function AuthLayout({
         </div>
       </div>
       <Toaster toastOptions={{
-          style: {
-            zIndex: 9999, // higher than modal (adjust as needed)
-          },
-        }} position="top-center" />
+        style: {
+          zIndex: 9999, // higher than modal (adjust as needed)
+        },
+      }} position="top-center" />
     </div>
   );
 }

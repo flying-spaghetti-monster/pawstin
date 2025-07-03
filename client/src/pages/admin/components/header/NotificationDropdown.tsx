@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { Link } from "react-router";
-import SocketApi from '../../../../api/socket';
+// import SocketApi from '../../../../api/socket';
 import { useConnectSocket } from '../../../../hooks/useSocket';
 
 export default function NotificationDropdown() {

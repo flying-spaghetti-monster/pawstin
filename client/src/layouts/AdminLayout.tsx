@@ -19,7 +19,7 @@ import { useConnectSocket } from '../hooks/useSocket';
 
 const LayoutContent: React.FC = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
-  
+
   useConnectSocket();
 
   return (
@@ -29,9 +29,8 @@ const LayoutContent: React.FC = () => {
         <Backdrop />
       </div>
       <div
-        className={`flex-1 transition-all duration-300 ease-in-out ${
-          isExpanded || isHovered ? "lg:ml-[290px]" : "lg:ml-[90px]"
-        } ${isMobileOpen ? "ml-0" : ""}`}
+        className={`flex-1 transition-all duration-300 ease-in-out ${isExpanded || isHovered ? "lg:ml-[290px]" : "lg:ml-[90px]"
+          } ${isMobileOpen ? "ml-0" : ""}`}
       >
         <AppHeader />
         <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
@@ -56,19 +55,19 @@ const AppLayout: React.FC = () => {
   }
   return (
     <QueryClientProvider client={queryClient}>
-    <CustomersPageProvider>
-    <CategoriesPageProvider>
-    <ProductsPageProvider>
-    <OrdersPageProvider>
-    <ShippersPageProvider>
-    <SidebarProvider>
-      <LayoutContent />
-    </SidebarProvider>
-    </ShippersPageProvider>
-    </OrdersPageProvider>
-    </ProductsPageProvider>
-    </CategoriesPageProvider>
-    </CustomersPageProvider>
+      <CustomersPageProvider>
+        <CategoriesPageProvider>
+          <ProductsPageProvider>
+            <OrdersPageProvider>
+              <ShippersPageProvider>
+                <SidebarProvider>
+                  <LayoutContent />
+                </SidebarProvider>
+              </ShippersPageProvider>
+            </OrdersPageProvider>
+          </ProductsPageProvider>
+        </CategoriesPageProvider>
+      </CustomersPageProvider>
     </QueryClientProvider>
   );
 };

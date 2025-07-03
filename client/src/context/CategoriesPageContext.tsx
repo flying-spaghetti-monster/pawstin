@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useCallback, useMemo } from "react
 import { PageDirection, CategoryResponse, Actions } from '../lib/types';
 import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import {instance as axios} from '../api/axios';
+import { instance as axios } from '../api/axios';
 
 type CategoriesPageContextType = {
   currentPage: number;
@@ -11,10 +11,10 @@ type CategoriesPageContextType = {
   totalPages: number;
   action: Actions,
   handleChangePage: (direction: PageDirection) => void;
-  createCategory: () => void;
-  deleteCategory: () => void;
-  editCategory: () => void;
-  setAction: () => void
+  createCategory: (formData: object) => Promise<CategoryResponse>;
+  deleteCategory: (slug: string) => void;
+  editCategory: (formData: CategoryResponse) => Promise<CategoryResponse>;
+  setAction: React.Dispatch<React.SetStateAction<Actions>>;
 };
 
 const CategoriesPageContext = createContext<CategoriesPageContextType | undefined>(undefined);
@@ -36,13 +36,13 @@ type categoriesResponse = {
 export const CategoriesPageProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [ currentPage, setCurrentPage ] = useState(1);
-  const [ action, setAction ] = useState<Actions>('CREATE');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [action, setAction] = useState<Actions>('CREATE');
 
-  const { data } = useQuery<categoriesResponse>({
+  const { data } = useQuery<categoriesResponse, Error, categoriesResponse, [string, number, Actions]>({
     queryKey: ['admin-categories', currentPage, action],
     staleTime: 1000 * 60 * 5, // 5 minutes
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
     queryFn: async () => {
       const response = await toast.promise(
         axios.get('/categories/findAll?page=' + currentPage),
@@ -56,9 +56,9 @@ export const CategoriesPageProvider: React.FC<{ children: React.ReactNode }> = (
     }
   })
 
-  const createCategory = async (newData: CategoriesPageContextType) => {
+  const createCategory = async (formData: object) => {
     const response = await toast.promise(
-      axios.post<CategoryResponse>('/categories/create', newData),
+      axios.post<CategoryResponse>('/categories/create', formData),
       {
         loading: 'Loading categories...',
         success: 'Loaded categories successfully',
