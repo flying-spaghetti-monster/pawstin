@@ -6,7 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Actions, ShipperResponse } from '../../../lib/types';
 import { useShippersPage } from '../../../context/ShippersPageContext';
 import PaginationControls from '../components/common/PaginationControls';
-import { Link, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ShipperModal from './ShippersModal';
@@ -32,11 +32,11 @@ export default function Shippers() {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<ShipperResponse> = (formData) => {
-    if (action === 'EDIT') {
+    if (action === Actions.EDIT && formData) {
       editShipper(formData);
-    } else if (action === 'DELETE') {
+    } else if (action === Actions.DELETE && activeShipper) {
       deleteShipper(activeShipper.id);
-    } else if (action === 'CREATE') {
+    } else if (action === Actions.CREATE && formData) {
       createShipper(formData);
     }
     closeModal();
@@ -60,7 +60,7 @@ export default function Shippers() {
         <PageBreadcrumb pageTitle="Shippers" />
         <div className="flex items-center justify-between mb-6">
           <button
-            onClick={handleOpenModal('CREATE')}
+            onClick={handleOpenModal(Actions.CREATE)}
             className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
           >
             <svg
@@ -150,13 +150,13 @@ export default function Shippers() {
                     <TableCell className="flex w-full gap-2 px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                       {/* TODO: add */}
                       <button
-                        onClick={handleOpenModal('EDIT', shipper)}
+                        onClick={handleOpenModal(Actions.EDIT, shipper)}
                         className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
                       >
                         <EditIcon />
                       </button>
                       <button
-                        onClick={handleOpenModal('DELETE', shipper)}
+                        onClick={handleOpenModal(Actions.DELETE, shipper)}
                         className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
                       >
                         <DeleteIcon />

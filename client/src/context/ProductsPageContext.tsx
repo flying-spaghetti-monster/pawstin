@@ -11,7 +11,7 @@ type ProductsPageContextType = {
   totalPages: number;
   action: Actions,
   handleChangePage: (direction: PageDirection) => void;
-  createProduct: (newData: ProductsPageContextType) => void;
+  createProduct: (newData: object) => void;
   deleteProduct: (slug: string) => void;
   editProduct: (newData: ProductResponse) => void;
   setAction: React.Dispatch<React.SetStateAction<Actions>>;
@@ -37,7 +37,7 @@ export const ProductsPageProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [action, setAction] = useState<Actions>('CREATE');
+  const [action, setAction] = useState<Actions>(Actions.CREATE);
 
   const { data } = useQuery<productsResponse, Error, productsResponse, [string, number, Actions]>({
     queryKey: ['admin-products', currentPage, action],

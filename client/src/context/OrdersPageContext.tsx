@@ -11,8 +11,8 @@ type OrdersPageContextType = {
   totalPages: number;
   action: Actions,
   handleChangePage: (direction: PageDirection) => void;
-  createOrder: (newData: OrdersPageContextType) => void;
-  deleteOrder: (slug: string) => void;
+  createOrder: (newData: object) => void;
+  deleteOrder: (id: string) => void;
   editOrder: (newData: OrderResponse) => void;
   setAction: React.Dispatch<React.SetStateAction<Actions>>;
 };
@@ -37,7 +37,7 @@ export const OrdersPageProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [action, setAction] = useState<Actions>('CREATE');
+  const [action, setAction] = useState<Actions>(Actions.CREATE);
 
   const { data } = useQuery<ordersResponse, Error, ordersResponse, [string, number, Actions]>({
     queryKey: ['admin-orders', currentPage, action],
@@ -56,7 +56,7 @@ export const OrdersPageProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   })
 
-  const createOrder = async (newData: OrdersPageContextType) => {
+  const createOrder = async (newData: OrderResponse) => {
     const response = await toast.promise(
       axios.post<OrderResponse>('/orders/create', newData),
       {
@@ -67,9 +67,9 @@ export const OrdersPageProvider: React.FC<{ children: React.ReactNode }> = ({
     );
     return response.data;
   };
-  const deleteOrder = async (slug: string) => {
+  const deleteOrder = async (id: number) => {
     const response = await toast.promise(
-      axios.delete<OrderResponse>('/orders/delete' + `/${slug}`),
+      axios.delete<OrderResponse>('/orders/delete' + `/${id}`),
       {
         loading: 'Delete order...',
         success: 'Deleted order successfully',
@@ -78,9 +78,9 @@ export const OrdersPageProvider: React.FC<{ children: React.ReactNode }> = ({
     );
     return response.data;
   };
-  const editOrder = async (newData: { slug: string } & OrderResponse) => {
+  const editOrder = async (newData: OrderResponse) => {
     const response = await toast.promise(
-      axios.patch<OrderResponse>('/orders/' + newData.slug, newData),
+      axios.patch<OrderResponse>('/orders/' + newData.id, newData),
       {
         loading: 'Loading orders...',
         success: 'Loaded orders successfully',

@@ -5,7 +5,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { OrdersResolver } from './orders.resolver';
 
 @Module({
-  imports: [PrismaModule, OrdersResolver],
+  imports: [PrismaModule],
   controllers: [OrdersController],
   providers: [OrdersService],
 })

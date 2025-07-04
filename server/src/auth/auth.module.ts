@@ -10,7 +10,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { AuthResolver } from './auth.resolver';
 
 @Module({
-  controllers: [AuthController, AuthResolver],
+  controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
   imports: [
     ConfigModule,

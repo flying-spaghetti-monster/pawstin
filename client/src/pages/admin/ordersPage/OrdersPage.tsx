@@ -32,11 +32,11 @@ export default function Orders() {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<OrderResponse> = (formData) => {
-    if (action === 'EDIT') {
+    if (action === Actions.EDIT) {
       editOrder(formData);
-    } else if (action === 'DELETE') {
-      deleteOrder(activeOrder.slug);
-    } else if (action === 'CREATE') {
+    } else if (action === Actions.DELETE) {
+      deleteOrder(activeOrder ? activeOrder.slug : '');
+    } else if (action === Actions.CREATE) {
       createOrder(formData);
     }
     closeModal();
@@ -60,7 +60,7 @@ export default function Orders() {
         <PageBreadcrumb pageTitle="Orders" />
         <div className="flex items-center justify-between mb-6">
           <button
-            onClick={handleOpenModal('CREATE')}
+            onClick={handleOpenModal(Actions.CREATE)}
             className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
           >
             <svg
@@ -150,13 +150,13 @@ export default function Orders() {
                     <TableCell className="flex w-full gap-2 px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                       {/* TODO: add */}
                       <button
-                        onClick={handleOpenModal('EDIT', Order)}
+                        onClick={handleOpenModal(Actions.EDIT, Order)}
                         className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
                       >
                         <EditIcon />
                       </button>
                       <button
-                        onClick={handleOpenModal('DELETE', Order)}
+                        onClick={handleOpenModal(Actions.DELETE, Order)}
                         className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
                       >
                         <DeleteIcon />

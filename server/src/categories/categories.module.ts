@@ -5,7 +5,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { CategoriesResolver } from './categories.resolver';
 
 @Module({
-  imports: [PrismaModule, CategoriesResolver],
+  imports: [PrismaModule],
   controllers: [CategoriesController],
   providers: [CategoriesService],
 })

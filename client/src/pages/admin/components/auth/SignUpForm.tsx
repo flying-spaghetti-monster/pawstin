@@ -27,12 +27,12 @@ export default function SignUpForm() {
   const { register, handleSubmit } = useForm<IFormInput>()
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+  const onSubmit: SubmitHandler<IFormInput> = async (data: IFormInput) => {
     try {
-      const resonse = await axios.post<Response>('http://localhost:3000/api/auth/registration', data);
-      const data = await resonse.data;
+      const response = await axios.post<Response>('http://localhost:3000/api/auth/registration', data);
+      // const data = await response.data;
 
-      if (res.status === 200) {
+      if (response.status === 200) {
         toast.success("Registration successful!");
         navigate("/signin");
       } else {
