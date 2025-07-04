@@ -16,7 +16,16 @@ import Badge from '../components/ui/badge/Badge';
 export default function Categories() {
   const [activeCategory, setActiveCategory] = useState<CategoryResponse | undefined>();
   const { isOpen, openModal, closeModal } = useModal();
-  const { control, register, handleSubmit } = useForm<CategoryResponse>()
+  const { control, register, handleSubmit, reset } = useForm<CategoryResponse>(
+    {
+      defaultValues: {
+        category_name: '',
+        slug: '',
+        description: '',
+        isActive: false
+      },
+    }
+  )
   const {
     handleChangePage,
     createCategory,
@@ -32,11 +41,11 @@ export default function Categories() {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<CategoryResponse> = (formData) => {
-    if (action === 'EDIT') {
+    if (action === Actions.EDIT) {
       editCategory(formData);
-    } else if (action === 'DELETE') {
+    } else if (action === Actions.DELETE) {
       deleteCategory(activeCategory ? activeCategory.slug : '');
-    } else if (action === 'CREATE') {
+    } else if (action === Actions.CREATE) {
       createCategory(formData);
     }
     closeModal();
@@ -60,7 +69,7 @@ export default function Categories() {
         <PageBreadcrumb pageTitle="Categories" />
         <div className="flex items-center justify-between mb-6">
           <button
-            onClick={handleOpenModal('CREATE')}
+            onClick={handleOpenModal(Actions.CREATE)}
             className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
           >
             <svg
@@ -80,7 +89,7 @@ export default function Categories() {
             </svg>
             Add Category
           </button>
-          {isOpen && (<CategoryModal action={action} activeCategory={activeCategory} setActiveCategory={setActiveCategory} isOpen={isOpen} closeModal={closeModal} onSubmit={onSubmit} handleSubmit={handleSubmit} control={control} register={register} />)}
+          {isOpen && (<CategoryModal action={action} activeCategory={activeCategory} setActiveCategory={setActiveCategory} isOpen={isOpen} closeModal={closeModal} onSubmit={onSubmit} handleSubmit={handleSubmit} control={control} register={register} reset={reset} />)}
         </div>
         <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
           <div className="max-w-full overflow-x-auto">
@@ -150,13 +159,13 @@ export default function Categories() {
                     <TableCell className="flex w-full gap-2 px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                       {/* TODO: add */}
                       <button
-                        onClick={handleOpenModal('EDIT', category)}
+                        onClick={handleOpenModal(Actions.EDIT, category)}
                         className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
                       >
                         <EditIcon />
                       </button>
                       <button
-                        onClick={handleOpenModal('DELETE', category)}
+                        onClick={handleOpenModal(Actions.DELETE, category)}
                         className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
                       >
                         <DeleteIcon />

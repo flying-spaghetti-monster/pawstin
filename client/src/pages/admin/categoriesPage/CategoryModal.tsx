@@ -3,16 +3,11 @@ import Label from '../components/form/Label';
 import Input from '../components/form/input/InputField';
 import TextArea from '../components/form/input/TextArea';
 import Checkbox from "../components/form/input/Checkbox";
-import DropzoneComponent from '../components/form/form-elements/DropZone';
+// import DropzoneComponent from '../components/form/form-elements/DropZone';
 import { Modal } from "../components/ui/modal";
-import { Controller } from 'react-hook-form';
-import { CategoryResponse } from '../../../lib/types';
-
-enum CategoryAction {
-  CREATE = 'Create',
-  EDIT = 'Edit',
-  DELETE = 'Delete'
-}
+import { Controller, UseFormReset } from 'react-hook-form';
+import { Actions, CategoryResponse } from '../../../lib/types';
+import { useEffect } from 'react';
 
 export default function CategoryModal({
   action,
@@ -22,28 +17,53 @@ export default function CategoryModal({
   handleSubmit,
   control,
   register,
-  activeCategory
+  activeCategory,
+  reset
 }: {
-  action: CategoryAction,
+  action: Actions,
   isOpen: boolean,
-  activeCategory: CategoryResponse,
+  activeCategory: CategoryResponse | undefined,
   closeModal: () => void;
   onSubmit: (data: any) => void;
   handleSubmit: (callback: (data: any) => void) => (e?: React.BaseSyntheticEvent) => void;
   control: any;
   register: any;
+  reset: UseFormReset<CategoryResponse>
 }) {
-  const isEdit = action && activeCategory && action == CategoryAction.EDIT.toLocaleUpperCase();
+  const isEdit = action && activeCategory && action == Actions.EDIT;
+
+  useEffect(() => {
+    if (isEdit && activeCategory) {
+      reset({
+        category_name: activeCategory.category_name,
+        slug: activeCategory.slug,
+        description: activeCategory.description,
+        isActive: activeCategory.isActive,
+      });
+    } else {
+      reset({
+        category_name: '',
+        slug: '',
+        description: '',
+        isActive: false,
+      });
+    }
+  }, [isEdit, activeCategory, reset]);
+
+  // Test Category
+  // test-category-top
+  // Lorem ipsum dolor sit amet consectetur adipisicing elit.Pariatur repellat quae dolorum a magnam accusamus quis aliquam libero consequuntur, labore, voluptatum veritatis ex nam non autem blanditiis, quos suscipit sit!
+
   return (
     <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
       <div className="relative w-full p-4 overflow-y-auto bg-white no-scrollbar rounded-3xl dark:bg-gray-900 lg:p-11">
         <div className="px-2 pr-14">
           <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-            {CategoryAction[action]} Category
+            {action} Category
           </h4>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-          {action === "DELETE" ? (
+          {action === Actions.DELETE ? (
             <div className="px-2 mb-4">
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Are you sure you want to delete this category? This action cannot be undone.
@@ -55,12 +75,12 @@ export default function CategoryModal({
                 <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
                   <div>
                     <Label>Name</Label>
-                    <Input type="text" value={isEdit ? activeCategory.category_name : ''} placeholder="Enter category name" name='category_name' register={register('category_name', { required: true })} />
+                    <Input type="text" placeholder="Enter category name" name='category_name' register={register('category_name', { required: true })} />
                   </div>
 
                   <div>
                     <Label>Slug</Label>
-                    <Input type="text" value={isEdit ? activeCategory.slug : ''} placeholder="Enter category slug" name='slug' register={register('slug', { required: true })} />
+                    <Input type="text" placeholder="Enter category slug" name='slug' register={register('slug', { required: true })} />
                   </div>
                 </div>
                 <div className="grid mt-8">
@@ -69,12 +89,10 @@ export default function CategoryModal({
                     control={control}
                     name="description"
                     rules={{ required: 'Description is required' }}
-                    render={({ field: { onChange, value } }) => (
+                    render={({ field }) => (
                       <TextArea
                         rows={6}
-                        value={(isEdit && !value) ? activeCategory.slug : value}
-                        error
-                        onChange={onChange}
+                        {...field}
                         placeholder="Enter category description"
                       />
                     )}
@@ -84,7 +102,7 @@ export default function CategoryModal({
                   <Checkbox label="Is Active" register={register('isActive')} />
                 </div>
                 <div className="grid mt-8">
-                  <DropzoneComponent />
+                  {/* <DropzoneComponent /> */}
                 </div>
               </div>
             </>
@@ -94,7 +112,7 @@ export default function CategoryModal({
               Close
             </Button>
             <Button size="sm">
-              {CategoryAction[action]} Category
+              {action} Category
             </Button>
           </div>
         </form>

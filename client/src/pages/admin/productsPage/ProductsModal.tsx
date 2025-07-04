@@ -3,17 +3,11 @@ import Label from '../components/form/Label';
 import Input from '../components/form/input/InputField';
 import TextArea from '../components/form/input/TextArea';
 import Checkbox from "../components/form/input/Checkbox";
-import DropzoneComponent from '../components/form/form-elements/DropZone';
+// import DropzoneComponent from '../components/form/form-elements/DropZone';
 import { Modal } from "../components/ui/modal";
 import { Controller } from 'react-hook-form';
-import { ProductResponse } from '../../../lib/types';
+import { Actions, ProductResponse } from '../../../lib/types';
 import Select from '../components/form/Select';
-
-enum ProductAction {
-  CREATE = 'Create',
-  EDIT = 'Edit',
-  DELETE = 'Delete'
-}
 
 export default function ProductModal({
   action,
@@ -25,16 +19,16 @@ export default function ProductModal({
   register,
   activeProduct
 }: {
-  action: ProductAction,
+  action: Actions,
   isOpen: boolean,
   activeProduct: ProductResponse,
   closeModal: () => void;
-  onSubmit: () => void;
-  handleSubmit: () => void;
+  onSubmit: (data: any) => void;
+  handleSubmit: (callback: (data: any) => void) => (e?: React.BaseSyntheticEvent) => void;
   control: () => void;
   register: () => void;
 }) {
-  const isEdit = action && activeProduct && action == ProductAction.EDIT.toLocaleUpperCase();
+  const isEdit = action && activeProduct && action == Actions.EDIT;
 
   //TODO reuse from DB + register validation
   const options = [
@@ -51,11 +45,11 @@ export default function ProductModal({
       <div className="relative w-full p-4 overflow-y-auto bg-white no-scrollbar rounded-3xl dark:bg-gray-900 lg:p-11">
         <div className="px-2 pr-14">
           <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-            {ProductAction[action]} Product
+            {action} Product
           </h4>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-          {action === "DELETE" ? (
+          {action === Actions.DELETE ? (
             <div className="px-2 mb-4">
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Are you sure you want to delete this product? This action cannot be undone.
@@ -67,27 +61,27 @@ export default function ProductModal({
                 <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
                   <div>
                     <Label>Name</Label>
-                    <Input type="text" value={isEdit && activeProduct.product_name} placeholder="Enter product name" name='product_name' register={register('product_name', { required: true })} />
+                    <Input type="text" value={isEdit ? activeProduct.product_name : ''} placeholder="Enter product name" name='product_name' register={register('product_name', { required: true })} />
                   </div>
 
                   <div>
                     <Label>Slug</Label>
-                    <Input type="text" value={isEdit && activeProduct.slug} placeholder="Enter Product slug" name='slug' register={register('slug', { required: true })} />
+                    <Input type="text" value={isEdit ? activeProduct.slug : ''} placeholder="Enter Product slug" name='slug' register={register('slug', { required: true })} />
                   </div>
 
                   <div>
                     <Label>Price</Label>
-                    <Input type="text" value={isEdit && activeProduct.price} placeholder="Enter product name" name='price' register={register('price', { required: true })} />
+                    <Input type="text" value={isEdit ? activeProduct.price : ''} placeholder="Enter product name" name='price' register={register('price', { required: true })} />
                   </div>
 
                   <div>
                     <Label>Discont price</Label>
-                    <Input type="text" value={isEdit && activeProduct.discont_price} placeholder="Enter product name" name='discont_price' register={register('discont_price', { required: true })} />
+                    <Input type="text" value={isEdit ? activeProduct.discont_price : ''} placeholder="Enter product name" name='discont_price' register={register('discont_price', { required: true })} />
                   </div>
 
                   <div>
                     <Label>In Stock</Label>
-                    <Input type="text" value={isEdit && activeProduct.in_stock} placeholder="Enter product name" name='in_stock' register={register('in_stock', { required: true })} />
+                    <Input type="text" value={isEdit ? activeProduct.in_stock : ''} placeholder="Enter product name" name='in_stock' register={register('in_stock', { required: true })} />
                   </div>
 
                   <div>
@@ -121,7 +115,7 @@ export default function ProductModal({
                   <Checkbox label="Is Active" register={register('isActive')} />
                 </div>
                 <div className="grid mt-8">
-                  <DropzoneComponent />
+                  {/* <DropzoneComponent /> */}
                 </div>
               </div>
             </>
@@ -131,7 +125,7 @@ export default function ProductModal({
               Close
             </Button>
             <Button size="sm">
-              {ProductAction[action]} Product
+              {action} Product
             </Button>
           </div>
         </form>

@@ -38,11 +38,9 @@ export type CategoryResponse = {
   isActive?: boolean;
 };
 
-export type Actions = "CREATE" | "EDIT" | "DELETE";
-
 export type ShipperResponse = {
   id: number;
-  category_name: string;
+  company_name: string;
   phone: string;
   isActive: boolean;
 }
@@ -110,4 +108,10 @@ export type pli = {
 export type prevCart = {
   plis: pli[],
   quantity: number
+}
+
+export enum Actions {
+  CREATE = 'Create',
+  EDIT = 'Edit',
+  DELETE = 'Delete'
 }

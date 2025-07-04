@@ -11,9 +11,9 @@ type ShippersPageContextType = {
   totalPages: number;
   action: Actions,
   handleChangePage: (direction: PageDirection) => void;
-  createShipper: (newData: ShippersPageContextType) => Promise<ShipperResponse>;
+  createShipper: (data: object) => Promise<ShipperResponse>;
   deleteShipper: (id: number) => Promise<ShipperResponse>;
-  editShipper: (newData: ShipperResponse) => Promise<ShipperResponse>;
+  editShipper: (data: ShipperResponse) => Promise<ShipperResponse>;
   setAction: React.Dispatch<React.SetStateAction<Actions>>;
 };
 
@@ -37,7 +37,7 @@ export const ShippersPageProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [action, setAction] = useState<Actions>('CREATE');
+  const [action, setAction] = useState<Actions>(Actions.CREATE);
 
   const { data } = useQuery<shippersResponse, Error, shippersResponse, [string, number, Actions]>({
     queryKey: ['admin-shippers', currentPage, action],
@@ -59,16 +59,18 @@ export const ShippersPageProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   })
 
-  const createShipper = async (newData: ShippersPageContextType) => {
-    const response = await toast.promise(
-      axios.post<ShipperResponse>('/shippers/create', newData),
+  const createShipper = async (data: ShippersPageContextType) => {
+    return toast.promise(
+      axios.post<ShipperResponse>('/shippers/create', data),
       {
-        loading: 'Loading shippers...',
-        success: 'Loaded shippers successfully',
-        error: 'Error loading shippers',
+        loading: 'Creating shipper...',
+        success: 'Shipper created successfully',
+        error: (err) => {
+          console.log(err);
+          return 'Error creating shipper';
+        },
       }
     );
-    return response.data;
   };
   const deleteShipper = async (id: number) => {
     const response = await toast.promise(
@@ -81,9 +83,9 @@ export const ShippersPageProvider: React.FC<{ children: React.ReactNode }> = ({
     );
     return response.data;
   };
-  const editShipper = async (newData: ShipperResponse) => {
+  const editShipper = async (data: ShipperResponse) => {
     const response = await toast.promise(
-      axios.patch<ShipperResponse>('/shippers/' + newData.id, newData),
+      axios.patch<ShipperResponse>('/shippers/' + data.id, data),
       {
         loading: 'Loading shippers...',
         success: 'Loaded shippers successfully',

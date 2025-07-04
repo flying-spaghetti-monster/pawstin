@@ -4,12 +4,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { HttpException, HttpStatus, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { RegistrationResponse } from './dto/register-response.dto';
+import { AuthResponse } from './dto/auth-response.dto copy';
 
 @Resolver('Auth')
 export class AuthResolver {
   constructor(private readonly authService: AuthService) { }
 
-  @Mutation(() => Object, { name: 'login' })
+  @Mutation(() => AuthResponse, { name: 'login' })
   async login(@Args('loginUserDto') loginUserDto: LoginUserDto) {
     const user = await this.authService.validateUser(loginUserDto.email, loginUserDto.password);
     if (!user) {
@@ -18,14 +20,14 @@ export class AuthResolver {
     return this.authService.login(user.email);
   }
 
-  @Mutation(() => Object, { name: 'registration' })
+  @Mutation(() => RegistrationResponse, { name: 'registration' })
   async register(@Args('createUserDto') createUserDto: CreateUserDto) {
     return await this.authService.createUser(createUserDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Query(() => Object, { name: 'getUsers' })
-  async me(@Args('page', ParseIntPipe) page: number) {
+  async getUsers(@Args('page', ParseIntPipe) page: number) {
     return this.authService.getUsers(page);
   }
 }

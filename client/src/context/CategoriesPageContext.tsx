@@ -11,9 +11,9 @@ type CategoriesPageContextType = {
   totalPages: number;
   action: Actions,
   handleChangePage: (direction: PageDirection) => void;
-  createCategory: (formData: object) => Promise<CategoryResponse>;
+  createCategory: (data: object) => Promise<CategoryResponse>;
   deleteCategory: (slug: string) => void;
-  editCategory: (formData: CategoryResponse) => Promise<CategoryResponse>;
+  editCategory: (data: CategoryResponse) => Promise<CategoryResponse>;
   setAction: React.Dispatch<React.SetStateAction<Actions>>;
 };
 
@@ -37,9 +37,9 @@ export const CategoriesPageProvider: React.FC<{ children: React.ReactNode }> = (
   children,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [action, setAction] = useState<Actions>('CREATE');
+  const [action, setAction] = useState<Actions>(Actions.CREATE);
 
-  const { data } = useQuery<categoriesResponse, Error, categoriesResponse, [string, number, Actions]>({
+  const { data, error } = useQuery<categoriesResponse, Error, categoriesResponse, [string, number, Actions]>({
     queryKey: ['admin-categories', currentPage, action],
     staleTime: 1000 * 60 * 5, // 5 minutes
     placeholderData: (previousData) => previousData,
@@ -56,17 +56,38 @@ export const CategoriesPageProvider: React.FC<{ children: React.ReactNode }> = (
     }
   })
 
-  const createCategory = async (formData: object) => {
-    const response = await toast.promise(
-      axios.post<CategoryResponse>('/categories/create', formData),
+  // const createCategory = async (formData: object) => {
+  //   const response = await toast.promise(
+  //     axios.post<CategoryResponse>('/categories/create', formData),
+  //     {
+  //       loading: 'Loading categories...',
+  //       success: 'Loaded categories successfully',
+  //       error: 'Error loading categories',
+  //     }
+  //   );
+  //   console.log(response)
+  //   // if (response) {
+  //   //   console.log(error)
+  //   //   throw error;
+  //   // }
+  //   return response.data;
+  // };
+
+  const createCategory = async (data: CategoryResponse) => {
+    console.log(data)
+    return toast.promise(
+      axios.post<CategoryResponse>('/categories/create', data),
       {
-        loading: 'Loading categories...',
-        success: 'Loaded categories successfully',
-        error: 'Error loading categories',
+        loading: 'Creating shipper...',
+        success: 'Shipper created successfully',
+        error: (err) => {
+          console.log(err);
+          return 'Error creating shipper';
+        },
       }
     );
-    return response.data;
   };
+
   const deleteCategory = async (slug: string) => {
     const response = await toast.promise(
       axios.delete<CategoryResponse>('/categories/delete' + `/${slug}`),

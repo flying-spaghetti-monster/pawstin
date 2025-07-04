@@ -6,6 +6,7 @@ import { genSalt, hash, compare } from 'bcrypt';
 import { Customers, Roles } from '@prisma/client';
 
 export interface JwtPayload {
+  status: string,
   access_token: string;
 }
 
@@ -65,7 +66,8 @@ export class AuthService {
     const payload = { sub: user.id, username: user.email };
 
     return {
-      access_token: await this.jwtService.signAsync(payload,),
+      status: 'success',
+      access_token: await this.jwtService.signAsync(payload),
     };
   }
 

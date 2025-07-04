@@ -3,16 +3,10 @@ import Label from '../components/form/Label';
 import Input from '../components/form/input/InputField';
 import TextArea from '../components/form/input/TextArea';
 import Checkbox from "../components/form/input/Checkbox";
-import DropzoneComponent from '../components/form/form-elements/DropZone';
+// import DropzoneComponent from '../components/form/form-elements/DropZone';
 import { Modal } from "../components/ui/modal";
 import { Controller } from 'react-hook-form';
-import { CategoryResponse } from '../../../lib/types';
-
-enum CategoryAction {
-  CREATE = 'Create',
-  EDIT = 'Edit',
-  DELETE = 'Delete'
-}
+import { Actions, CategoryResponse } from '../../../lib/types';
 
 export default function CategoryModal({
   action,
@@ -24,7 +18,7 @@ export default function CategoryModal({
   onSubmit,
   handleSubmit,
 }: {
-  action: CategoryAction,
+  action: Actions,
   isOpen: boolean,
   activeCategory: CategoryResponse,
   closeModal: () => void;
@@ -33,17 +27,17 @@ export default function CategoryModal({
   // control: () => void;
   // register: () => void;
 }) {
-  const isEdit = action && activeCategory && action == CategoryAction.EDIT.toLocaleUpperCase();
+  const isEdit = action && activeCategory && action == Actions.EDIT;
   return (
     <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
       <div className="relative w-full p-4 overflow-y-auto bg-white no-scrollbar rounded-3xl dark:bg-gray-900 lg:p-11">
         <div className="px-2 pr-14">
           <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-            {CategoryAction[action]} Category
+            {action} Category
           </h4>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-          {action === "DELETE" ? (
+          {action === Actions.DELETE ? (
             <div className="px-2 mb-4">
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Are you sure you want to delete this category? This action cannot be undone.
@@ -84,7 +78,7 @@ export default function CategoryModal({
                   <Checkbox label="Is Active" register={register('isActive')} />
                 </div>
                 <div className="grid mt-8">
-                  <DropzoneComponent />
+                  {/* <DropzoneComponent /> */}
                 </div>
               </div>
             </>
@@ -94,7 +88,7 @@ export default function CategoryModal({
               Close
             </Button>
             <Button size="sm">
-              {CategoryAction[action]} Category
+              {action} Category
             </Button>
           </div>
         </form>
