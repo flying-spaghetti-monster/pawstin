@@ -5,7 +5,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { HttpException, HttpStatus, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RegistrationResponse } from './dto/register-response.dto';
-import { AuthResponse } from './dto/auth-response.dto copy';
+import { AuthResponse } from './dto/auth-response.dto';
 
 @Resolver('Auth')
 export class AuthResolver {
