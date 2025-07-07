@@ -5,42 +5,41 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { GetCategoriesDto } from './dto/get-category.dto';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { CategoryListResponse } from './dto/category-list.response';
+import { Category } from './dto/category.model';
 
 @Resolver('Category')
 export class CategoriesResolver {
   constructor(private readonly categoriesService: CategoriesService) { }
 
-  @UseGuards(JwtAuthGuard)
-  @Mutation(() => Boolean)
-  async createCategory(@Args('createCategoryDto') createCategoryDto: CreateCategoryDto) {
-    await this.categoriesService.create(createCategoryDto);
-    return true;
+  // @UseGuards(JwtAuthGuard)
+  @Mutation(() => Category, { name: 'createCategory' })
+  async createCategory(@Args('createCategoryDto') createCategoryDto: CreateCategoryDto): Promise<Category> {
+    return await this.categoriesService.create(createCategoryDto);
   }
 
-  @Query(() => [Object], { name: 'categories' })
-  async findAll(@Args('dto', { type: () => GetCategoriesDto, nullable: true }) dto: GetCategoriesDto) {
+  @Query(() => CategoryListResponse, { name: 'findAll' })
+  async findAll(@Args('dto', { type: () => GetCategoriesDto, nullable: true }) dto: GetCategoriesDto): Promise<CategoryListResponse> {
     return this.categoriesService.findAll(dto);
   }
 
-  @Query(() => Object, { name: 'category' })
-  async findOne(@Args('slug', { type: () => Int }) slug: string) {
+  @Query(() => Category, { name: 'findOne' })
+  async findOne(@Args('slug') slug: string): Promise<Category | null> {
     return this.categoriesService.findOne(slug);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Mutation(() => Boolean)
+  // @UseGuards(JwtAuthGuard)
+  @Mutation(() => Category, { name: 'updateCategory' })
   async updateCategory(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateCategoryDto') updateCategoryDto: UpdateCategoryDto,
-  ) {
-    await this.categoriesService.update(id, updateCategoryDto);
-    return true;
+  ): Promise<Category> {
+    return await this.categoriesService.update(id, updateCategoryDto);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Mutation(() => Boolean)
-  async removeCategory(@Args('id', { type: () => Int }) id: number) {
-    await this.categoriesService.remove(id);
-    return true;
+  // @UseGuards(JwtAuthGuard)
+  @Mutation(() => Category, { name: 'removeCategory' })
+  async removeCategory(@Args('id', { type: () => Int }) id: number): Promise<Category> {
+    return await this.categoriesService.remove(id);
   }
 }

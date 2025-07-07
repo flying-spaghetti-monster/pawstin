@@ -2,6 +2,51 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Category {
+  category_name: String!
+  description: String!
+  id: Int!
+  isActive: Boolean!
+  picture: String
+  slug: String!
+}
+
+type CategoryListResponse {
+  categories: [Category!]!
+  totalCategories: Int!
+  totalPages: Int!
+}
+
+input CreateCategoryDto {
+  category_name: String!
+  description: String!
+  isActive: Boolean
+  picture: String
+  slug: String!
+}
+
+input GetCategoriesDto {
+  isActive: Boolean
+  page: Float
+  take: Float
+}
+
+type Mutation {
+  createCategory(createCategoryDto: CreateCategoryDto!): Category!
+  removeCategory(id: Int!): Category!
+  updateCategory(id: Int!, updateCategoryDto: UpdateCategoryDto!): Category!
+}
+
 type Query {
+  findAll(dto: GetCategoriesDto): CategoryListResponse!
+  findOne(slug: String!): Category!
   hello: String!
+}
+
+input UpdateCategoryDto {
+  category_name: String!
+  description: String!
+  isActive: Boolean
+  picture: String
+  slug: String!
 }

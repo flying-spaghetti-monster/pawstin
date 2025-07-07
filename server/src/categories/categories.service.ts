@@ -15,7 +15,7 @@ export class CategoriesService {
     });
   }
 
-  async findAll(dto: GetCategoriesDto): Promise<{ categories: Partial<Categories>[], totalCategories: number, totalPages: number }> {
+  async findAll(dto: GetCategoriesDto): Promise<{ categories: Categories[], totalCategories: number, totalPages: number }> {
     const args: any = {};
     if (dto.take) {
       args.skip = dto.page ? (dto.page - 1) * dto.take : 0;

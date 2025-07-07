@@ -7,6 +7,6 @@ import { CategoriesResolver } from './categories.resolver';
 @Module({
   imports: [PrismaModule],
   controllers: [CategoriesController],
-  providers: [CategoriesService],
+  providers: [CategoriesService, CategoriesResolver],
 })
 export class CategoriesModule { }

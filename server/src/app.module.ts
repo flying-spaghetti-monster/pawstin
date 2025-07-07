@@ -57,7 +57,7 @@ import { AppResolver } from './graphql/app.resolver';
   controllers: [AppController],
   providers: [
     AppService,
-    NotificationsGateway,
+    // NotificationsGateway,
     AppResolver
   ],
 })
