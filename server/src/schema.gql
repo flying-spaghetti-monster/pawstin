@@ -39,7 +39,7 @@ type Mutation {
 
 type Query {
   findAll(dto: GetCategoriesDto): CategoryListResponse!
-  findOne(slug: String!): Category!
+  findOne(slug: String!): Category
   hello: String!
 }
 

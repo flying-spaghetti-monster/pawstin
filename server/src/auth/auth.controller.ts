@@ -36,6 +36,12 @@ export class AuthController {
     return this.authService.getUsers(page);
   }
 
+  @Post('logout')
+  async signOut(@Request() request: ProtectedRequest): Promise<string> {
+    // await this.authService.signOut(request.keystore);
+    return 'Logout sucess';
+  }
+
   //TODO: Implement these methods
   // logout
   //resetPassword / gmail sevice
