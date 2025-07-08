@@ -23,7 +23,7 @@ export class CategoriesResolver {
     return this.categoriesService.findAll(dto);
   }
 
-  @Query(() => Category, { name: 'findOne' })
+  @Query(() => Category, { name: 'findOne', nullable: true })
   async findOne(@Args('slug') slug: string): Promise<Category | null> {
     return this.categoriesService.findOne(slug);
   }

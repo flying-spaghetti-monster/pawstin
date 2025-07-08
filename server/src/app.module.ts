@@ -14,6 +14,7 @@ import { NotificationsGateway } from './notifications/notifications.gateway';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AppResolver } from './graphql/app.resolver';
+import { WinstonLogger } from './setup/winston.logger';
 
 @Module({
   imports: [
@@ -58,7 +59,11 @@ import { AppResolver } from './graphql/app.resolver';
   providers: [
     AppService,
     // NotificationsGateway,
-    AppResolver
+    AppResolver,
+    {
+      provide: 'Logger',
+      useClass: WinstonLogger,
+    },
   ],
 })
 export class AppModule { }
