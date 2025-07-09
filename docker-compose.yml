@@ -11,17 +11,28 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     ports:
-      - "5432:5432"
+      - '${DB_PORT}:5432'
+    restart: unless-stopped
     volumes:
       - pgdata:/var/lib/postgresql/data
-    restart: always
-    networks:
-      - dbnet
+
+  redis:
+    image: redis:8.2-rc1-alpine
+    container_name: wimm-apis-redis
+    restart: unless-stopped
+    env_file:
+      - ./server/.env
+    ports:
+      - '${REDIS_PORT}:6379'
+    command: redis-server --bind localhost --bind 0.0.0.0 --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - cache:/data/cache
 
   server:
     container_name: server
     build:
       context: ./server
+      dockerfile: Dockerfile
     env_file:
       - ./server/.env
     ports:
@@ -32,13 +43,12 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
-    networks:
-      - dbnet
     links:
       - "postgres:db"
-    restart: always
+    restart: unless-stopped
     depends_on:
       - postgres
+      - redis
     volumes:
       - ./server/node_modules
       - ./server:/app
@@ -47,21 +57,19 @@ services:
     container_name: client
     build:
       context: ./client
+      dockerfile: Dockerfile
     ports:
       - '5173:5173'
     volumes:
       - ./client/node_modules
       - ./client:/app
-    restart: always
+    restart: unless-stopped
     depends_on:
+      - postgres
+      - redis
       - server
-
-networks:
-  dbnet:
-    driver: bridge
 
 volumes:
   pgdata:
-
-# TODO fix postgres connection like here
-# https://github.com/alexdevero/docker-nestjs-react-postgres/tree/master
+  cache:
+    driver: local
