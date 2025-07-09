@@ -1,14 +1,22 @@
 # client/Dockerfile
 FROM node:22-alpine
 
+# create user in the docker image
+USER node
+
+# Creating a new directory for app files and setting path in the container
+RUN mkdir -p /app && chown -R node:node /app
+
+# setting working directory in the container
 WORKDIR /app
 
-COPY package*.json ./
+# grant permission of node project directory to node user
+COPY --chown=node:node . .
 
+# installing the dependencies into the container
 RUN yarn install
 
-COPY . .
-
+# container exposed network port number
 EXPOSE 5173
 
 CMD ["yarn", "dev", "--", "--host"]
