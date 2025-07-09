@@ -16,6 +16,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AppResolver } from './graphql/app.resolver';
 import { WinstonLogger } from './setup/winston.logger';
 import { RedisCacheModule } from './cache/redis-cache.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { RedisCacheModule } from './cache/redis-cache.module';
     OrdersModule,
     ProductsModule,
     ShippersModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [
