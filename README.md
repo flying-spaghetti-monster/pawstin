@@ -12,7 +12,7 @@
   - Tailwindcss
   - Material-ui <i>components<i>
   - SCSS <i>modules<i>
-  - Docker?
+  - Docker
 
 
 ===========
