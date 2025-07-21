@@ -17,11 +17,15 @@ import { AppResolver } from './graphql/app.resolver';
 import { WinstonLogger } from './setup/winston.logger';
 import { RedisCacheModule } from './cache/redis-cache.module';
 import { FilesModule } from './files/files.module';
+import cacheConfig from './configs/cache.config';
+import serverConfig from './configs/server.config';
+import diskConfig from './configs/disk.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      load: [serverConfig, cacheConfig, diskConfig],
     }),
     // GraphQL is available at /graphql
     GraphQLModule.forRoot<ApolloDriverConfig>({

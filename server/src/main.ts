@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ServerConfig, ServerConfigName } from './config/server.config';
+import { ServerConfig, ServerConfigName } from './configs/server.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,9 +12,9 @@ async function bootstrap() {
 
   //Only for REST API
   app.setGlobalPrefix('api', { exclude: ['/qraph', '/uploads'] });
-  // app.useGlobalPipes(new ValidationPipe({
-  //   transform: true, // This is crucial for type conversion
-  // }));
+  app.useGlobalPipes(new ValidationPipe({
+    transform: true, // This is crucial for type conversion
+  }));
 
   app.enableCors({
     origin: configService.getOrThrow<string>('CORS_URL'), // Allow all origins by default

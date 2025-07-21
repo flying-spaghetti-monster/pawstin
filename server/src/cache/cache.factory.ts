@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { CacheConfig, CacheConfigName } from '../config/cache.config';
+import { CacheConfig, CacheConfigName } from '../configs/cache.config';
 import { CacheModuleOptions, CacheOptionsFactory } from '@nestjs/cache-manager';
 import { createKeyv } from '@keyv/redis';
 
