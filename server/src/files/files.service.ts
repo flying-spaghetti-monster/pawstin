@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { DiskConfig, DiskConfigName } from 'src/config/disk.config';
+import { DiskConfig, DiskConfigName } from 'src/configs/disk.config';
 import { extname, resolve } from 'path';
 
 @Injectable()

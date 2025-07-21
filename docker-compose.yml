@@ -24,7 +24,7 @@ services:
       - ./server/.env
     ports:
       - '${REDIS_PORT}:6379'
-    command: redis-server --bind localhost --bind 0.0.0.0 --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    command: redis-server --bind 0.0.0.0 --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
     volumes:
       - cache:/data/cache
 
@@ -38,19 +38,16 @@ services:
     ports:
       - '3000:3000'
     environment:
-      - DB_HOST=${DB_HOST}
+      - DB_HOST=postgres
       - DB_PORT=${DB_PORT}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
-    links:
-      - "postgres:db"
     restart: unless-stopped
     depends_on:
       - postgres
       - redis
     volumes:
-      - ./server/node_modules
       - ./server:/app
 
   client:
@@ -60,14 +57,13 @@ services:
       dockerfile: Dockerfile
     ports:
       - '5173:5173'
-    volumes:
-      - ./client/node_modules
-      - ./client:/app
     restart: unless-stopped
     depends_on:
       - postgres
       - redis
       - server
+    volumes:
+      - ./client:/app
 
 volumes:
   pgdata:

@@ -1,20 +1,20 @@
 # server/Dockerfile
 FROM node:22-alpine
 
-# create user in the docker image
-USER node
-
-# Creating a new directory for app files and setting path in the container
+# Create app directory as root
 RUN mkdir -p /app && chown -R node:node /app
 
-# setting working directory in the container
+# Switch to non-root user
+USER node
+
+# Set working directory
 WORKDIR /app
 
-# grant permission of node project directory to node user
+# Copy files and set correct ownership
 COPY --chown=node:node . .
 
-# installing the dependencies into the container
-RUN yarn build
+# Install dependencies and build the app
+RUN yarn install && yarn build
 
 EXPOSE 3000
 

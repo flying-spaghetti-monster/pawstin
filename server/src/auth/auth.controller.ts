@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, HttpException, Get, Query, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, HttpException, Get, Query, ParseIntPipe, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -36,11 +36,11 @@ export class AuthController {
     return this.authService.getUsers(page);
   }
 
-  @Post('logout')
-  async signOut(@Request() request: ProtectedRequest): Promise<string> {
-    // await this.authService.signOut(request.keystore);
-    return 'Logout sucess';
-  }
+  // @Post('logout')
+  // async signOut(@Request() request: ProtectedRequest): Promise<string> {
+  //   // await this.authService.signOut(request.keystore);
+  //   return 'Logout sucess';
+  // }
 
   //TODO: Implement these methods
   // logout

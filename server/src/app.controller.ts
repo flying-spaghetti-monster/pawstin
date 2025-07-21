@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { I18nService } from 'nestjs-i18n';
+// import { I18nService } from 'nestjs-i18n';
 
 //Test REST API connection
 //Test I18n
@@ -8,7 +8,7 @@ import { I18nService } from 'nestjs-i18n';
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    private readonly i18n: I18nService,
+    // private readonly i18n: I18nService,
   ) { }
 
   @Get()
