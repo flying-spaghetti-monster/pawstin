@@ -4,9 +4,6 @@ FROM node:22-alpine
 # Create app directory as root
 RUN mkdir -p /app && chown -R node:node /app
 
-# Switch to non-root user
-USER node
-
 # Set working directory
 WORKDIR /app
 
@@ -14,8 +11,10 @@ WORKDIR /app
 COPY --chown=node:node . .
 
 # Install dependencies and build the app
-RUN yarn install && yarn build
+RUN npm install && npm run build
+
+RUN npx prisma db push
 
 EXPOSE 3000
 
-CMD ["yarn", "start"]
+CMD ["npm run", "start"]

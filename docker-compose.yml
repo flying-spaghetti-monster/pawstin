@@ -1,32 +1,38 @@
-version: '3.8'
+# version: '3.8'
 
 services:
   postgres:
     image: postgres:17-alpine
     container_name: postgres
     env_file:
-      - ./server/.env
+      - .env
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
+      TZ: Europe/Kyiv
     ports:
       - '${DB_PORT}:5432'
     restart: unless-stopped
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  redis:
-    image: redis:8.2-rc1-alpine
-    container_name: wimm-apis-redis
-    restart: unless-stopped
-    env_file:
-      - ./server/.env
-    ports:
-      - '${REDIS_PORT}:6379'
-    command: redis-server --bind 0.0.0.0 --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
-    volumes:
-      - cache:/data/cache
+  # redis:
+  #   image: redis:8.2-rc1-alpine
+  #   container_name: wimm-apis-redis
+  #   restart: unless-stopped
+  #   env_file:
+  #     - ./server/.env
+  #   ports:
+  #     - '${REDIS_PORT}:6379'
+  #   command: redis-server --bind 0.0.0.0 --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+  #   volumes:
+  #     - cache:/data/cache
 
   server:
     container_name: server
@@ -34,21 +40,22 @@ services:
       context: ./server
       dockerfile: Dockerfile
     env_file:
-      - ./server/.env
-    ports:
-      - '3000:3000'
+      - .env
     environment:
       - DB_HOST=postgres
-      - DB_PORT=${DB_PORT}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
+    ports:
+      - '3000:3000'
     restart: unless-stopped
     depends_on:
       - postgres
-      - redis
     volumes:
       - ./server:/app
+      - server_node_modules:/app/node_modules
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   client:
     container_name: client
@@ -56,16 +63,28 @@ services:
       context: ./client
       dockerfile: Dockerfile
     ports:
-      - '5173:5173'
+      - '${CLIENT_PORT}:5173'
     restart: unless-stopped
     depends_on:
-      - postgres
-      - redis
       - server
+      - postgres
     volumes:
       - ./client:/app
+      - client_node_modules:/app/node_modules
+    env_file:
+      - .env
+    environment:
+      - VITE_API_URL=http://localhost:3000/
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5173"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
 volumes:
-  pgdata:
-  cache:
-    driver: local
+  postgres_data:
+  server_node_modules:
+  client_node_modules:
+
+  # cache:
+  #   driver: local
