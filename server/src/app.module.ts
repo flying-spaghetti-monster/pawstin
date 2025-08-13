@@ -15,11 +15,13 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AppResolver } from './graphql/app.resolver';
 import { WinstonLogger } from './setup/winston.logger';
-// import { RedisCacheModule } from './cache/redis-cache.module';
+import { RedisCacheModule } from './cache/redis-cache.module';
 import { FilesModule } from './files/files.module';
 import cacheConfig from './configs/cache.config';
 import serverConfig from './configs/server.config';
 import diskConfig from './configs/disk.config';
+import { SearchModule } from './search/search.module';
+import { ProductSearchService } from './product-search/product-search.service';
 
 @Module({
   imports: [
@@ -55,13 +57,14 @@ import diskConfig from './configs/disk.config';
     //   inject: [ConfigService],
     // }),
     PrismaModule,
-    // RedisCacheModule,
+    RedisCacheModule,
     AuthModule,
     CategoriesModule,
     OrdersModule,
     ProductsModule,
     ShippersModule,
     FilesModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [
@@ -72,6 +75,7 @@ import diskConfig from './configs/disk.config';
       provide: 'Logger',
       useClass: WinstonLogger,
     },
+    ProductSearchService,
   ],
 })
 export class AppModule { }
