@@ -4,6 +4,7 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
 import { SearchService } from './search.service';
 import { ProductSearchService } from './product.search.service';
 import { ProductSearchController } from './product.search.controller';
+import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ProductSearchController } from './product.search.controller';
       }),
       inject: [ConfigService],
     }),
+    PrismaModule
   ],
   controllers: [
     ProductSearchController
