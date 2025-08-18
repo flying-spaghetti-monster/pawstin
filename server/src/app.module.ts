@@ -21,7 +21,6 @@ import cacheConfig from './configs/cache.config';
 import serverConfig from './configs/server.config';
 import diskConfig from './configs/disk.config';
 import { SearchModule } from './search/search.module';
-import { ProductSearchService } from './product-search/product-search.service';
 
 @Module({
   imports: [
@@ -75,7 +74,6 @@ import { ProductSearchService } from './product-search/product-search.service';
       provide: 'Logger',
       useClass: WinstonLogger,
     },
-    ProductSearchService,
   ],
 })
 export class AppModule { }

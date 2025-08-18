@@ -20,7 +20,7 @@ export async function createProductsIndex(elasticsearchService: ElasticsearchSer
             category_id: { type: 'integer' },
           },
         },
-      },
+      } as any,
     });
     console.log(`Індекс ${indexName} створено ✅`);
   } else {
