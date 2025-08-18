@@ -11,7 +11,14 @@ import { PrismaModule } from 'src/prisma/prisma.module';
     ElasticsearchModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        node: configService.get('ELASTICSEARCH_NODE'),
+        node: configService.get('ELASTICSEARCH_NODE'), // e.g., 'http://localhost:9200'
+        // node: 'https://...', // if using a cloud service
+        // auth: {
+        //   apiKey: {
+        //     id: 'foo',
+        //     api_key: 'bar',
+        //   }
+        // }
       }),
       inject: [ConfigService],
     }),

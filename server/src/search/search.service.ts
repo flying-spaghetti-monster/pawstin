@@ -10,7 +10,7 @@ export class SearchService {
       index: index,
       body: {
         query,
-      },
+      } as any,
     });
   }
 
