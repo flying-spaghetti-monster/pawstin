@@ -34,11 +34,12 @@ import AdminShippers from "./pages/admin/shippersPage/Shippers";
 
 // Importing ProtectedRoute to protect admin routes
 import ProtectedRoute from './layouts/ProtectedRoute';
+import LoginSuccess from './pages/admin/components/auth/LoginSuccess';
 
 function App() {
   return (
     <Router>
-      <ScrollToTop /> 
+      <ScrollToTop />
       <Routes>
         {/* Site */}
         <Route element={<SiteLayout />}>
@@ -53,7 +54,9 @@ function App() {
         {/* Auth Layout */}
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/login/success" element={<LoginSuccess />} />
 
+        {/* Redirects */}
         {/* Dashboard Layout */}
 
         <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
@@ -63,7 +66,7 @@ function App() {
           <Route path="admin/shippers" element={<AdminShippers />} />
           <Route path="admin/orders" element={<AdminOrders />} />
           <Route path="admin/customers" element={<AdminCustomers />} />
-          
+
           {/* Others Page */}
           <Route path="admin/blank" element={<Blank />} />
 

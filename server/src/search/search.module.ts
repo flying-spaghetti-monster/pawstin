@@ -12,12 +12,13 @@ import { PrismaModule } from 'src/prisma/prisma.module';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         node: configService.get('ELASTICSEARCH_NODE'), // e.g., 'http://localhost:9200'
-        // node: 'https://...', // if using a cloud service
+        // if using a cloud service
+        // cloud: {
+        //   id: '<cloud-id>'
+        // },
         // auth: {
-        //   apiKey: {
-        //     id: 'foo',
-        //     api_key: 'bar',
-        //   }
+        //   username: 'elastic',
+        //   password: 'changeme'
         // }
       }),
       inject: [ConfigService],

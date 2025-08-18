@@ -7,15 +7,15 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import { getJWTConfig } from '../configs/jwt.config';
 import { PrismaModule } from '../prisma/prisma.module';
-import { AuthResolver } from './auth.resolver';
+import { GoogleStrategy } from './google.strategy';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, GoogleStrategy],
   imports: [
     ConfigModule,
     PrismaModule,
-    PassportModule,
+    PassportModule.register({ session: true }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

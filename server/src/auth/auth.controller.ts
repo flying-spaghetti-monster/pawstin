@@ -1,8 +1,9 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, HttpException, Get, Query, ParseIntPipe, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, HttpException, Get, Query, ParseIntPipe, UseGuards, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -34,6 +35,22 @@ export class AuthController {
   @Get('getUsers')
   async getUsers(@Query('page', ParseIntPipe) page: number) {
     return this.authService.getUsers(page);
+  }
+
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth() {
+    // Initiates the Google OAuth2 login process
+    return { message: 'Google authentication initiated' };
+  }
+
+  @Get('google/redirect')
+  @UseGuards(AuthGuard('google'))
+  async googleAuthRedirect(@Req() req, @Res() res) {
+    console.log(req.user)
+    let result = await this.authService.login(req.user.email, true);
+    console.log(result)
+    return res.redirect(`http://localhost:5173/login/success?token=${result.access_token}`);
   }
 
   // @Post('logout')
