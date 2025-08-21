@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -11,13 +12,19 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
+  @ApiResponse({
+    status: 201,
+    description: 'Returns an object with status and access_token fields'
+  })
+  @ApiResponse({ status: 401, description: 'User not found' })
+  @ApiResponse({ status: 401, description: 'Invalid credentials: ' + HttpStatus.UNAUTHORIZED })
   async login(@Body() dto: LoginUserDto) {
     //TODO: dto.remember_me
     const user = await this.authService.validateUser(dto.email, dto.password);
     if (!user) {
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
     }
-    return this.authService.login(user.email);
+    return this.authService.login(user);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -44,11 +51,12 @@ export class AuthController {
     return { message: 'Google authentication initiated' };
   }
 
+  //TODO update DB to save user data from google without password, add field like isServiceAuth
   @Get('google/redirect')
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req, @Res() res) {
     console.log(req.user)
-    let result = await this.authService.login(req.user.email, true);
+    let result = await this.authService.login(req.user, true);
     console.log(result)
     return res.redirect(`http://localhost:5173/login/success?token=${result.access_token}`);
   }

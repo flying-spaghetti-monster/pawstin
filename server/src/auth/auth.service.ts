@@ -57,18 +57,13 @@ export class AuthService {
     return user;
   }
 
-  async login(email: string, isService?): Promise<JwtPayload> {
+  async login(user: Required<Pick<Customers, "email" | "id">>, isService?): Promise<JwtPayload> {
     let payload = {};
 
     if (!isService) {
-      const user = await this.findUser(email);
-
-      if (!user) {
-        throw new UnauthorizedException('User not found');
-      }
       payload = { sub: user.id, username: user.email };
     } else {
-      payload = { sub: 'google', username: email };
+      payload = { sub: 'google', username: user.email };
     }
 
     return {

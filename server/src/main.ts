@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ServerConfig, ServerConfigName } from './configs/server.config';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,6 +22,27 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   })
+
+  // Swagger configuration
+  const config = new DocumentBuilder()
+    .setTitle('Pawstin store')
+    .setDescription('The Pawstin store API description')
+    .setVersion('1.0')
+    .build();
+  // Create Swagger document
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api-doc', app, documentFactory);
+
+  // Swagger document for GraphQL
+  const gqlDocument = SwaggerModule.createDocument(app, {
+    ...config,
+    info: {
+      ...config.info,
+      title: 'Pawstin GraphQL API',
+      description: 'The Pawstin GraphQL API description',
+    },
+  });
+  SwaggerModule.setup('graphql-doc', app, gqlDocument);
 
   await app.listen(serverConfig.port, () => {
     console.log(`REST API: http://localhost:${serverConfig.port}/api`);
