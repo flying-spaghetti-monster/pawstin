@@ -19,11 +19,16 @@ import { FilesService } from './files.service';
 import { existsSync } from 'fs';
 import { join } from 'path';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 
 @Controller('files')
 export class FilesController {
   constructor(private readonly filesService: FilesService) { }
 
+  @ApiBody({
+    description: 'show one of image',
+    type: '/uploads/image/example.jpeg',
+  })
   @Get('uploads/image/:image')
   async getImageFile(@Param('image') image: string, @Res() response: Response) {
     const diskPath = this.filesService.getDiskPath();
@@ -38,6 +43,11 @@ export class FilesController {
     response.sendFile(filepath);
   }
 
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Load one or list of images',
+    type: 'maxSize:5mb / fileType:(jpe?g|png)',
+  })
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   @Post('uploads/image')
