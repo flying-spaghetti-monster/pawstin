@@ -8,12 +8,14 @@ import { JwtStrategy } from './jwt.strategy';
 import { getJWTConfig } from '../configs/jwt.config';
 import { PrismaModule } from '../prisma/prisma.module';
 import { GoogleStrategy } from './google.strategy';
+import { LoggerModule } from 'src/Logger/loger.module';
 
 @Module({
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, GoogleStrategy],
   imports: [
     ConfigModule,
+    LoggerModule,
     PrismaModule,
     PassportModule.register({ session: true }),
     JwtModule.registerAsync({

@@ -70,20 +70,21 @@ model Products {
 }
 
 model Customers {
-  id          Int      @id @default(autoincrement())
-  email       String   @unique
-  password    String
-  first_name  String
-  last_name   String
-  role        Roles    @default(USER)
-  address     String?
-  city        String?
-  region      String?
-  postal_code String?
-  country     String?
-  phone       String?
-  isActive    Boolean  @default(true)
-  orders      Orders[]
+  id            Int             @id @default(autoincrement())
+  email         String          @unique
+  password      String
+  first_name    String
+  last_name     String
+  role          Roles           @default(USER)
+  address       String?
+  city          String?
+  region        String?
+  postal_code   String?
+  country       String?
+  phone         String?
+  isActive      Boolean         @default(true)
+  orders        Orders[]
+  PasswordReset PasswordReset[]
 
   @@map("customers")
 }
@@ -129,4 +130,13 @@ model OrderDetails {
 
   @@id([order_id, product_id])
   @@map("orderDetails")
+}
+
+model PasswordReset {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  userId    Int
+  user      Customers @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime  @default(now())
 }

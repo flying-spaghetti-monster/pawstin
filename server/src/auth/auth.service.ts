@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, LoggerService, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
@@ -15,6 +15,8 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private readonly prisma: PrismaService,
+    @Inject('RABBITMQ_CHANNEL') private channel,
+    @Inject('Logger') private readonly logger: LoggerService,
   ) { }
 
   async createUser(dto: CreateUserDto): Promise<Customers> {
@@ -96,5 +98,65 @@ export class AuthService {
       totalUsers,
       totalPages: Math.ceil(totalUsers / 6),
     };
+  }
+
+  async saveResetToken(userId: number, token: string) {
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 15); // 15 хвилин TTL
+
+    return this.prisma.passwordReset.create({
+      data: { token, userId, expiresAt },
+    });
+  }
+
+  async verifyResetToken(token: string) {
+    const reset = await this.prisma.passwordReset.findUnique({
+      where: { token },
+      include: { user: true },
+    });
+
+    if (!reset || reset.expiresAt < new Date()) {
+      return null;
+    }
+
+    return reset.user;
+  }
+
+  async updatePassword(userId: number, newPassword: string) {
+    const salt = await genSalt(10);
+    const hashed = await hash(newPassword, salt);
+
+    await this.prisma.customers.update({
+      where: { id: userId },
+      data: { password: hashed },
+    });
+
+    await this.prisma.passwordReset.deleteMany({
+      where: { userId: userId },
+    });
+
+    return { success: true };
+  }
+
+  async logout(token: string) {
+    // there will be remove token logic soon
+    return { success: true };
+  }
+
+  sendEmail(user: Customers, options: {
+    type: 'registration' | 'resetPassword',
+    token?: string
+  }) {
+    const message = {
+      type: options.type,
+      to: user.email,
+      name: user.first_name,
+      token: options.token || null,
+    };
+
+    this.channel.sendToQueue('emailQueue', Buffer.from(JSON.stringify(message)), {
+      persistent: true,
+    });
+
+    this.logger.log(`📨 Email task sent: ${JSON.stringify(message)}`);
   }
 }

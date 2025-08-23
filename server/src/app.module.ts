@@ -14,13 +14,14 @@ import { ShippersModule } from './shippers/shippers.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AppResolver } from './graphql/app.resolver';
-import { WinstonLogger } from './setup/winston.logger';
 import { RedisCacheModule } from './cache/redis-cache.module';
 import { FilesModule } from './files/files.module';
 import cacheConfig from './configs/cache.config';
 import serverConfig from './configs/server.config';
 import diskConfig from './configs/disk.config';
 import { SearchModule } from './search/search.module';
+import { RabbitMQModule } from './rabbitmq/rabbitmq.module';
+import { LoggerModule } from './Logger/loger.module';
 
 @Module({
   imports: [
@@ -55,8 +56,10 @@ import { SearchModule } from './search/search.module';
     //   ],
     //   inject: [ConfigService],
     // }),
+    LoggerModule,
     PrismaModule,
     RedisCacheModule,
+    RabbitMQModule,
     AuthModule,
     CategoriesModule,
     OrdersModule,
@@ -70,10 +73,6 @@ import { SearchModule } from './search/search.module';
     AppService,
     // NotificationsGateway,
     AppResolver,
-    {
-      provide: 'Logger',
-      useClass: WinstonLogger,
-    },
   ],
 })
 export class AppModule { }

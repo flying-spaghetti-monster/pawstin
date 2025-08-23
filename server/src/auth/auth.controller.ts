@@ -1,14 +1,20 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, HttpException, Get, Query, ParseIntPipe, UseGuards, Req, Res } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, HttpException, Get, Query, ParseIntPipe, UseGuards, Req, Res, Inject, LoggerService } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiResponse } from '@nestjs/swagger';
+import { Customers } from '@prisma/client';
+import { v4 as uuid } from 'uuid';
+import { LoggerModule } from 'src/Logger/loger.module';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(
+    private readonly authService: AuthService,
+    @Inject('Logger') private readonly logger: LoggerService
+  ) { }
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
@@ -35,7 +41,12 @@ export class AuthController {
     if (oldUser) {
       return new HttpException(`User ${dto.email} alredy registered`, HttpStatus.BAD_REQUEST);
     }
-    return await this.authService.createUser(dto);
+
+    const newUser = await this.authService.createUser(dto);
+
+    this.authService.sendEmail(newUser, { type: 'registration' });
+
+    return newUser;
   }
 
   @UseGuards(JwtAuthGuard)
@@ -57,17 +68,55 @@ export class AuthController {
   async googleAuthRedirect(@Req() req, @Res() res) {
     console.log(req.user)
     let result = await this.authService.login(req.user, true);
-    console.log(result)
     return res.redirect(`http://localhost:5173/login/success?token=${result.access_token}`);
   }
 
-  // @Post('logout')
-  // async signOut(@Request() request: ProtectedRequest): Promise<string> {
-  //   // await this.authService.signOut(request.keystore);
-  //   return 'Logout sucess';
-  // }
+  @Post('reset-password-request')
+  async resetPasswordRequest(@Body('email') email: string) {
+    const user = await this.authService.findUser(email);
 
-  //TODO: Implement these methods
-  // logout
-  //resetPassword / gmail sevice
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    const token = uuid();
+
+    await this.authService.saveResetToken(user.id, token);
+
+    this.authService.sendEmail(user, { type: 'resetPassword', token });
+
+    return { message: 'Reset password email sent' };
+  }
+
+  @Post('reset-password-confirm')
+  async resetPasswordConfirm(
+    @Body('token') token: string,
+    @Body('newPassword') newPassword: string,
+  ) {
+    const user = await this.authService.verifyResetToken(token);
+
+    if (!user) {
+      this.logger.error(`Invalid or expired token: ${token}`)
+      throw new HttpException(`Invalid or expired token: ${token}`, HttpStatus.BAD_REQUEST);
+    }
+
+    await this.authService.updatePassword(user.id, newPassword);
+
+    return { message: 'Password successfully updated' };
+  }
+
+  @Post('logout')
+  @UseGuards(JwtAuthGuard)
+  async logout(@Req() req) {
+    const token = req.headers.authorization?.split(' ')[1];
+
+    if (!token) {
+      return { message: 'No token provided' };
+    }
+
+    await this.authService.logout(token);
+
+    return { message: 'Logout successful' };
+  }
+
 }
