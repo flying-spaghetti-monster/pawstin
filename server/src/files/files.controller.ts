@@ -7,6 +7,7 @@ import {
   Param,
   ParseFilePipe,
   Post,
+  Query,
   Request,
   Res,
   UploadedFile,
@@ -26,28 +27,63 @@ export class FilesController {
   constructor(private readonly filesService: FilesService) { }
 
   @ApiBody({
-    description: 'show one of image',
+    description: 'Generate temporary link to access a file',
     type: '/uploads/image/example.jpeg',
   })
-  @Get('uploads/image/:image')
-  async getImageFile(@Param('image') image: string, @Res() response: Response) {
+  @Get('generate-link/:filename')
+  async generateTemporaryLink(
+    @Param('filename') filename: string,
+    @Request() req,
+  ) {
     const diskPath = this.filesService.getDiskPath();
-    const filepath = join(diskPath, image);
+    const filepath = join(diskPath, filename);
 
-    const exists = existsSync(filepath);
-    if (!exists) throw new NotFoundException(`${image} not found`);
+    if (!existsSync(filepath)) {
+      throw new NotFoundException(`${filename} not found`);
+    }
 
-    const cacheDuration = this.filesService.getImageCacheDuration();
+    const baseUrl = req.protocol + '://' + req.get('host');
+    const url = this.filesService.generateTemporaryUrl(filename, 300, baseUrl);
 
-    response.set('Cache-Control', `private, max-age=${cacheDuration}`);
-    response.sendFile(filepath);
+    return { url };
   }
 
-  @ApiConsumes('multipart/form-data')
   @ApiBody({
-    description: 'Load one or list of images',
-    type: 'maxSize:5mb / fileType:(jpe?g|png)',
+    description: 'Access a file using a temporary link',
+    type: '/files/secure/example.jpeg?token=<token>',
   })
+  @Get('secure/:filename')
+  async getFileSecure(
+    @Param('filename') filename: string,
+    @Query('token') token: string,
+    @Res() res: Response,
+  ) {
+    let payload;
+    try {
+      payload = this.filesService.verifyToken(token);
+    } catch {
+      throw new NotFoundException('Invalid or expired link');
+    }
+
+    if (payload.filename !== filename) {
+      throw new NotFoundException('File mismatch');
+    }
+
+    const diskPath = this.filesService.getDiskPath();
+    const filepath = join(diskPath, filename);
+
+    if (!existsSync(filepath)) {
+      throw new NotFoundException(`${filename} not found`);
+    }
+
+    res.sendFile(filepath);
+  }
+
+  @ApiBody({
+    description: 'Upload an image file (jpg, jpeg, png) max 5MB',
+    type: 'multipart/form-data',
+  })
+  @ApiConsumes('multipart/form-data')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   @Post('uploads/image')
@@ -64,8 +100,7 @@ export class FilesController {
     file: Express.Multer.File,
   ) {
     const baseUrl = request.protocol + '://' + request.get('host');
-    return `${baseUrl}/assets/image/${file.filename}`;
+    return this.filesService.generateTemporaryUrl(file.filename, 300, baseUrl);
   }
-
 
 }
