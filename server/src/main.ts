@@ -4,9 +4,10 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ServerConfig, ServerConfigName } from './configs/server.config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import * as bodyParser from 'body-parser';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { rawBody: true });
 
   const configService = app.get(ConfigService);
   const serverConfig = configService.getOrThrow<ServerConfig>(ServerConfigName);
@@ -43,6 +44,10 @@ async function bootstrap() {
     },
   });
   SwaggerModule.setup('graphql-doc', app, gqlDocument);
+
+  app.use('/stripe/webhook',
+    bodyParser.raw({ type: 'application/json' })
+  );
 
   await app.listen(serverConfig.port, () => {
     console.log(`REST API: http://localhost:${serverConfig.port}/api`);

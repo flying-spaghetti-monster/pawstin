@@ -35,6 +35,9 @@ import AdminShippers from "./pages/admin/shippersPage/Shippers";
 // Importing ProtectedRoute to protect admin routes
 import ProtectedRoute from './layouts/ProtectedRoute';
 import LoginSuccess from './pages/admin/components/auth/LoginSuccess';
+import { Chat } from './pages/chat/Chat';
+import SuccessPage from './pages/stripe/SuccessPage';
+import CancelPage from './pages/stripe/CancelPage';
 
 function App() {
   return (
@@ -49,6 +52,10 @@ function App() {
           <Route path="about" element={<About />} />
           <Route path="cart" element={<Cart />} />
           <Route path="checkout" element={<Checkout />} />
+          <Route path="chat" element={<Chat />} />
+
+          <Route path="/success" element={<SuccessPage />} />
+          <Route path="/cancel" element={<CancelPage />} />
         </Route>
 
         {/* Auth Layout */}

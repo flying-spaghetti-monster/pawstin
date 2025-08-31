@@ -22,6 +22,7 @@ import diskConfig from './configs/disk.config';
 import { SearchModule } from './search/search.module';
 import { RabbitMQModule } from './rabbitmq/rabbitmq.module';
 import { LoggerModule } from './Logger/loger.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { LoggerModule } from './Logger/loger.module';
     ShippersModule,
     FilesModule,
     SearchModule,
+    ChatModule
   ],
   controllers: [AppController],
   providers: [
